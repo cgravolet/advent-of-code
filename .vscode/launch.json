@@ -6,12 +6,12 @@
     "configurations": [
         {
             "name": "Dec 01",
-            "type": "go",
+            "type": "swift",
             "request": "launch",
             "mode": "auto",
-            "program": "${workspaceFolder}/cmd/dec01/main.go",
+            "program": "${workspaceFolder}/.build/debug/dec01",
             "args": [
-                "../../input/dec01.txt"
+                "input/dec01.txt"
             ]
         }
     ]
