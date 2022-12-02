@@ -1,8 +1,8 @@
 package main
 
 import (
-	"errors"
 	"fmt"
+	"log"
 	"os"
 	"sort"
 	"strconv"
@@ -28,18 +28,11 @@ import (
  * 6000
  */
 func main() {
-
-	if len(os.Args) <= 1 {
-		err := errors.New("Path to input file required")
-		panic(err)
-	}
-	path := os.Args[1]
-	lines, err := utility.ReadLinesFromFile(path)
+	lines, err := utility.ReadLinesFromFile(os.Args)
 
 	if err != nil {
-		panic(err)
+		log.Fatalf("Error reading lines from file: %v", err)
 	}
-
 	elfCalories := []int{0}
 
 	for _, s := range lines {
