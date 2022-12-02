@@ -6,13 +6,21 @@
     "configurations": [
         {
             "name": "Dec 01",
-            "type": "swift",
+            "type": "lldb",
             "request": "launch",
-            "mode": "auto",
             "program": "${workspaceFolder}/.build/debug/dec01",
-            "args": [
-                "input/dec01.txt"
-            ]
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "swift: Build Debug dec01",
+            "args": ["-p", "input/dec01.txt"]
+        },
+        {
+            "name": "Dec 02",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/.build/debug/dec02",
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "swift: Build Debug dec02",
+            "args": ["-p", "input/dec02.txt"]
         }
     ]
 }

@@ -1,6 +1,6 @@
 //
 //  main.swift
-//  
+//
 //
 //  Created by Gravolet, Charles on 12/1/22.
 //
@@ -77,7 +77,7 @@ struct AdventDay02: ParsableCommand {
     }
 
     // MARK: - Private methods
-    
+
     private func part1() throws {
         let totalScore = try String(contentsOfFile: path)
             .components(separatedBy: .newlines)
