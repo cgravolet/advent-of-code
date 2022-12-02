@@ -10,59 +10,40 @@ import (
 	"github.comcast.com/cgravo558/advent2022/pkg/utility"
 )
 
-/*
- * Input is number of calories each Elf is carrying. Each elf writes one item per line, and separates their own
- * inventory from the previous Elf's inventory by a blank line.
- *
- * 1. Find the elf carrying the most calories, how many calories is that Elf carrying?
- * 2. Find the top 3 elves that are carrying the most calories, how many calories in total?
- *
- * Sample input:
- * 1000
- * 2000
- * 3000
- *
- * 4000
- *
- * 5000
- * 6000
- */
 func main() {
-	lines, err := utility.ReadLinesFromFile(os.Args)
+	calories := []int{0}
+
+	err := utility.ForEachLineInFile(os.Args[1], func(s string) {
+		if len(s) == 0 {
+			calories = append(calories, 0)
+			return
+		}
+		c, err := strconv.Atoi(s)
+
+		if err == nil {
+			calories[len(calories)-1] += c
+		}
+	})
 
 	if err != nil {
-		log.Fatalf("Error reading lines from file: %v", err)
-	}
-	elfCalories := []int{0}
-
-	for _, s := range lines {
-		if len(s) == 0 {
-			elfCalories = append(elfCalories, 0)
-		} else {
-			calories, err := strconv.Atoi(s)
-
-			if err == nil {
-				index := len(elfCalories) - 1
-				elfCalories[index] += calories
-			}
-		}
+		log.Fatal(err)
 	}
 
-	sort.Slice(elfCalories, func(l, r int) bool {
-		return elfCalories[l] > elfCalories[r]
+	sort.Slice(calories, func(l, r int) bool {
+		return calories[l] > calories[r]
 	})
 
 	// Elf with most calories
-	mostCalories := elfCalories[0]
-	fmt.Println(mostCalories)
+	mostCalories := calories[0]
+	fmt.Printf("Most calories (part 1): %d\n", mostCalories)
 
 	// Top three calories
 	topThree := 0
 
 	for i := 0; i < 3; i++ {
-		if len(elfCalories) > i {
-			topThree += elfCalories[i]
+		if len(calories) > i {
+			topThree += calories[i]
 		}
 	}
-	fmt.Println(topThree)
+	fmt.Printf("Top three combined (part 2): %d\n", topThree)
 }

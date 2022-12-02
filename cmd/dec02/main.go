@@ -9,6 +9,7 @@ import (
 	"github.comcast.com/cgravo558/advent2022/pkg/utility"
 )
 
+type Line string
 type Shape int
 type Outcome int
 
@@ -24,14 +25,118 @@ const (
 	Loss         = 0
 )
 
+func (lhs Shape) Play(rhs Shape) Outcome {
+	var outcome Outcome
+	switch lhs {
+	case Rock:
+		switch rhs {
+		case Rock:
+			outcome = Draw
+		case Paper:
+			outcome = Win
+		case Scissors:
+			outcome = Loss
+		}
+	case Paper:
+		switch rhs {
+		case Rock:
+			outcome = Loss
+		case Paper:
+			outcome = Draw
+		case Scissors:
+			outcome = Win
+		}
+	case Scissors:
+		switch rhs {
+		case Rock:
+			outcome = Win
+		case Paper:
+			outcome = Loss
+		case Scissors:
+			outcome = Draw
+		}
+	}
+	return outcome
+}
+
+func (lhs Shape) Score(rhs Shape) int {
+	return int(lhs.Play(rhs)) + int(rhs)
+}
+
+func (lhs Shape) ScoreWithDesiredOutcome(o Outcome) int {
+	if lhs.Play(Rock) == o {
+		return lhs.Score(Rock)
+	} else if lhs.Play(Paper) == o {
+		return lhs.Score(Paper)
+	} else if lhs.Play(Scissors) == o {
+		return lhs.Score(Scissors)
+	}
+	return 0
+}
+
+func (l Line) ToOutcome() Outcome {
+	switch l {
+	case "X":
+		return Loss
+	case "Y":
+		return Draw
+	case "Z":
+		return Win
+	default:
+		return 0
+	}
+}
+
+func (l Line) ToShape() Shape {
+	switch l {
+	case "A", "X":
+		return Rock
+	case "B", "Y":
+		return Paper
+	case "C", "Z":
+		return Scissors
+	default:
+		return 0
+	}
+}
+
 func main() {
-	lines, err := utility.ReadLinesFromFile(os.Args)
+	part1()
+	part2()
+}
+
+func part1() {
+	scoreTotal := 0
+	err := utility.ForEachLineInFile(os.Args[1], func(s string) {
+		inputs := utility.Map(strings.Split(s, " "), func(i string) Shape {
+			return Line(i).ToShape()
+		})
+		if len(inputs) < 2 {
+			return
+		}
+		scoreTotal += inputs[0].Score(inputs[1])
+	})
 
 	if err != nil {
 		log.Fatal(err)
 	}
-	foo := utility.Map(lines, func(l string) []string {
-		return strings.Split(l, " ")
+	fmt.Printf("Total score (part 1): %d\n", scoreTotal)
+}
+
+func part2() {
+	scoreTotal := 0
+	err := utility.ForEachLineInFile(os.Args[1], func(s string) {
+		inputs := strings.Split(s, " ")
+		if len(inputs) < 2 {
+			return
+		}
+		shape := Line(inputs[0]).ToShape()
+		outcome := Line(inputs[1]).ToOutcome()
+		scoreTotal += shape.ScoreWithDesiredOutcome(outcome)
 	})
-	fmt.Println(foo)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("Total score (part 2): %d\n", scoreTotal)
 }
