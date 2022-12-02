@@ -1,1 +1,4 @@
-{}
+{
+  "editor.inlayHints.enabled": "offUnlessPressed",
+  "swift.autoGenerateLaunchConfigurations": false
+}

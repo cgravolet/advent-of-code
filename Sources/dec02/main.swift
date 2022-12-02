@@ -85,8 +85,7 @@ struct AdventDay02: ParsableCommand {
                 let shapes = line.components(separatedBy: " ").compactMap { Shape($0) }
                 return shapes.count == 2 ? (shapes[0], shapes[1]) : nil
             }
-            .map { $0.0.score(shape: $0.1) }
-            .reduce(0, +)
+            .reduce(0) { $0 + $1.0.score(shape: $1.1) }
         print("Total Score (part 1): \(totalScore)")
     }
 
@@ -101,8 +100,7 @@ struct AdventDay02: ParsableCommand {
                 else { return nil }
                 return (shape, outcome)
             }
-            .map { $0.0.score(withOutcome: $0.1) }
-            .reduce(0, +)
+            .reduce(0) { $0 + $1.0.score(withOutcome: $1.1) }
         print("Total Score (part 2): \(totalScore)")
     }
 }
