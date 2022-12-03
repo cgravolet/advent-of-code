@@ -1,7 +1,7 @@
 import ArgumentParser
 import Foundation
 
-struct AdventDay01: ParsableCommand {
+struct AdventDay03: ParsableCommand {
     static let configuration = CommandConfiguration(abstract: "Advent of Code - 2022 December 3", version: "1.0.0")
 
     // MARK: - Options
@@ -13,15 +13,23 @@ struct AdventDay01: ParsableCommand {
 
     mutating func run() throws {
         try part1()
+        try part2()
     }
 
     // MARK: - Private methods
 
+    private func getBadge(fromGroup group: [String]) -> String {
+        return group
+            .map { Set($0) }
+            .reduce(Set<String.Element>()) { $0.count <= 0 ? $1 : $0.intersection($1) }
+            .map { String($0) }
+            .joined()
+    }
+
     private func getCommonItem(inCompartments compartments: [String]) -> String? {
-        let sets = compartments.map { Set($0) }
-        guard sets.count == 2 else { return nil }
-        let item = sets[0].intersection(sets[1])
-            .map { String($0 ) }
+        let item = compartments.map { Set($0) }
+            .reduce(Set<String.Element>()) { $0.count <= 0 ? $1 : $0.intersection($1) }
+            .map { String($0) }
             .joined()
         return item.count == 1 ? item : nil
     }
@@ -43,6 +51,12 @@ struct AdventDay01: ParsableCommand {
             .reduce(0, +)
     }
 
+    private func groupElves(by rucksacks: [String]) -> [[String]] {
+        return stride(from: 0, through: rucksacks.count, by: 3).map {
+            Array(rucksacks[$0 ..< Swift.min($0 + 3, rucksacks.count)])
+        }
+    }
+
     private func part1() throws {
         let sum = try String(contentsOfFile: path)
             .components(separatedBy: .newlines)
@@ -52,6 +66,15 @@ struct AdventDay01: ParsableCommand {
             .reduce(0, +)
         print("Priority sum (part 1): \(sum)")
     }
+
+    private func part2() throws {
+        let rucksacks = try String(contentsOfFile: path).components(separatedBy: .newlines)
+        let sum = groupElves(by: rucksacks)
+            .compactMap(getBadge(fromGroup:))
+            .map(getPriority(for:))
+            .reduce(0, +)
+        print("Priority sum of badges (part 2): \(sum)")
+    }
 }
 
-AdventDay01.main()
+AdventDay03.main()
