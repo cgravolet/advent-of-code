@@ -18,14 +18,6 @@ struct AdventDay03: ParsableCommand {
 
     // MARK: - Private methods
 
-    private func getBadge(fromGroup group: [String]) -> String {
-        return group
-            .map { Set($0) }
-            .reduce(Set<String.Element>()) { $0.count <= 0 ? $1 : $0.intersection($1) }
-            .map { String($0) }
-            .joined()
-    }
-
     private func getCommonItem(inCompartments compartments: [String]) -> String? {
         let item = compartments.map { Set($0) }
             .reduce(Set<String.Element>()) { $0.count <= 0 ? $1 : $0.intersection($1) }
@@ -70,7 +62,7 @@ struct AdventDay03: ParsableCommand {
     private func part2() throws {
         let rucksacks = try String(contentsOfFile: path).components(separatedBy: .newlines)
         let sum = groupElves(by: rucksacks)
-            .compactMap(getBadge(fromGroup:))
+            .compactMap(getCommonItem(inCompartments:))
             .map(getPriority(for:))
             .reduce(0, +)
         print("Priority sum of badges (part 2): \(sum)")
