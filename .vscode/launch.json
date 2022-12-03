@@ -21,6 +21,15 @@
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "swift: Build Debug dec02",
             "args": ["-p", "input/dec02.txt"]
+        },
+        {
+            "name": "Dec 03",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/.build/debug/dec03",
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "swift: Build Debug dec03",
+            "args": ["-p", "input/dec03.txt"]
         }
     ]
 }
