@@ -11,9 +11,10 @@ import (
 
 type Compartment string
 type Item rune
+type Items []Item
 
-func (lhs Compartment) GetCommonItems(rhs Compartment) []Item {
-	commonItems := make([]Item, 0)
+func (lhs Compartment) GetCommonItems(rhs Compartment) Items {
+	commonItems := make(Items, 0)
 	for _, el := range lhs {
 		if strings.IndexRune(string(rhs), el) > -1 && strings.IndexRune(string(commonItems), el) == -1 {
 			commonItems = append(commonItems, Item(el))
@@ -30,6 +31,14 @@ func (i Item) Priority() int {
 	}
 }
 
+func (i Items) Priority() int {
+	p := 0
+	for _, j := range i {
+		p += j.Priority()
+	}
+	return p
+}
+
 func main() {
 	part1()
 	part2()
@@ -43,10 +52,7 @@ func part1() {
 		}
 		mid := len(s) / 2
 		commonItems := Compartment(s[:mid]).GetCommonItems(Compartment(s[mid:]))
-
-		for _, i := range commonItems {
-			sum += i.Priority()
-		}
+		sum += commonItems.Priority()
 	})
 
 	if err != nil {
@@ -70,24 +76,21 @@ func part2() {
 		groups[index] = append(groups[index], Compartment(s))
 	})
 
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	for _, g := range groups {
 
 		if len(g) <= 0 {
 			continue
 		}
-		commonItems := []Item(g[0])
+		commonItems := Items(g[0])
 
 		for r := 1; r < len(g); r += 1 {
 			commonItems = g[r].GetCommonItems(Compartment(commonItems))
 		}
-
-		for _, i := range commonItems {
-			sum += i.Priority()
-		}
-	}
-
-	if err != nil {
-		log.Fatal(err)
+		sum += commonItems.Priority()
 	}
 	fmt.Printf("Priority sum of badges (part 2): %d\n", sum)
 }
