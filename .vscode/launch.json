@@ -43,6 +43,16 @@
             "args": [
                 "../../input/dec04.txt"
             ]
+        },
+        {
+            "name": "Dec 05",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd/dec05/main.go",
+            "args": [
+                "../../input/dec05.txt"
+            ]
         }
     ]
 }
