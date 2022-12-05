@@ -40,24 +40,40 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("Day 5\nStacks: %v\nInstructions (%d): %v\n", stacks, len(instructions), instructions)
 
-	applyInstructions(instructions, &stacks)
-	var answer string
+	// Part 1
+	var answer1 string
+	part1 := applyInstructions(stacks, instructions)
 
-	for _, stack := range stacks {
+	for _, stack := range part1 {
 		if len(stack) > 0 {
-			answer += stack[len(stack)-1]
+			answer1 += stack[len(stack)-1]
 		}
 	}
-	fmt.Printf("Day 5\nStacks: %v\n\n", stacks)
-	fmt.Printf("Day 5, part 1 answer: %s\n", answer)
+	fmt.Printf("Day 5, part 1 answer: %s\n", answer1)
+
+	// Part 2
+	var answer2 string
+	part2 := applyModifiedInstructions(stacks, instructions)
+
+	for _, stack := range part2 {
+		if len(stack) > 0 {
+			answer2 += stack[len(stack)-1]
+		}
+	}
+	fmt.Printf("Day 5, part 2 answer: %s\n", answer2)
 }
 
 // Private methods
 
-func applyInstructions(instructions []Instruction, s *[]Stack) {
-	stacks := *s
+func applyInstructions(s []Stack, instructions []Instruction) []Stack {
+	stacks := make([]Stack, 0)
+
+	for _, stack := range s {
+		newStack := make(Stack, len(stack))
+		copy(newStack, stack)
+		stacks = append(stacks, newStack)
+	}
 
 	for _, i := range instructions {
 		for c := 0; c < i.Count; c++ {
@@ -69,7 +85,24 @@ func applyInstructions(instructions []Instruction, s *[]Stack) {
 			stacks[i.To] = append(stacks[i.To], x)
 		}
 	}
-	*s = stacks
+	return stacks
+}
+
+func applyModifiedInstructions(s []Stack, instructions []Instruction) []Stack {
+	stacks := make([]Stack, 0)
+
+	for _, stack := range s {
+		newStack := make(Stack, len(stack))
+		copy(newStack, stack)
+		stacks = append(stacks, newStack)
+	}
+
+	for _, i := range instructions {
+		var x Stack
+		x, stacks[i.From] = stacks[i.From][len(stacks[i.From])-i.Count:], stacks[i.From][:len(stacks[i.From])-i.Count]
+		stacks[i.To] = append(stacks[i.To], x...)
+	}
+	return stacks
 }
 
 func parseInstructionFromString(s string) (Instruction, error) {
@@ -86,7 +119,6 @@ func parseInstructionFromString(s string) (Instruction, error) {
 	return i, nil
 }
 
-// 0 4 8 12 16 20 24 28 32
 func positionCrates(s string, st *[]Stack) {
 	stacks := *st
 	str := s
