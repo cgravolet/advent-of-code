@@ -27,7 +27,7 @@ func main() {
 
 	err := utility.ForEachLineInFile(os.Args[1], func(s string) {
 		if strings.Contains(s, "[") {
-			positionCrates(s, &stacks)
+			positionCrates(s, stacks)
 		} else {
 			i, err := parseInstructionFromString(s)
 
@@ -42,31 +42,17 @@ func main() {
 	}
 
 	// Part 1
-	var answer1 string
 	part1 := applyInstructions(stacks, instructions)
-
-	for _, stack := range part1 {
-		if len(stack) > 0 {
-			answer1 += stack[len(stack)-1]
-		}
-	}
-	fmt.Printf("Day 5, part 1 answer: %s\n", answer1)
+	fmt.Printf("Day 5, part 1 answer: %s\n", part1)
 
 	// Part 2
-	var answer2 string
 	part2 := applyModifiedInstructions(stacks, instructions)
-
-	for _, stack := range part2 {
-		if len(stack) > 0 {
-			answer2 += stack[len(stack)-1]
-		}
-	}
-	fmt.Printf("Day 5, part 2 answer: %s\n", answer2)
+	fmt.Printf("Day 5, part 2 answer: %s\n", part2)
 }
 
 // Private methods
 
-func applyInstructions(s []Stack, instructions []Instruction) []Stack {
+func applyInstructions(s []Stack, instructions []Instruction) string {
 	stacks := make([]Stack, 0)
 
 	for _, stack := range s {
@@ -85,10 +71,10 @@ func applyInstructions(s []Stack, instructions []Instruction) []Stack {
 			stacks[i.To] = append(stacks[i.To], x)
 		}
 	}
-	return stacks
+	return getAnswer(stacks)
 }
 
-func applyModifiedInstructions(s []Stack, instructions []Instruction) []Stack {
+func applyModifiedInstructions(s []Stack, instructions []Instruction) string {
 	stacks := make([]Stack, 0)
 
 	for _, stack := range s {
@@ -102,7 +88,17 @@ func applyModifiedInstructions(s []Stack, instructions []Instruction) []Stack {
 		x, stacks[i.From] = stacks[i.From][len(stacks[i.From])-i.Count:], stacks[i.From][:len(stacks[i.From])-i.Count]
 		stacks[i.To] = append(stacks[i.To], x...)
 	}
-	return stacks
+	return getAnswer(stacks)
+}
+
+func getAnswer(st []Stack) string {
+	var answer string
+	for _, stack := range st {
+		if len(stack) > 0 {
+			answer += stack[len(stack)-1]
+		}
+	}
+	return answer
 }
 
 func parseInstructionFromString(s string) (Instruction, error) {
@@ -119,25 +115,21 @@ func parseInstructionFromString(s string) (Instruction, error) {
 	return i, nil
 }
 
-func positionCrates(s string, st *[]Stack) {
-	stacks := *st
-	str := s
-
-	i := strings.IndexRune(str, '[')
+func positionCrates(s string, st []Stack) {
+	i := strings.IndexRune(s, '[')
 	si := 0
 
 	for i > -1 {
 		si += i / 4
-		crate := str[i+1 : i+2]
-		stacks[si] = append(Stack{crate}, stacks[si]...)
+		crate := s[i+1 : i+2]
+		st[si] = append(Stack{crate}, st[si]...)
 
-		if len(str) < i+4 {
+		if len(s) < i+4 {
 			i = -1
 			continue
 		}
-		str = str[i+4:]
-		i = strings.IndexRune(str, '[')
+		s = s[i+4:]
+		i = strings.IndexRune(s, '[')
 		si += 1
 	}
-	*st = stacks
 }
