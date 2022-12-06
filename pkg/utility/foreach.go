@@ -24,3 +24,28 @@ func ForEachLineInFile(path string, f func(string)) error {
 	}
 	return nil
 }
+
+func ForEachRuneInFile(path string, f func(string) bool) error {
+	file, err := os.Open(path)
+
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	scanner.Split(bufio.ScanRunes)
+
+	for scanner.Scan() {
+		stop := f(scanner.Text())
+
+		if stop {
+			return scanner.Err()
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		return err
+	}
+	return nil
+}
