@@ -20,12 +20,10 @@ func main() {
 // Private functions
 
 func findMarkerInFile(path string, size int) (int, error) {
-	i := 0
 	charset := make([]string, 0)
 	marker := -1
 
-	err := utility.ForEachRuneInFile(path, func(s string) bool {
-		i += 1
+	err := utility.ForEachRuneInFile(path, func(i int, s string) bool {
 		charset = append(charset, s)
 
 		if len(charset) > size {
@@ -38,7 +36,7 @@ func findMarkerInFile(path string, size int) (int, error) {
 		}
 
 		if len(charmap) == size {
-			marker = i
+			marker = i + 1
 			return true
 		}
 		return false
