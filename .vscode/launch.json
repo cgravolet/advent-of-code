@@ -5,58 +5,76 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Dec 01",
             "type": "lldb",
             "request": "launch",
-            "program": "${workspaceFolder}/.build/debug/dec01",
-            "cwd": "${workspaceFolder}",
-            "preLaunchTask": "swift: Build Debug dec01",
-            "args": ["-p", "input/dec01.txt"]
+            "name": "Debug AdventOfCode2022",
+            "program": "${workspaceFolder:advent-of-code-2022}/.build/debug/AdventOfCode2022",
+            "args": [],
+            "cwd": "${workspaceFolder:advent-of-code-2022}",
+            "preLaunchTask": "swift: Build Debug AdventOfCode2022"
         },
         {
-            "name": "Dec 02",
             "type": "lldb",
             "request": "launch",
-            "program": "${workspaceFolder}/.build/debug/dec02",
-            "cwd": "${workspaceFolder}",
-            "preLaunchTask": "swift: Build Debug dec02",
-            "args": ["-p", "input/dec02.txt"]
+            "name": "Release AdventOfCode2022",
+            "program": "${workspaceFolder:advent-of-code-2022}/.build/release/AdventOfCode2022",
+            "args": [],
+            "cwd": "${workspaceFolder:advent-of-code-2022}",
+            "preLaunchTask": "swift: Build Release AdventOfCode2022"
         },
         {
-            "name": "Dec 03",
             "type": "lldb",
             "request": "launch",
-            "program": "${workspaceFolder}/.build/debug/dec03",
-            "cwd": "${workspaceFolder}",
-            "preLaunchTask": "swift: Build Debug dec03",
-            "args": ["-p", "input/dec03.txt"]
+            "name": "Day 01",
+            "program": "${workspaceFolder:advent-of-code-2022}/.build/debug/AdventOfCode2022",
+            "args": ["day01", "-p", "input/day01.txt"],
+            "cwd": "${workspaceFolder:advent-of-code-2022}",
+            "preLaunchTask": "swift: Build Debug AdventOfCode2022"
         },
         {
-            "name": "Dec 04",
             "type": "lldb",
             "request": "launch",
-            "program": "${workspaceFolder}/.build/debug/dec04",
-            "cwd": "${workspaceFolder}",
-            "preLaunchTask": "swift: Build Debug dec04",
-            "args": ["-p", "input/dec04.txt"]
+            "name": "Day 02",
+            "program": "${workspaceFolder:advent-of-code-2022}/.build/debug/AdventOfCode2022",
+            "args": ["day02", "-p", "input/day02.txt"],
+            "cwd": "${workspaceFolder:advent-of-code-2022}",
+            "preLaunchTask": "swift: Build Debug AdventOfCode2022"
         },
         {
-            "name": "Dec 05",
             "type": "lldb",
             "request": "launch",
-            "program": "${workspaceFolder}/.build/debug/dec05",
-            "cwd": "${workspaceFolder}",
-            "preLaunchTask": "swift: Build Debug dec05",
-            "args": ["-p", "input/dec05.txt"]
+            "name": "Day 03",
+            "program": "${workspaceFolder:advent-of-code-2022}/.build/debug/AdventOfCode2022",
+            "args": ["day03", "-p", "input/day03.txt"],
+            "cwd": "${workspaceFolder:advent-of-code-2022}",
+            "preLaunchTask": "swift: Build Debug AdventOfCode2022"
         },
         {
-            "name": "Dec 06",
             "type": "lldb",
             "request": "launch",
-            "program": "${workspaceFolder}/.build/debug/dec06",
-            "cwd": "${workspaceFolder}",
-            "preLaunchTask": "swift: Build Debug dec06",
-            "args": ["-p", "input/dec06.txt"]
+            "name": "Day 04",
+            "program": "${workspaceFolder:advent-of-code-2022}/.build/debug/AdventOfCode2022",
+            "args": ["day04", "-p", "input/day04.txt"],
+            "cwd": "${workspaceFolder:advent-of-code-2022}",
+            "preLaunchTask": "swift: Build Debug AdventOfCode2022"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Day 05",
+            "program": "${workspaceFolder:advent-of-code-2022}/.build/debug/AdventOfCode2022",
+            "args": ["day05", "-p", "input/day05.txt"],
+            "cwd": "${workspaceFolder:advent-of-code-2022}",
+            "preLaunchTask": "swift: Build Debug AdventOfCode2022"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Day 06",
+            "program": "${workspaceFolder:advent-of-code-2022}/.build/debug/AdventOfCode2022",
+            "args": ["day06", "-p", "input/day06.txt"],
+            "cwd": "${workspaceFolder:advent-of-code-2022}",
+            "preLaunchTask": "swift: Build Debug AdventOfCode2022"
         }
     ]
 }

@@ -61,13 +61,13 @@ enum Outcome: Int {
     }
 }
 
-struct AdventDay02: ParsableCommand {
+struct Day02: ParsableCommand {
     static let configuration = CommandConfiguration(abstract: "Advent of Code - 2022 December 2", version: "1.0.0")
 
     // MARK: - Options
 
     @Option(name: .shortAndLong, help: "Input file path")
-    var path: String = "input/dec02.txt"
+    var path: String = "input/day02.txt"
 
     // MARK: - Lifecycle
 
@@ -104,5 +104,3 @@ struct AdventDay02: ParsableCommand {
         print("Total Score (part 2): \(totalScore)")
     }
 }
-
-AdventDay02.main()

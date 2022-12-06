@@ -110,13 +110,13 @@ struct InstructionParser {
     }
 }
 
-struct AdventDay05: ParsableCommand {
+struct Day05: ParsableCommand {
     static let configuration = CommandConfiguration(abstract: "Advent of Code - 2022 December 5", version: "1.0.0")
 
     // MARK: - Options
 
     @Option(name: .shortAndLong, help: "Input file path")
-    var path: String = "input/dec05.txt"
+    var path: String = "input/day05.txt"
 
     // MARK: - Lifecycle
 
@@ -128,5 +128,3 @@ struct AdventDay05: ParsableCommand {
         print("Day 5 answer (part 2): \(mover9001.run(instructions))")
     }
 }
-
-AdventDay05.main()

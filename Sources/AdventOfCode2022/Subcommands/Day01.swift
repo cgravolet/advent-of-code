@@ -1,11 +1,11 @@
 import ArgumentParser
 import Foundation
 
-struct AdventDay01: ParsableCommand {
+struct Day01: ParsableCommand {
     static let configuration = CommandConfiguration(abstract: "Advent of Code - 2022 December 1", version: "1.0.0")
 
     @Option(name: .shortAndLong, help: "Input file path")
-    var path: String = "input/dec01.txt"
+    var path: String = "input/day01.txt"
 
     mutating func run() throws {
         let calories = try String(contentsOfFile: path)
@@ -31,5 +31,3 @@ struct AdventDay01: ParsableCommand {
         print("Top three calories combined: \(topThree)")
     }
 }
-
-AdventDay01.main()

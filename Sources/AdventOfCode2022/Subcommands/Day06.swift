@@ -1,13 +1,13 @@
 import ArgumentParser
 import Foundation
 
-struct AdventDay06: ParsableCommand {
+struct Day06: ParsableCommand {
     static let configuration = CommandConfiguration(abstract: "Advent of Code - 2022 December 6", version: "1.0.0")
 
     // MARK: - Options
 
     @Option(name: .shortAndLong, help: "Input file path")
-    var path: String = "input/dec06.txt"
+    var path: String = "input/day06.txt"
 
     // MARK: - Lifecycle
 
@@ -19,7 +19,9 @@ struct AdventDay06: ParsableCommand {
         print("Day 6 answer (part 2): \(answer2)")
     }
 
-    private func findMarker(inStream stream: String, size: Int) throws -> Int {
+    // MARK: - Internal methods
+
+    func findMarker(inStream stream: String, size: Int) throws -> Int {
         var charSet = Array<String.Element>()
 
         for (i, char) in stream.enumerated() {
@@ -36,5 +38,3 @@ struct AdventDay06: ParsableCommand {
         throw NSError(domain: "com.adventofcode.day06", code: 404)
     }
 }
-
-AdventDay06.main()

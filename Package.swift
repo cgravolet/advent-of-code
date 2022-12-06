@@ -10,37 +10,12 @@ let package = Package(
     ],
     targets: [
         .executableTarget(
-            name: "dec01",
-            dependencies: [
-                .product(name: "ArgumentParser", package: "swift-argument-parser")
-            ]),
-        .executableTarget(
-            name: "dec02",
-            dependencies: [
-                .product(name: "ArgumentParser", package: "swift-argument-parser")
-            ]),
-        .executableTarget(
-            name: "dec03",
-            dependencies: [
-                .product(name: "ArgumentParser", package: "swift-argument-parser")
-            ]),
-        .executableTarget(
-            name: "dec04",
-            dependencies: [
-                .product(name: "ArgumentParser", package: "swift-argument-parser")
-            ]),
-        .executableTarget(
-            name: "dec05",
-            dependencies: [
-                .product(name: "ArgumentParser", package: "swift-argument-parser")
-            ]),
-        .executableTarget(
-            name: "dec06",
+            name: "AdventOfCode2022",
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser")
             ]),
         .testTarget(
             name: "swiftTests",
-            dependencies: ["dec01"]),
+            dependencies: ["AdventOfCode2022"]),
     ]
 )

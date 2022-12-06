@@ -7,13 +7,13 @@ extension ClosedRange {
     }
 }
 
-struct AdventDay04: ParsableCommand {
+struct Day04: ParsableCommand {
     static let configuration = CommandConfiguration(abstract: "Advent of Code - 2022 December 4", version: "1.0.0")
 
     // MARK: - Options
 
     @Option(name: .shortAndLong, help: "Input file path")
-    var path: String = "input/dec04.txt"
+    var path: String = "input/day04.txt"
 
     // MARK: - Lifecycle
 
@@ -53,5 +53,3 @@ struct AdventDay04: ParsableCommand {
         return sections.count == 2 ? (sections[0], sections[1]) : nil
     }
 }
-
-AdventDay04.main()

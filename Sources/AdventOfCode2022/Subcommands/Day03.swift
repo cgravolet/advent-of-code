@@ -1,13 +1,13 @@
 import ArgumentParser
 import Foundation
 
-struct AdventDay03: ParsableCommand {
+struct Day03: ParsableCommand {
     static let configuration = CommandConfiguration(abstract: "Advent of Code - 2022 December 3", version: "1.0.0")
 
     // MARK: - Options
 
     @Option(name: .shortAndLong, help: "Input file path")
-    var path: String = "input/dec03.txt"
+    var path: String = "input/day03.txt"
 
     // MARK: - Lifecycle
 
@@ -68,5 +68,3 @@ struct AdventDay03: ParsableCommand {
         print("Priority sum of badges (part 2): \(sum)")
     }
 }
-
-AdventDay03.main()
