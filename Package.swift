@@ -34,6 +34,11 @@ let package = Package(
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser")
             ]),
+        .executableTarget(
+            name: "dec06",
+            dependencies: [
+                .product(name: "ArgumentParser", package: "swift-argument-parser")
+            ]),
         .testTarget(
             name: "swiftTests",
             dependencies: ["dec01"]),
