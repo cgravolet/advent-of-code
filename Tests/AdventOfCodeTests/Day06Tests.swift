@@ -1,4 +1,4 @@
-@testable import AdventOfCode2022
+@testable import AdventOfCode
 import XCTest
 import class Foundation.Bundle
 

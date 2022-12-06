@@ -7,74 +7,98 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug AdventOfCode2022",
-            "program": "${workspaceFolder:advent-of-code-2022}/.build/debug/AdventOfCode2022",
+            "name": "Debug AdventOfCode",
+            "program": "${workspaceFolder:advent-of-code-2022}/.build/debug/AdventOfCode",
             "args": [],
             "cwd": "${workspaceFolder:advent-of-code-2022}",
-            "preLaunchTask": "swift: Build Debug AdventOfCode2022"
+            "preLaunchTask": "swift: Build Debug AdventOfCode"
         },
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Release AdventOfCode2022",
-            "program": "${workspaceFolder:advent-of-code-2022}/.build/release/AdventOfCode2022",
+            "name": "Release AdventOfCode",
+            "program": "${workspaceFolder:advent-of-code-2022}/.build/release/AdventOfCode",
             "args": [],
             "cwd": "${workspaceFolder:advent-of-code-2022}",
-            "preLaunchTask": "swift: Build Release AdventOfCode2022"
+            "preLaunchTask": "swift: Build Release AdventOfCode"
         },
         {
             "type": "lldb",
             "request": "launch",
             "name": "Day 01",
-            "program": "${workspaceFolder:advent-of-code-2022}/.build/debug/AdventOfCode2022",
-            "args": ["day01", "-p", "input/day01.txt"],
+            "program": "${workspaceFolder:advent-of-code-2022}/.build/debug/AdventOfCode",
+            "args": [
+                "day01",
+                "-p",
+                "input/day01.txt"
+            ],
             "cwd": "${workspaceFolder:advent-of-code-2022}",
-            "preLaunchTask": "swift: Build Debug AdventOfCode2022"
+            "preLaunchTask": "swift: Build Debug AdventOfCode"
         },
         {
             "type": "lldb",
             "request": "launch",
             "name": "Day 02",
-            "program": "${workspaceFolder:advent-of-code-2022}/.build/debug/AdventOfCode2022",
-            "args": ["day02", "-p", "input/day02.txt"],
+            "program": "${workspaceFolder:advent-of-code-2022}/.build/debug/AdventOfCode",
+            "args": [
+                "day02",
+                "-p",
+                "input/day02.txt"
+            ],
             "cwd": "${workspaceFolder:advent-of-code-2022}",
-            "preLaunchTask": "swift: Build Debug AdventOfCode2022"
+            "preLaunchTask": "swift: Build Debug AdventOfCode"
         },
         {
             "type": "lldb",
             "request": "launch",
             "name": "Day 03",
-            "program": "${workspaceFolder:advent-of-code-2022}/.build/debug/AdventOfCode2022",
-            "args": ["day03", "-p", "input/day03.txt"],
+            "program": "${workspaceFolder:advent-of-code-2022}/.build/debug/AdventOfCode",
+            "args": [
+                "day03",
+                "-p",
+                "input/day03.txt"
+            ],
             "cwd": "${workspaceFolder:advent-of-code-2022}",
-            "preLaunchTask": "swift: Build Debug AdventOfCode2022"
+            "preLaunchTask": "swift: Build Debug AdventOfCode"
         },
         {
             "type": "lldb",
             "request": "launch",
             "name": "Day 04",
-            "program": "${workspaceFolder:advent-of-code-2022}/.build/debug/AdventOfCode2022",
-            "args": ["day04", "-p", "input/day04.txt"],
+            "program": "${workspaceFolder:advent-of-code-2022}/.build/debug/AdventOfCode",
+            "args": [
+                "day04",
+                "-p",
+                "input/day04.txt"
+            ],
             "cwd": "${workspaceFolder:advent-of-code-2022}",
-            "preLaunchTask": "swift: Build Debug AdventOfCode2022"
+            "preLaunchTask": "swift: Build Debug AdventOfCode"
         },
         {
             "type": "lldb",
             "request": "launch",
             "name": "Day 05",
-            "program": "${workspaceFolder:advent-of-code-2022}/.build/debug/AdventOfCode2022",
-            "args": ["day05", "-p", "input/day05.txt"],
+            "program": "${workspaceFolder:advent-of-code-2022}/.build/debug/AdventOfCode",
+            "args": [
+                "day05",
+                "-p",
+                "input/day05.txt"
+            ],
             "cwd": "${workspaceFolder:advent-of-code-2022}",
-            "preLaunchTask": "swift: Build Debug AdventOfCode2022"
+            "preLaunchTask": "swift: Build Debug AdventOfCode"
         },
         {
             "type": "lldb",
             "request": "launch",
             "name": "Day 06",
-            "program": "${workspaceFolder:advent-of-code-2022}/.build/debug/AdventOfCode2022",
-            "args": ["day06", "-p", "input/day06.txt"],
+            "program": "${workspaceFolder:advent-of-code-2022}/.build/debug/AdventOfCode",
+            "args": [
+                "day06",
+                "-p",
+                "input/day06.txt"
+            ],
             "cwd": "${workspaceFolder:advent-of-code-2022}",
-            "preLaunchTask": "swift: Build Debug AdventOfCode2022"
+            "preLaunchTask": "swift: Build Debug AdventOfCode"
         }
     ]
 }
