@@ -5,8 +5,8 @@ import (
 	"io"
 )
 
-func ForEachLineInFile(input io.Reader, f func(string)) error {
-	scanner := bufio.NewScanner(input)
+func ForEachLineInReader(r io.Reader, f func(string)) error {
+	scanner := bufio.NewScanner(r)
 
 	for scanner.Scan() {
 		f(scanner.Text())
@@ -18,8 +18,8 @@ func ForEachLineInFile(input io.Reader, f func(string)) error {
 	return nil
 }
 
-func ForEachRuneInFile(input io.Reader, f func(int, string) bool) error {
-	scanner := bufio.NewScanner(input)
+func ForEachRuneInReader(r io.Reader, f func(int, string) bool) error {
+	scanner := bufio.NewScanner(r)
 	scanner.Split(bufio.ScanRunes)
 
 	i := 0

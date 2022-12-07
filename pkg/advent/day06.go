@@ -23,7 +23,7 @@ func findMarkerInFile(input io.Reader, size int) (int, error) {
 	charset := make([]string, 0)
 	marker := -1
 
-	err := utility.ForEachRuneInFile(input, func(i int, s string) bool {
+	err := utility.ForEachRuneInReader(input, func(i int, s string) bool {
 		charset = append(charset, s)
 
 		if len(charset) > size {

@@ -13,9 +13,9 @@ func Map[T, U any](data []T, f func(T) U) []U {
 	return res
 }
 
-func MapLinesInFile[T any](input io.Reader, f func(string) T) ([]T, error) {
+func MapLinesInReader[T any](r io.Reader, f func(string) T) ([]T, error) {
 	var res []T
-	scanner := bufio.NewScanner(input)
+	scanner := bufio.NewScanner(r)
 
 	for scanner.Scan() {
 		res = append(res, f(scanner.Text()))

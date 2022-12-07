@@ -107,7 +107,7 @@ func Day02(input string) {
 
 func day02part1(input io.Reader) {
 	scoreTotal := 0
-	err := utility.ForEachLineInFile(input, func(s string) {
+	err := utility.ForEachLineInReader(input, func(s string) {
 		inputs := utility.Map(strings.Split(s, " "), func(i string) Shape {
 			return Line(i).ToShape()
 		})
@@ -125,7 +125,7 @@ func day02part1(input io.Reader) {
 
 func day02part2(input io.Reader) {
 	scoreTotal := 0
-	err := utility.ForEachLineInFile(input, func(s string) {
+	err := utility.ForEachLineInReader(input, func(s string) {
 		inputs := strings.Split(s, " ")
 		if len(inputs) < 2 {
 			return

@@ -31,7 +31,7 @@ func Day04(input string) {
 	var contained int
 	var overlapped int
 
-	err := utility.ForEachLineInFile(strings.NewReader(input), func(s string) {
+	err := utility.ForEachLineInReader(strings.NewReader(input), func(s string) {
 		lhs, rhs, err := makeSectionPairFromString(s)
 
 		if err != nil {

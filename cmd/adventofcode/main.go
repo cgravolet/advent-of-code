@@ -18,7 +18,7 @@ type AdventCmd struct {
 func main() {
 	cmds := make(map[string]AdventCmd)
 
-	for _, cmd := range []string{"day01", "day02", "day03", "day04", "day05", "day06"} {
+	for _, cmd := range []string{"day01", "day02", "day03", "day04", "day05", "day06", "day07"} {
 		flagSet := flag.NewFlagSet(cmd, flag.ExitOnError)
 		input := flagSet.String("path", fmt.Sprintf("../../input/%s.txt", cmd), "Path to input file")
 		cmds[cmd] = AdventCmd{flagSet, input}
@@ -48,6 +48,8 @@ func main() {
 		advent.Day05(contents)
 	case "day06":
 		advent.Day06(contents)
+	case "day07":
+		advent.Day07(contents)
 	default:
 		log.Fatal(fmt.Errorf("Unexpected argument: %v", os.Args[1]))
 	}

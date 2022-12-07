@@ -46,7 +46,7 @@ func Day03(input string) {
 
 func day03part1(input io.Reader) {
 	var sum int
-	err := utility.ForEachLineInFile(input, func(s string) {
+	err := utility.ForEachLineInReader(input, func(s string) {
 		if len(s) == 0 {
 			return
 		}
@@ -66,7 +66,7 @@ func day03part2(input io.Reader) {
 
 	groups := make([][]Compartment, 0)
 
-	err := utility.ForEachLineInFile(input, func(s string) {
+	err := utility.ForEachLineInReader(input, func(s string) {
 		index := len(groups) - 1
 
 		if index < 0 || len(groups[index]) == 3 {

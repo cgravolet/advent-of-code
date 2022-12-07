@@ -48,6 +48,14 @@
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
             "args": ["day06", "-path=../../input/day06.txt"]
+        },
+        {
+            "name": "Day 07",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd/adventofcode/main.go",
+            "args": ["day07", "-path=../../input/day07.txt"]
         }
     ]
 }

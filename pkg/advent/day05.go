@@ -24,7 +24,7 @@ func Day05(input string) {
 	stacks := make([]Stack, 9)
 	instructions := make([]Instruction, 0)
 
-	err := utility.ForEachLineInFile(strings.NewReader(input), func(s string) {
+	err := utility.ForEachLineInReader(strings.NewReader(input), func(s string) {
 		if strings.Contains(s, "[") {
 			positionCrates(s, stacks)
 		} else {

@@ -13,7 +13,7 @@ import (
 func Day01(input string) {
 	calories := []int{0}
 
-	err := utility.ForEachLineInFile(strings.NewReader(input), func(s string) {
+	err := utility.ForEachLineInReader(strings.NewReader(input), func(s string) {
 		if len(s) == 0 {
 			calories = append(calories, 0)
 			return
