@@ -6,26 +6,20 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/cgravolet/adventofcode2022/pkg/advent"
 )
 
-type AdventCmd struct {
-	FlagSet *flag.FlagSet
-	Input   *string
-}
-
 func main() {
-	cmds := make(map[string]AdventCmd)
-
-	for _, cmd := range []string{"day01", "day02", "day03", "day04", "day05", "day06", "day07"} {
-		flagSet := flag.NewFlagSet(cmd, flag.ExitOnError)
-		input := flagSet.String("path", fmt.Sprintf("../../input/%s.txt", cmd), "Path to input file")
-		cmds[cmd] = AdventCmd{flagSet, input}
+	if len(os.Args) < 2 {
+		log.Fatal(fmt.Errorf("You must specify a subcommand (i.e. 'day01' or 'day02')"))
 	}
-	cmd := cmds[os.Args[1]]
-	cmd.FlagSet.Parse(os.Args[2:])
-	file, err := os.Open(*cmd.Input)
+	subcmd := os.Args[1]
+	flagSet := flag.NewFlagSet(subcmd, flag.ExitOnError)
+	input := flagSet.String("path", fmt.Sprintf("../../input/%s.txt", subcmd), "Input file path")
+	flagSet.Parse(os.Args[2:])
+	file, err := os.Open(*input)
 
 	if err != nil {
 		log.Fatal(err)
@@ -35,7 +29,7 @@ func main() {
 	buf.ReadFrom(file)
 	contents := buf.String()
 
-	switch os.Args[1] {
+	switch strings.ToLower(subcmd) {
 	case "day01":
 		advent.Day01(contents)
 	case "day02":
