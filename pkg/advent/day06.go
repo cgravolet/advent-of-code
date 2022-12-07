@@ -1,29 +1,29 @@
-package main
+package advent
 
 import (
 	"fmt"
-	"os"
+	"io"
+	"strings"
 
-	"github.comcast.com/cgravo558/advent2022/pkg/utility"
+	"github.com/cgravolet/adventofcode2022/pkg/utility"
 )
 
 // Lifecycle
 
-func main() {
-	path := os.Args[1]
-	part1, _ := findMarkerInFile(path, 4)
-	part2, _ := findMarkerInFile(path, 14)
+func Day06(input string) {
+	part1, _ := findMarkerInFile(strings.NewReader(input), 4)
+	part2, _ := findMarkerInFile(strings.NewReader(input), 14)
 	fmt.Printf("Day 6 answer (part 1): %d\n", part1)
 	fmt.Printf("Day 6 answer (part 2): %d\n", part2)
 }
 
-// Private functions
+// Internal functions
 
-func findMarkerInFile(path string, size int) (int, error) {
+func findMarkerInFile(input io.Reader, size int) (int, error) {
 	charset := make([]string, 0)
 	marker := -1
 
-	err := utility.ForEachRuneInFile(path, func(i int, s string) bool {
+	err := utility.ForEachRuneInFile(input, func(i int, s string) bool {
 		charset = append(charset, s)
 
 		if len(charset) > size {

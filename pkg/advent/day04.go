@@ -1,11 +1,11 @@
-package main
+package advent
 
 import (
 	"fmt"
 	"log"
-	"os"
+	"strings"
 
-	"github.comcast.com/cgravo558/advent2022/pkg/utility"
+	"github.com/cgravolet/adventofcode2022/pkg/utility"
 )
 
 type SectionRange struct {
@@ -27,11 +27,11 @@ func makeSectionPairFromString(s string) (SectionRange, SectionRange, error) {
 	return lhs, rhs, err
 }
 
-func main() {
+func Day04(input string) {
 	var contained int
 	var overlapped int
 
-	err := utility.ForEachLineInFile(os.Args[1], func(s string) {
+	err := utility.ForEachLineInFile(strings.NewReader(input), func(s string) {
 		lhs, rhs, err := makeSectionPairFromString(s)
 
 		if err != nil {

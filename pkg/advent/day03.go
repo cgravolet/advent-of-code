@@ -1,12 +1,12 @@
-package main
+package advent
 
 import (
 	"fmt"
+	"io"
 	"log"
-	"os"
 	"strings"
 
-	"github.comcast.com/cgravo558/advent2022/pkg/utility"
+	"github.com/cgravolet/adventofcode2022/pkg/utility"
 )
 
 type Compartment string
@@ -39,14 +39,14 @@ func (i Items) Priority() int {
 	return p
 }
 
-func main() {
-	part1()
-	part2()
+func Day03(input string) {
+	day03part1(strings.NewReader(input))
+	day03part2(strings.NewReader(input))
 }
 
-func part1() {
+func day03part1(input io.Reader) {
 	var sum int
-	err := utility.ForEachLineInFile(os.Args[1], func(s string) {
+	err := utility.ForEachLineInFile(input, func(s string) {
 		if len(s) == 0 {
 			return
 		}
@@ -61,12 +61,12 @@ func part1() {
 	fmt.Printf("Priority sum of common items (part 1): %d\n", sum)
 }
 
-func part2() {
+func day03part2(input io.Reader) {
 	var sum int
 
 	groups := make([][]Compartment, 0)
 
-	err := utility.ForEachLineInFile(os.Args[1], func(s string) {
+	err := utility.ForEachLineInFile(input, func(s string) {
 		index := len(groups) - 1
 
 		if index < 0 || len(groups[index]) == 3 {

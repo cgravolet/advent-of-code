@@ -1,19 +1,19 @@
-package main
+package advent
 
 import (
 	"fmt"
 	"log"
-	"os"
 	"sort"
 	"strconv"
+	"strings"
 
-	"github.comcast.com/cgravo558/advent2022/pkg/utility"
+	"github.com/cgravolet/adventofcode2022/pkg/utility"
 )
 
-func main() {
+func Day01(input string) {
 	calories := []int{0}
 
-	err := utility.ForEachLineInFile(os.Args[1], func(s string) {
+	err := utility.ForEachLineInFile(strings.NewReader(input), func(s string) {
 		if len(s) == 0 {
 			calories = append(calories, 0)
 			return

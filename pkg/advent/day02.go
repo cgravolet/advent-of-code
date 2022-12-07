@@ -1,12 +1,12 @@
-package main
+package advent
 
 import (
 	"fmt"
+	"io"
 	"log"
-	"os"
 	"strings"
 
-	"github.comcast.com/cgravo558/advent2022/pkg/utility"
+	"github.com/cgravolet/adventofcode2022/pkg/utility"
 )
 
 type Line string
@@ -100,14 +100,14 @@ func (l Line) ToShape() Shape {
 	}
 }
 
-func main() {
-	part1()
-	part2()
+func Day02(input string) {
+	day02part1(strings.NewReader(input))
+	day02part2(strings.NewReader(input))
 }
 
-func part1() {
+func day02part1(input io.Reader) {
 	scoreTotal := 0
-	err := utility.ForEachLineInFile(os.Args[1], func(s string) {
+	err := utility.ForEachLineInFile(input, func(s string) {
 		inputs := utility.Map(strings.Split(s, " "), func(i string) Shape {
 			return Line(i).ToShape()
 		})
@@ -123,9 +123,9 @@ func part1() {
 	fmt.Printf("Total score (part 1): %d\n", scoreTotal)
 }
 
-func part2() {
+func day02part2(input io.Reader) {
 	scoreTotal := 0
-	err := utility.ForEachLineInFile(os.Args[1], func(s string) {
+	err := utility.ForEachLineInFile(input, func(s string) {
 		inputs := strings.Split(s, " ")
 		if len(inputs) < 2 {
 			return

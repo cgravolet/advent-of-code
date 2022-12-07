@@ -1,12 +1,11 @@
-package main
+package advent
 
 import (
 	"fmt"
 	"log"
-	"os"
 	"strings"
 
-	"github.comcast.com/cgravo558/advent2022/pkg/utility"
+	"github.com/cgravolet/adventofcode2022/pkg/utility"
 )
 
 // Data structures
@@ -21,11 +20,11 @@ type Instruction struct {
 
 // Program lifecycle
 
-func main() {
+func Day05(input string) {
 	stacks := make([]Stack, 9)
 	instructions := make([]Instruction, 0)
 
-	err := utility.ForEachLineInFile(os.Args[1], func(s string) {
+	err := utility.ForEachLineInFile(strings.NewReader(input), func(s string) {
 		if strings.Contains(s, "[") {
 			positionCrates(s, stacks)
 		} else {

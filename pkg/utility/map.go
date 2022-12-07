@@ -2,7 +2,7 @@ package utility
 
 import (
 	"bufio"
-	"os"
+	"io"
 )
 
 func Map[T, U any](data []T, f func(T) U) []U {
@@ -13,16 +13,9 @@ func Map[T, U any](data []T, f func(T) U) []U {
 	return res
 }
 
-func MapLinesInFile[T any](path string, f func(string) T) ([]T, error) {
+func MapLinesInFile[T any](input io.Reader, f func(string) T) ([]T, error) {
 	var res []T
-	file, err := os.Open(path)
-
-	if err != nil {
-		return res, err
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
+	scanner := bufio.NewScanner(input)
 
 	for scanner.Scan() {
 		res = append(res, f(scanner.Text()))

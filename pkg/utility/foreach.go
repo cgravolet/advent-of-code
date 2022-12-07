@@ -2,18 +2,11 @@ package utility
 
 import (
 	"bufio"
-	"os"
+	"io"
 )
 
-func ForEachLineInFile(path string, f func(string)) error {
-	file, err := os.Open(path)
-
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
+func ForEachLineInFile(input io.Reader, f func(string)) error {
+	scanner := bufio.NewScanner(input)
 
 	for scanner.Scan() {
 		f(scanner.Text())
@@ -25,15 +18,8 @@ func ForEachLineInFile(path string, f func(string)) error {
 	return nil
 }
 
-func ForEachRuneInFile(path string, f func(int, string) bool) error {
-	file, err := os.Open(path)
-
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
+func ForEachRuneInFile(input io.Reader, f func(int, string) bool) error {
+	scanner := bufio.NewScanner(input)
 	scanner.Split(bufio.ScanRunes)
 
 	i := 0
