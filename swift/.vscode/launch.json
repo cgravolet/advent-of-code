@@ -1,0 +1,130 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug AdventOfCode",
+            "program": "${workspaceFolder:swift}/.build/debug/AdventOfCode",
+            "args": [],
+            "cwd": "${workspaceFolder:swift}",
+            "preLaunchTask": "swift: Build Debug AdventOfCode"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Release AdventOfCode",
+            "program": "${workspaceFolder:swift}/.build/release/AdventOfCode",
+            "args": [],
+            "cwd": "${workspaceFolder:swift}",
+            "preLaunchTask": "swift: Build Release AdventOfCode"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Day 01",
+            "program": "${workspaceFolder:swift}/.build/debug/AdventOfCode",
+            "args": [
+                "day01",
+                "-p",
+                "input/day01.txt"
+            ],
+            "cwd": "${workspaceFolder:swift}",
+            "preLaunchTask": "swift: Build Debug AdventOfCode"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Day 02",
+            "program": "${workspaceFolder:swift}/.build/debug/AdventOfCode",
+            "args": [
+                "day02",
+                "-p",
+                "input/day02.txt"
+            ],
+            "cwd": "${workspaceFolder:swift}",
+            "preLaunchTask": "swift: Build Debug AdventOfCode"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Day 03",
+            "program": "${workspaceFolder:swift}/.build/debug/AdventOfCode",
+            "args": [
+                "day03",
+                "-p",
+                "input/day03.txt"
+            ],
+            "cwd": "${workspaceFolder:swift}",
+            "preLaunchTask": "swift: Build Debug AdventOfCode"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Day 04",
+            "program": "${workspaceFolder:swift}/.build/debug/AdventOfCode",
+            "args": [
+                "day04",
+                "-p",
+                "input/day04.txt"
+            ],
+            "cwd": "${workspaceFolder:swift}",
+            "preLaunchTask": "swift: Build Debug AdventOfCode"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Day 05",
+            "program": "${workspaceFolder:swift}/.build/debug/AdventOfCode",
+            "args": [
+                "day05",
+                "-p",
+                "input/day05.txt"
+            ],
+            "cwd": "${workspaceFolder:swift}",
+            "preLaunchTask": "swift: Build Debug AdventOfCode"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Day 06",
+            "program": "${workspaceFolder:swift}/.build/debug/AdventOfCode",
+            "args": [
+                "day06",
+                "-p",
+                "input/day06.txt"
+            ],
+            "cwd": "${workspaceFolder:swift}",
+            "preLaunchTask": "swift: Build Debug AdventOfCode"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Day 07",
+            "program": "${workspaceFolder:swift}/.build/debug/AdventOfCode",
+            "args": [
+                "day07",
+                "-p",
+                "input/day07.txt"
+            ],
+            "cwd": "${workspaceFolder:swift}",
+            "preLaunchTask": "swift: Build Debug AdventOfCode"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Day 08",
+            "program": "${workspaceFolder:swift}/.build/debug/AdventOfCode",
+            "args": [
+                "day08",
+                "-p",
+                "input/day08.txt"
+            ],
+            "cwd": "${workspaceFolder:swift}",
+            "preLaunchTask": "swift: Build Debug AdventOfCode"
+        }
+    ]
+}
