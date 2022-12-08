@@ -13,6 +13,6 @@ struct Day08: ParsableCommand {
     // MARK: - Lifecycle
 
     mutating func run() throws {
-        AdventOfCodeObjc.Day08().run(path)
+        AdventOfCodeObjc.Day08(path: path).run()
     }
 }

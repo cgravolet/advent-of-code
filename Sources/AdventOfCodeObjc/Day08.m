@@ -1,14 +1,36 @@
 #import "include/Day08.h"
 
+@interface Day08 ()
+
+@property (nonatomic, retain) NSString *input;
+
+@end
+
 @implementation Day08
+
+@synthesize input = _input;
+
+#pragma mark - Initialization
+
+- (instancetype)initWithInput:(NSString *)input {
+    self = [super init];
+    if (self) {
+        _input = input;
+    }
+    return self;
+}
+
+- (instancetype)initWithPath:(NSString *)path {
+    NSString *contents = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+    return [self initWithInput:contents];
+}
 
 #pragma mark - Lifecycle
 
-- (void)run:(NSString *)path {
-    NSString *input = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
-    NSArray *map = [self aerialMapFromString:input];
+- (void)run {
+    NSArray *map = [self aerialMapFromString:self.input];
     NSArray *visibleTrees = [self visibleTreesInAerialMap:map];
-    NSNumber *maxScore = [self maxScenicScoreOfAerialMap:map];
+    NSNumber *maxScore = [self maxScenicScoreInAerialMap:map];
     NSLog(@"Visible tree count (part 1): %ld", [visibleTrees count]);
     NSLog(@"Max scenic score (part 2): %ld", [maxScore integerValue]);
 }
@@ -38,7 +60,7 @@
     return  [result copy];
 }
 
-- (NSNumber *)maxScenicScoreOfAerialMap:(NSArray *)map {
+- (NSNumber *)maxScenicScoreInAerialMap:(NSArray *)map {
     NSInteger maxScore = 0;
 
     for (NSInteger i = 0; i < [map count]; i++) {

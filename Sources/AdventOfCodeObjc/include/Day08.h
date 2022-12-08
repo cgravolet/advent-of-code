@@ -2,9 +2,11 @@
 
 @interface Day08: NSObject
 
-- (void)run:(nonnull NSString *)path;
+- (nonnull instancetype)initWithInput:(nonnull NSString *)input;
+- (nonnull instancetype)initWithPath:(nonnull NSString *)path;
+- (void)run;
 - (nonnull NSArray<NSArray<NSNumber *> *> *)aerialMapFromString:(nonnull NSString *)input;
-- (nonnull NSNumber *)maxScenicScoreOfAerialMap:(nonnull NSArray<NSArray<NSNumber *> *> *)map;
+- (nonnull NSNumber *)maxScenicScoreInAerialMap:(nonnull NSArray<NSArray<NSNumber *> *> *)map;
 - (nonnull NSArray<NSNumber *> *)visibleTreesInAerialMap:(nonnull NSArray<NSArray<NSNumber *> *> *)map;
 
 @end
