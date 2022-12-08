@@ -99,6 +99,32 @@
             ],
             "cwd": "${workspaceFolder:advent-of-code-2022}",
             "preLaunchTask": "swift: Build Debug AdventOfCode"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Day 07",
+            "program": "${workspaceFolder:advent-of-code-2022}/.build/debug/AdventOfCode",
+            "args": [
+                "day07",
+                "-p",
+                "input/day07.txt"
+            ],
+            "cwd": "${workspaceFolder:advent-of-code-2022}",
+            "preLaunchTask": "swift: Build Debug AdventOfCode"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Day 08",
+            "program": "${workspaceFolder:advent-of-code-2022}/.build/debug/AdventOfCode",
+            "args": [
+                "day08",
+                "-p",
+                "input/day08.txt"
+            ],
+            "cwd": "${workspaceFolder:advent-of-code-2022}",
+            "preLaunchTask": "swift: Build Debug AdventOfCode"
         }
     ]
 }

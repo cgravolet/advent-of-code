@@ -9,13 +9,15 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.0")
     ],
     targets: [
+        .target(name: "AdventOfCodeObjc"),
         .executableTarget(
             name: "AdventOfCode",
             dependencies: [
-                .product(name: "ArgumentParser", package: "swift-argument-parser")
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
+                .target(name: "AdventOfCodeObjc")
             ]),
         .testTarget(
             name: "AdventOfCodeTests",
-            dependencies: ["AdventOfCode"]),
+            dependencies: ["AdventOfCode", "AdventOfCodeObjc"]),
     ]
 )
