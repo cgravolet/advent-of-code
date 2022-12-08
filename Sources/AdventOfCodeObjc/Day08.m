@@ -57,7 +57,7 @@
             [result addObject:row];
         }
     }
-    return  [result copy];
+    return [result copy];
 }
 
 - (NSNumber *)maxScenicScoreInAerialMap:(NSArray *)map {

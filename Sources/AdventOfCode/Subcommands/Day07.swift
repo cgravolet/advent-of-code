@@ -9,7 +9,7 @@ class Node {
     private(set) var children: [Node]
     let name: String
     weak private(set) var parent: Node?
-    let size: Int
+    var size: Int
     let type: NodeType
 
     init(name: String, size: Int = 0, type: NodeType, children: [Node] = [], parent: Node? = nil) {
@@ -23,6 +23,7 @@ class Node {
     func addChild(_ node: Node) {
         children.append(node)
         node.parent = self
+        size += node.size
     }
 }
 
@@ -37,59 +38,94 @@ struct Day07: ParsableCommand {
     // MARK: - Lifecycle
 
     mutating func run() throws {
-        let tree = makeTree(fromConsoleHistory: try String(contentsOfFile: path))
-        print("Day 7 answer (part 1): \(tree)")
+        let tree = makeDirTree(fromConsoleHistory: try String(contentsOfFile: path))
+        let part1 = findTotalSizeOfDeletionCandidates(inTree: tree, max: 100000)
+        let part2 = findMinSizeOfDeletionCandidates(inTree: tree, total: 70000000, required: 30000000)
+        print("Day 7 answer (part 1): \(part1)")
+        print("Day 7 answer (part 2): \(part2)")
     }
 
     // MARK: - Internal methods
 
-    func makeTree(fromConsoleHistory history: String) -> Node {
+    func findMinSizeOfDeletionCandidates(inTree tree: Node, total: Int, required: Int) -> Int {
+        let unusedSpace = total - tree.size
+        let deletionSpace = required - unusedSpace
+
+        func findMinDirectorySizeForDeletion(node: Node, required: Int) -> Int? {
+            var result: Int?
+            if node.type == .directory && node.size > required {
+                result = node.size
+            }
+            for child in node.children {
+                if let value = findMinDirectorySizeForDeletion(node: child, required: required) {
+                    if let res = result, value < res {
+                        result = value
+                    } else if result == nil {
+                        result = value
+                    }
+                }
+            }
+            return result
+        }
+        return findMinDirectorySizeForDeletion(node: tree, required: deletionSpace) ?? 0
+    }
+
+    func findTotalSizeOfDeletionCandidates(inTree tree: Node, max: Int) -> Int {
+        var sum = 0
+        if tree.type == .directory && tree.size < max {
+            sum += tree.size
+        }
+        for node in tree.children {
+            sum += findTotalSizeOfDeletionCandidates(inTree: node, max: max)
+        }
+        return sum
+    }
+
+    func makeDirTree(fromConsoleHistory history: String) -> Node {
         let root = Node(name: ".", type: .directory)
-        var walk: [Node] = [root]
+        var currentNode = root
 
         for line in history.components(separatedBy: .newlines) {
-            switch line.first {
+            let components = line.components(separatedBy: .whitespaces)
+
+            switch components.first {
             // Traversal
             case "$":
-                do {
-                    var matches = [String](repeating: "", count: 1)
-                    try line.matchPattern("^\\$ cd (.+)$", matches: &matches)
+                guard components.count == 3 else { continue }
 
-                    switch matches[0] {
-                    case "/":
-                        walk = [walk.first!]
-                    case "..":
-                        walk.removeLast()
-                    default:
-                        let children = walk.last?.children
-                        if let dir = children?.first(where: { $0.name == matches[0] && $0.type == .directory}) {
-                            walk.append(dir)
-                        }
+                switch components[2] {
+                case "/":
+                    while let parent = currentNode.parent {
+                        currentNode = parent
                     }
-                } catch {
-                    // no-op
+                case "..":
+                    if let parent = currentNode.parent {
+                        currentNode = parent
+                    }
+                default:
+                    let dir = currentNode.children.first { $0.name == components[2] && $0.type == .directory }
+                    currentNode = dir ?? currentNode
                 }
 
             // Directory
-            case "d":
-                do {
-                    var matches = [String](repeating: "", count: 1)
-                    try line.matchPattern("^dir (.+)$", matches: &matches)
-                    walk.last?.addChild(Node(name: matches[0], type: .directory))
-                } catch {
-                    // no-op
-                }
+            case "dir":
+                guard components.count == 2 else { continue }
+                currentNode.addChild(Node(name: components[1], type: .directory))
 
             // File
             default:
-                do {
-                    var matches = [String](repeating: "", count: 2)
-                    try line.matchPattern("^([0-9]+) (.+)$", matches: &matches)
-                    walk.last?.addChild(Node(name: matches[1], size: Int(matches[0]) ?? 0, type: .file))
-                } catch {
-                    // no-op
+                guard components.count == 2 else { continue }
+                let size = Int(components[0]) ?? 0
+                let node = Node(name: components[1], size: size, type: .file)
+                currentNode.addChild(node)
+
+                // Update size of parent directories
+                var currentParent = currentNode.parent
+
+                while let parent = currentParent, parent.type == .directory {
+                    parent.size += size
+                    currentParent = parent.parent
                 }
-                break
             }
         }
         return root

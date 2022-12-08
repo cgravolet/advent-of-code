@@ -3,23 +3,55 @@ import XCTest
 import class Foundation.Bundle
 
 final class Day07Tests: XCTestCase {
-    func testFindMarker() throws {
-        let tests: [(input: String, size: Int, want: Int)] = [
-            ("bvwbjplbgvbhsrlpgdmjqwftvncz", 4, 5),
-            ("nppdvjthqldpwncqszvftbrmjlhg", 4, 6),
-            ("nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg", 4, 10),
-            ("zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw", 4, 11),
-            ("mjqjpqmgbljsphdztnvjfqwrcgsmlb", 14, 19),
-            ("bvwbjplbgvbhsrlpgdmjqwftvncz", 14, 23),
-            ("nppdvjthqldpwncqszvftbrmjlhg", 14, 23),
-            ("nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg", 14, 29),
-            ("zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw", 14, 26),
-        ]
-        let sut = Day06()
+    private let sampleInput = """
+    $ cd /
+    $ ls
+    dir a
+    14848514 b.txt
+    8504156 c.dat
+    dir d
+    $ cd a
+    $ ls
+    dir e
+    29116 f
+    2557 g
+    62596 h.lst
+    $ cd e
+    $ ls
+    584 i
+    $ cd ..
+    $ cd ..
+    $ cd d
+    $ ls
+    4060174 j
+    8033020 d.log
+    5626152 d.ext
+    7214296 k
 
-        for test in tests {
-            let got = try sut.findMarker(inStream: test.input, size: test.size)
-            XCTAssertEqual(got, test.want)
-        }
+    """
+
+    // MARK: - Tests
+
+    func testFindMinSizeOfDeletionCandidates() throws {
+        let sut = Day07()
+        let tree = sut.makeDirTree(fromConsoleHistory: sampleInput)
+        let got = sut.findMinSizeOfDeletionCandidates(inTree: tree, total: 70000000, required: 30000000)
+        let want = 24933642
+        XCTAssertEqual(got, want)
+    }
+
+    func testFindTotalSizeOfDirectories() throws {
+        let sut = Day07()
+        let tree = sut.makeDirTree(fromConsoleHistory: sampleInput)
+        let got = sut.findTotalSizeOfDeletionCandidates(inTree: tree, max: 100000)
+        let want = 95437
+        XCTAssertEqual(got, want)
+    }
+
+    func testMakeDirTree() throws {
+        let sut = Day07()
+        let got = sut.makeDirTree(fromConsoleHistory: sampleInput)
+        XCTAssertEqual(got.children.count, 4)
+        XCTAssertEqual(got.size, 48381165)
     }
 }
