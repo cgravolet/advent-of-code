@@ -1,4 +1,5 @@
 {
   "editor.inlayHints.enabled": "offUnlessPressed",
+  "files.associations": {"*.h": "objective-c"},
   "swift.autoGenerateLaunchConfigurations": true
 }
