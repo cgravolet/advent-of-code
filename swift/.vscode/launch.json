@@ -30,7 +30,7 @@
             "args": [
                 "day01",
                 "-p",
-                "input/day01.txt"
+                "../input/day01.txt"
             ],
             "cwd": "${workspaceFolder:swift}",
             "preLaunchTask": "swift: Build Debug AdventOfCode"
@@ -43,7 +43,7 @@
             "args": [
                 "day02",
                 "-p",
-                "input/day02.txt"
+                "../input/day02.txt"
             ],
             "cwd": "${workspaceFolder:swift}",
             "preLaunchTask": "swift: Build Debug AdventOfCode"
@@ -56,7 +56,7 @@
             "args": [
                 "day03",
                 "-p",
-                "input/day03.txt"
+                "../input/day03.txt"
             ],
             "cwd": "${workspaceFolder:swift}",
             "preLaunchTask": "swift: Build Debug AdventOfCode"
@@ -69,7 +69,7 @@
             "args": [
                 "day04",
                 "-p",
-                "input/day04.txt"
+                "../input/day04.txt"
             ],
             "cwd": "${workspaceFolder:swift}",
             "preLaunchTask": "swift: Build Debug AdventOfCode"
@@ -82,7 +82,7 @@
             "args": [
                 "day05",
                 "-p",
-                "input/day05.txt"
+                "../input/day05.txt"
             ],
             "cwd": "${workspaceFolder:swift}",
             "preLaunchTask": "swift: Build Debug AdventOfCode"
@@ -95,7 +95,7 @@
             "args": [
                 "day06",
                 "-p",
-                "input/day06.txt"
+                "../input/day06.txt"
             ],
             "cwd": "${workspaceFolder:swift}",
             "preLaunchTask": "swift: Build Debug AdventOfCode"
@@ -108,7 +108,7 @@
             "args": [
                 "day07",
                 "-p",
-                "input/day07.txt"
+                "../input/day07.txt"
             ],
             "cwd": "${workspaceFolder:swift}",
             "preLaunchTask": "swift: Build Debug AdventOfCode"
@@ -121,7 +121,7 @@
             "args": [
                 "day08",
                 "-p",
-                "input/day08.txt"
+                "../input/day08.txt"
             ],
             "cwd": "${workspaceFolder:swift}",
             "preLaunchTask": "swift: Build Debug AdventOfCode"

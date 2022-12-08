@@ -17,7 +17,7 @@ func main() {
 	}
 	subcmd := os.Args[1]
 	flagSet := flag.NewFlagSet(subcmd, flag.ExitOnError)
-	input := flagSet.String("path", fmt.Sprintf("../../input/%s.txt", subcmd), "Input file path")
+	input := flagSet.String("path", fmt.Sprintf("../../../input/%s.txt", subcmd), "Input file path")
 	flagSet.Parse(os.Args[2:])
 	file, err := os.Open(*input)
 

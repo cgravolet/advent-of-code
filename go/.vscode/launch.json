@@ -7,7 +7,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
-            "args": ["day01", "-path=../../input/day01.txt"]
+            "args": ["day01", "-path=../../../input/day01.txt"]
         },
         {
             "name": "Day 02",
@@ -15,7 +15,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
-            "args": ["day02", "-path=../../input/day02.txt"]
+            "args": ["day02", "-path=../../../input/day02.txt"]
         },
         {
             "name": "Day 03",
@@ -23,7 +23,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
-            "args": ["day03", "-path=../../input/day03.txt"]
+            "args": ["day03", "-path=../../../input/day03.txt"]
         },
         {
             "name": "Day 04",
@@ -31,7 +31,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
-            "args": ["day04", "-path=../../input/day04.txt"]
+            "args": ["day04", "-path=../../../input/day04.txt"]
         },
         {
             "name": "Day 05",
@@ -39,7 +39,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
-            "args": ["day05", "-path=../../input/day05.txt"]
+            "args": ["day05", "-path=../../../input/day05.txt"]
         },
         {
             "name": "Day 06",
@@ -47,7 +47,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
-            "args": ["day06", "-path=../../input/day06.txt"]
+            "args": ["day06", "-path=../../../input/day06.txt"]
         },
         {
             "name": "Day 07",
@@ -55,7 +55,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
-            "args": ["day07", "-path=../../input/day07.txt"]
+            "args": ["day07", "-path=../../../input/day07.txt"]
         }
     ]
 }
