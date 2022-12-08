@@ -38,7 +38,7 @@
     return  [result copy];
 }
 
-- (nonnull NSNumber *)maxScenicScoreOfAerialMap:(nonnull NSArray<NSArray<NSNumber *> *> *)map {
+- (NSNumber *)maxScenicScoreOfAerialMap:(NSArray *)map {
     NSInteger maxScore = 0;
 
     for (NSInteger i = 0; i < [map count]; i++) {
@@ -73,7 +73,7 @@
 
     // Check to the left
     BOOL visibleLeft = YES;
-    for (NSInteger r = 0; r < row; r++) {
+    for (NSInteger r = row - 1; r < row && r > -1; r--) {
         NSNumber *item = [[map objectAtIndex:section] objectAtIndex:r];
         if (item.integerValue >= tree.integerValue) {
             visibleLeft = NO;
@@ -84,20 +84,18 @@
 
     // Check to the right
     BOOL visibleRight = YES;
-    if (row < [[map objectAtIndex:section] count] - 1) {
-        for (NSInteger r = row + 1; r < [[map objectAtIndex:section] count]; r++) {
-            NSNumber *item = [[map objectAtIndex:section] objectAtIndex:r];
-            if (item.integerValue >= tree.integerValue) {
-                visibleRight = NO;
-                break;
-            }
+    for (NSInteger r = row + 1; r < [[map objectAtIndex:section] count]; r++) {
+        NSNumber *item = [[map objectAtIndex:section] objectAtIndex:r];
+        if (item.integerValue >= tree.integerValue) {
+            visibleRight = NO;
+            break;
         }
     }
     if (visibleRight) return YES;
 
     // Check above
     BOOL visibleAbove = YES;
-    for (NSInteger s = 0; s < section; s++) {
+    for (NSInteger s = section - 1; s < section && s > -1; s--) {
         NSNumber *item = [[map objectAtIndex:s] objectAtIndex:row];
         if (item.integerValue >= tree.integerValue) {
             visibleAbove = NO;
@@ -108,15 +106,14 @@
 
     // Check below
     BOOL visibleBelow = YES;
-    if (section < [map count] - 1) {
-        for (NSInteger s = section + 1; s < [map count]; s++) {
-            NSNumber *item = [[map objectAtIndex:s] objectAtIndex:row];
-            if (item.integerValue >= tree.integerValue) {
-                return NO;
-            }
+    for (NSInteger s = section + 1; s < [map count]; s++) {
+        NSNumber *item = [[map objectAtIndex:s] objectAtIndex:row];
+        if (item.integerValue >= tree.integerValue) {
+            visibleBelow = NO;
+            break;
         }
     }
-    return YES;
+    return visibleBelow;
 }
 
 - (NSInteger)scenicScoreOfItemAtRow:(NSInteger)row andSection:(NSInteger)section inAerialMap:(NSArray *)map {
