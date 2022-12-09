@@ -1,34 +1,36 @@
 import ArgumentParser
 import Foundation
 
-class Node {
-    enum NodeType {
-        case directory, file
-    }
-
-    private(set) var children: [Node]
-    let name: String
-    weak private(set) var parent: Node?
-    var size: Int
-    let type: NodeType
-
-    init(name: String, size: Int = 0, type: NodeType, children: [Node] = [], parent: Node? = nil) {
-        self.children = children
-        self.name = name
-        self.parent = parent
-        self.size = size
-        self.type = type
-    }
-
-    func addChild(_ node: Node) {
-        children.append(node)
-        node.parent = self
-        size += node.size
-    }
-}
-
 struct Day07: ParsableCommand {
     static let configuration = CommandConfiguration(abstract: "Advent of Code - 2022 December 7", version: "1.0.0")
+
+    // MARK: - Data structures
+
+    class Node {
+        enum NodeType {
+            case directory, file
+        }
+
+        private(set) var children: [Node]
+        let name: String
+        weak private(set) var parent: Node?
+        var size: Int
+        let type: NodeType
+
+        init(name: String, size: Int = 0, type: NodeType, children: [Node] = [], parent: Node? = nil) {
+            self.children = children
+            self.name = name
+            self.parent = parent
+            self.size = size
+            self.type = type
+        }
+
+        func addChild(_ node: Node) {
+            children.append(node)
+            node.parent = self
+            size += node.size
+        }
+    }
 
     // MARK: - Options
 

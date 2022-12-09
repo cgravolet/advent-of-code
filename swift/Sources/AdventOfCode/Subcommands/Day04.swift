@@ -1,7 +1,7 @@
 import ArgumentParser
 import Foundation
 
-extension ClosedRange {
+fileprivate extension ClosedRange {
     func hasContainment(withRange range: ClosedRange) -> Bool {
         (self ~= range.lowerBound && self ~= range.upperBound) || (range ~= lowerBound && range ~= upperBound)
     }

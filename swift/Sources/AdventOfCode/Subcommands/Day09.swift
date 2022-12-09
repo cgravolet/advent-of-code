@@ -60,16 +60,13 @@ struct Day09: ParsableCommand {
 
         func reposition(near h: IntPoint) -> IntPoint {
             guard !isTouching(h) else { return self }
-            var t = self
-            let xdiff = h.x - t.x
-            let ydiff = h.y - t.y
+            let (xdiff, ydiff) = (h.x - x, h.y - y)
             let movex = abs(xdiff) > 1 || (abs(xdiff) > 0 && abs(ydiff) > 1)
             let movey = abs(ydiff) > 1 || (abs(ydiff) > 0 && abs(xdiff) > 1)
-            t = IntPoint(
-                movex ? t.x + (xdiff < 0 ? -1 : 1) : t.x,
-                movey ? t.y + (ydiff < 0 ? -1 : 1) : t.y
+            return IntPoint(
+                movex ? x + (xdiff < 0 ? -1 : 1) : x,
+                movey ? y + (ydiff < 0 ? -1 : 1) : y
             )
-            return t
         }
     }
 
