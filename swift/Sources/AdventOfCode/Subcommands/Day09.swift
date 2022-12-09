@@ -56,6 +56,21 @@ struct IntPoint: Hashable {
         let moveCoord = direction.coord
         return IntPoint(x + moveCoord.x, y + moveCoord.y)
     }
+
+    func reposition(near h: IntPoint) -> IntPoint {
+        var t = self
+        if !t.isTouching(h) {
+            let xdiff = h.x - t.x
+            let ydiff = h.y - t.y
+            let movex = abs(xdiff) > 1 || (abs(xdiff) > 0 && abs(ydiff) > 1)
+            let movey = abs(ydiff) > 1 || (abs(ydiff) > 0 && abs(xdiff) > 1)
+            t = IntPoint(
+                movex ? t.x + (xdiff < 0 ? -1 : 1) : t.x,
+                movey ? t.y + (ydiff < 0 ? -1 : 1) : t.y
+            )
+        }
+        return t
+    }
 }
 
 struct Day09: ParsableCommand {
@@ -80,33 +95,6 @@ struct Day09: ParsableCommand {
         str.components(separatedBy: .newlines).compactMap(Direction.init)
     }
 
-    /*
-    Left
-    H  99,100 ->  98,100
-    T 100,100 ->  99,100
-    xdiff 98-100 = -2
-    ydiff 100-100 = 0
-
-    Right
-    H 101,100 -> 102,100
-    T 100,100 -> 101,100
-
-    Up
-    H 100, 99 -> 100, 98
-    T 100,100 -> 100, 99
-
-    Down
-    H 100,101 -> 102,100
-    T 100,100 -> 100,100
-
-    Diagonal upleftleft
-    H  99, 99 ->  98, 99
-    T 100,100 ->  99, 99
-
-    Diagonal upleftup
-    H  99, 99 ->  99, 98
-    T 100,100 ->  99, 99
-    */
     func solve1(instructions: [Direction]) -> Int {
         var h = IntPoint(500, 500)
         var t = IntPoint(500, 500)
@@ -115,17 +103,8 @@ struct Day09: ParsableCommand {
         for direction in instructions {
             for _ in 0 ..< direction.count {
                 h = h.move(direction)
-                if !t.isTouching(h) {
-                    let xdiff = h.x - t.x
-                    let ydiff = h.y - t.y
-                    let movex = abs(xdiff) > 1 || (abs(xdiff) > 0 && abs(ydiff) > 1)
-                    let movey = abs(ydiff) > 1 || (abs(ydiff) > 0 && abs(xdiff) > 1)
-                    t = IntPoint(
-                        movex ? t.x + (xdiff < 0 ? -1 : 1) : t.x,
-                        movey ? t.y + (ydiff < 0 ? -1 : 1) : t.y
-                    )
-                    visited[t] = true
-                }
+                t = t.reposition(near: h)
+                visited[t] = true
             }
         }
         return visited.count
