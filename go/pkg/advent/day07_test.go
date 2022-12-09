@@ -6,38 +6,7 @@ import (
 	"testing"
 )
 
-func TestFindSizeOfDirectoryForDeletion(t *testing.T) {
-	dirmap := map[string]int{
-		".":     584 + 29116 + 2557 + 62596 + 14848514 + 8504156 + 4060174 + 8033020 + 5626152 + 7214296,
-		"./a":   584 + 29116 + 2557 + 62596,
-		"./a/e": 584,
-		"./d":   4060174 + 8033020 + 5626152 + 7214296,
-	}
-	want := 24933642
-	got := findSizeOfDirectoryForDeletion(dirmap, 70000000, 30000000)
-
-	if !reflect.DeepEqual(want, got) {
-		t.Errorf("\nexpected %d, got %d\n", want, got)
-	}
-}
-
-func TestFindTotalSizeOfCandidatesForDeletion(t *testing.T) {
-	dirmap := map[string]int{
-		".":     584 + 29116 + 2557 + 62596 + 14848514 + 8504156 + 4060174 + 8033020 + 5626152 + 7214296,
-		"./a":   584 + 29116 + 2557 + 62596,
-		"./a/e": 584,
-		"./d":   4060174 + 8033020 + 5626152 + 7214296,
-	}
-	want := 95437
-	got := findTotalSizeOfCandidatesForDeletion(dirmap, 100000)
-
-	if !reflect.DeepEqual(want, got) {
-		t.Errorf("\nexpected %d, got %d\n", want, got)
-	}
-}
-
-func TestMakeDirMap(t *testing.T) {
-	input := `$ cd /
+var sampleInput string = `$ cd /
 $ ls
 dir a
 14848514 b.txt
@@ -59,9 +28,32 @@ $ ls
 4060174 j
 8033020 d.log
 5626152 d.ext
-7214296 k`
+7214296 k
 
-	got := makeDirMap(strings.NewReader(input))
+`
+
+func TestFindSizeOfDirectoryForDeletion(t *testing.T) {
+	input := makeDirMap(strings.NewReader(sampleInput))
+	want := 24933642
+	got := findSizeOfDirectoryForDeletion(input, 70000000, 30000000)
+
+	if !reflect.DeepEqual(want, got) {
+		t.Errorf("\nexpected %d, got %d\n", want, got)
+	}
+}
+
+func TestFindTotalSizeOfCandidatesForDeletion(t *testing.T) {
+	input := makeDirMap(strings.NewReader(sampleInput))
+	want := 95437
+	got := findTotalSizeOfCandidatesForDeletion(input, 100000)
+
+	if !reflect.DeepEqual(want, got) {
+		t.Errorf("\nexpected %d, got %d\n", want, got)
+	}
+}
+
+func TestMakeDirMap(t *testing.T) {
+	got := makeDirMap(strings.NewReader(sampleInput))
 	want := map[string]int{
 		".":     584 + 29116 + 2557 + 62596 + 14848514 + 8504156 + 4060174 + 8033020 + 5626152 + 7214296,
 		"./a":   584 + 29116 + 2557 + 62596,
