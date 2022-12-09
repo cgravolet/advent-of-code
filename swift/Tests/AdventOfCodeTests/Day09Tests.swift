@@ -52,7 +52,7 @@ final class Day09Tests: XCTestCase {
         let want = 13
         let sut = Day09()
         let instructions = sut.makeInstructions(fromString: sampleInput)
-        let got = sut.solve1(instructions: instructions)
+        let got = sut.solve(instructions: instructions, ropeSize: 2)
         XCTAssertEqual(got, want)
     }
 }

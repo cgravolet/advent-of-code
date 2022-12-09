@@ -1,4 +1,3 @@
-import AdventOfCodeObjc
 import ArgumentParser
 import Foundation
 
@@ -85,8 +84,10 @@ struct Day09: ParsableCommand {
 
     mutating func run() throws {
         let instructions = makeInstructions(fromString: try String(contentsOfFile: path))
-        let part1 = solve1(instructions: instructions)
+        let part1 = solve(instructions: instructions, ropeSize: 2)
+        let part2 = solve(instructions: instructions, ropeSize: 10)
         print("Part 1: \(part1)")
+        print("Part 2: \(part2)")
     }
 
     // MARK: - Internal methods
@@ -95,16 +96,18 @@ struct Day09: ParsableCommand {
         str.components(separatedBy: .newlines).compactMap(Direction.init)
     }
 
-    func solve1(instructions: [Direction]) -> Int {
-        var h = IntPoint(500, 500)
-        var t = IntPoint(500, 500)
-        var visited: [IntPoint: Bool] = [t: true]
+    func solve(instructions: [Direction], ropeSize: Int) -> Int {
+        guard ropeSize > 0 else { return 0 }
+        var rope = [IntPoint](repeating: IntPoint(500, 500), count: ropeSize)
+        var visited = [IntPoint: Bool]()
 
         for direction in instructions {
             for _ in 0 ..< direction.count {
-                h = h.move(direction)
-                t = t.reposition(near: h)
-                visited[t] = true
+                rope[0] = rope[0].move(direction)
+                for i in 1 ..< rope.count {
+                    rope[i] = rope[i].reposition(near: rope[i-1])
+                }
+                visited[rope[rope.count-1]] = true
             }
         }
         return visited.count
