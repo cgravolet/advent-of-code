@@ -25,26 +25,24 @@ func (a *AdventOfCode2022) Day10(input string) {
 // Internal methods
 
 func day10part1(in []ClockCircuitInstruction) (int, string) {
-	x := 1
-	strength := []int{0}
-	pixels := make([]string, 0)
-	pos := 0
+	cycle, x, pos, sum, pixels := 1, 1, 0, 0, ""
 
 	for len(in) > 0 {
-		cycle := len(strength)
-		strength = append(strength, x*cycle)
+		if (cycle-20)%40 == 0 {
+			sum += x * cycle
+		}
 
 		// Draw the pixel
-		pixel := "."
 		if pos >= x-1 && pos <= x+1 {
-			pixel = "#"
+			pixels += "#"
+		} else {
+			pixels += "."
 		}
-		pixels = append(pixels, pixel)
 		pos++
 
 		// Reset position if this is end of the CRT's draw distance
 		if pos%40 == 0 {
-			pixels = append(pixels, "\n")
+			pixels += "\n"
 			pos = 0
 		}
 
@@ -54,14 +52,9 @@ func day10part1(in []ClockCircuitInstruction) (int, string) {
 			x += in[0].Value
 			in = in[1:]
 		}
+		cycle++
 	}
-
-	// Sum of signal strength during the 20th, 60th, 100th, 140th, 180th, and 220th cycles
-	sum := 0
-	for i := 20; i <= 220; i += 40 {
-		sum += strength[i]
-	}
-	return sum, strings.Join(pixels, "")
+	return sum, pixels
 }
 
 func makeClockCircuitInstructions(r io.Reader) []ClockCircuitInstruction {
