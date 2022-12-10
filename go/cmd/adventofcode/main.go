@@ -44,6 +44,8 @@ func main() {
 		advent.Day06(contents)
 	case "day07":
 		advent.Day07(contents)
+	case "day10":
+		advent.Day10(contents)
 	default:
 		log.Fatal(fmt.Errorf("Unexpected argument: %v", os.Args[1]))
 	}

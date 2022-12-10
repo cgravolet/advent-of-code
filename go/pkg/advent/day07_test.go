@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-var sampleInput string = `$ cd /
+var day07sample string = `$ cd /
 $ ls
 dir a
 14848514 b.txt
@@ -33,7 +33,7 @@ $ ls
 `
 
 func TestFindSizeOfDirectoryForDeletion(t *testing.T) {
-	input := makeDirMap(strings.NewReader(sampleInput))
+	input := makeDirMap(strings.NewReader(day07sample))
 	want := 24933642
 	got := findSizeOfDirectoryForDeletion(input, 70000000, 30000000)
 
@@ -43,7 +43,7 @@ func TestFindSizeOfDirectoryForDeletion(t *testing.T) {
 }
 
 func TestFindTotalSizeOfCandidatesForDeletion(t *testing.T) {
-	input := makeDirMap(strings.NewReader(sampleInput))
+	input := makeDirMap(strings.NewReader(day07sample))
 	want := 95437
 	got := findTotalSizeOfCandidatesForDeletion(input, 100000)
 
@@ -53,7 +53,7 @@ func TestFindTotalSizeOfCandidatesForDeletion(t *testing.T) {
 }
 
 func TestMakeDirMap(t *testing.T) {
-	got := makeDirMap(strings.NewReader(sampleInput))
+	got := makeDirMap(strings.NewReader(day07sample))
 	want := map[string]int{
 		".":     584 + 29116 + 2557 + 62596 + 14848514 + 8504156 + 4060174 + 8033020 + 5626152 + 7214296,
 		"./a":   584 + 29116 + 2557 + 62596,
