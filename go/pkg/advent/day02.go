@@ -100,7 +100,7 @@ func (l Line) ToShape() Shape {
 	}
 }
 
-func Day02(input string) {
+func (a *AdventOfCode2022) Day02(input string) {
 	day02part1(strings.NewReader(input))
 	day02part2(strings.NewReader(input))
 }

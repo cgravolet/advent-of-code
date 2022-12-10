@@ -39,7 +39,7 @@ func (i Items) Priority() int {
 	return p
 }
 
-func Day03(input string) {
+func (a *AdventOfCode2022) Day03(input string) {
 	day03part1(strings.NewReader(input))
 	day03part2(strings.NewReader(input))
 }

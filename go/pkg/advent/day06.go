@@ -10,7 +10,7 @@ import (
 
 // Lifecycle
 
-func Day06(input string) {
+func (a *AdventOfCode2022) Day06(input string) {
 	part1, _ := findMarkerInFile(strings.NewReader(input), 4)
 	part2, _ := findMarkerInFile(strings.NewReader(input), 14)
 	fmt.Printf("Day 6 answer (part 1): %d\n", part1)

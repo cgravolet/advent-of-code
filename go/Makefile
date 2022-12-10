@@ -5,7 +5,7 @@ fmt:
 .PHONY:fmt
 
 test: vet
-	go test ./...
+	go test ./pkg/...
 .PHONY:test
 
 vet: fmt

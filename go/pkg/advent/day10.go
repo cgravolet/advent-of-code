@@ -15,7 +15,7 @@ type ClockCircuitInstruction struct {
 	Value  int
 }
 
-func Day10(input string) {
+func (a *AdventOfCode2022) Day10(input string) {
 	instructions := makeClockCircuitInstructions(strings.NewReader(input))
 	part1, part2 := day10part1(instructions)
 	fmt.Printf("Part 1: %d\n", part1)
@@ -56,7 +56,7 @@ func day10part1(in []ClockCircuitInstruction) (int, string) {
 		}
 	}
 
-	// Sum of signal strength duyring the 20th, 60th, 100th, 140th, 180th, and 220th cycles
+	// Sum of signal strength during the 20th, 60th, 100th, 140th, 180th, and 220th cycles
 	sum := 0
 	for i := 20; i <= 220; i += 40 {
 		sum += strength[i]

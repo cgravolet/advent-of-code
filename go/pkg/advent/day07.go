@@ -9,7 +9,7 @@ import (
 	"github.com/cgravolet/adventofcode2022/pkg/utility"
 )
 
-func Day07(input string) {
+func (a *AdventOfCode2022) Day07(input string) {
 	dirmap := makeDirMap(strings.NewReader(input))
 	part1 := findTotalSizeOfCandidatesForDeletion(dirmap, 100000)
 	part2 := findSizeOfDirectoryForDeletion(dirmap, 70000000, 30000000)

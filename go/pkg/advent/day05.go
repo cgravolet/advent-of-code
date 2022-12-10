@@ -20,7 +20,7 @@ type Instruction struct {
 
 // Program lifecycle
 
-func Day05(input string) {
+func (a *AdventOfCode2022) Day05(input string) {
 	stacks := make([]Stack, 9)
 	instructions := make([]Instruction, 0)
 

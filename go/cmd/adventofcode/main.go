@@ -6,21 +6,26 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"reflect"
 	"strings"
 
 	"github.com/cgravolet/adventofcode2022/pkg/advent"
 )
 
 func main() {
+	// Check for sub-command argument (i.e. "day01, day02, etc.")
 	if len(os.Args) < 2 {
 		log.Fatal(fmt.Errorf("You must specify a subcommand (i.e. 'day01' or 'day02')"))
 	}
 	subcmd := os.Args[1]
+
+	// Retrieve the input path option, if available
 	flagSet := flag.NewFlagSet(subcmd, flag.ExitOnError)
 	input := flagSet.String("path", fmt.Sprintf("../../../input/%s.txt", subcmd), "Input file path")
 	flagSet.Parse(os.Args[2:])
-	file, err := os.Open(*input)
 
+	// Open the input file and read it's contents
+	file, err := os.Open(*input)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -29,24 +34,14 @@ func main() {
 	buf.ReadFrom(file)
 	contents := buf.String()
 
-	switch strings.ToLower(subcmd) {
-	case "day01":
-		advent.Day01(contents)
-	case "day02":
-		advent.Day02(contents)
-	case "day03":
-		advent.Day03(contents)
-	case "day04":
-		advent.Day04(contents)
-	case "day05":
-		advent.Day05(contents)
-	case "day06":
-		advent.Day06(contents)
-	case "day07":
-		advent.Day07(contents)
-	case "day10":
-		advent.Day10(contents)
-	default:
-		log.Fatal(fmt.Errorf("Unexpected argument: %v", os.Args[1]))
+	// Use reflection to find the function related to the given sub-command, and pass it the contents of the input file
+	adv := &advent.AdventOfCode2022{}
+	funcName := strings.ToUpper(subcmd[:1]) + strings.ToLower(subcmd[1:])
+	cmdFunc := reflect.ValueOf(adv).MethodByName(funcName)
+
+	if !cmdFunc.IsValid() {
+		log.Fatal(fmt.Errorf("Method '%s' not found", funcName))
 	}
+	params := []reflect.Value{reflect.ValueOf(contents)}
+	cmdFunc.Call(params)
 }

@@ -27,7 +27,7 @@ func makeSectionPairFromString(s string) (SectionRange, SectionRange, error) {
 	return lhs, rhs, err
 }
 
-func Day04(input string) {
+func (a *AdventOfCode2022) Day04(input string) {
 	var contained int
 	var overlapped int
 

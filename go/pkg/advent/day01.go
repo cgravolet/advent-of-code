@@ -10,7 +10,7 @@ import (
 	"github.com/cgravolet/adventofcode2022/pkg/utility"
 )
 
-func Day01(input string) {
+func (a *AdventOfCode2022) Day01(input string) {
 	calories := []int{0}
 
 	err := utility.ForEachLineInReader(strings.NewReader(input), func(s string) {
