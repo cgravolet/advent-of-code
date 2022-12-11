@@ -48,11 +48,11 @@ final class Day11Tests: XCTestCase {
 
     func testObserveMonkeys() throws {
         let sut = Day11()
-        let tests: [(indexFalse: Int, indexTrue: Int, inventory: [Int], quotient: Int)] = [
-            (3, 2, [79, 98], 23),
-            (0, 2, [54, 65, 75, 74], 19),
-            (3, 1, [79, 60, 97], 13),
-            (1, 0, [74], 17)
+        let tests: [(indexFalse: Int, indexTrue: Int, inventory: [Day11.WorryLevel], quotient: Int, rhs: String)] = [
+            (3, 2, [79, 98], 23, "19"),
+            (0, 2, [54, 65, 75, 74], 19, "6"),
+            (3, 1, [79, 60, 97], 13, "old"),
+            (1, 0, [74], 17, "3")
         ]
         let monkeys = try sut.observeMonkeys(notes: sampleInput)
 
@@ -77,10 +77,19 @@ final class Day11Tests: XCTestCase {
         let got = sut.solvePart1(monkeys: monkeys)
         XCTAssertEqual(got, want)
     }
+
+    func testSolvePart2() throws {
+        let sut = Day11()
+        let monkeys = try sut.observeMonkeys(notes: sampleInput)
+        let want: Day11.MonkeyBusiness = 2713310158
+        let got = sut.solvePart2(monkeys: monkeys)
+        XCTAssertEqual(got, want)
+    }
 }
 
 extension Day11.Monkey {
     init(_ inspections: Int) {
-        self.init(indexFalse: 0, indexTrue: 0, inspections: inspections, inventory: [], operation: +, quotient: 0)
+        self.init(indexFalse: 0, indexTrue: 0, inspections: inspections, inventory: [], operation: "",
+                  quotient: 0, rhs: "")
     }
 }

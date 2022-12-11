@@ -8,34 +8,43 @@ struct Day11: ParsableCommand {
 
     typealias MonkeyBusiness = Int
     typealias MonkeyIndex = Int
-    typealias WorryLevel = Int
+    typealias WorryLevel = UInt64
 
     struct Monkey {
         let indexFalse: MonkeyIndex
         let indexTrue: MonkeyIndex
         var inspections: Int
         var inventory: [WorryLevel]
-        let operation: (WorryLevel) -> WorryLevel
+        let operation: String
         let quotient: Int
+        let rhs: String
 
         init(indexFalse: MonkeyIndex, indexTrue: MonkeyIndex, inspections: Int = 0, inventory: [WorryLevel],
-             operation: @escaping (WorryLevel) -> WorryLevel, quotient: Int) {
+             operation: String, quotient: Int, rhs: String) {
             self.indexFalse = indexFalse
             self.indexTrue = indexTrue
             self.inspections = inspections
             self.inventory = inventory
             self.operation = operation
             self.quotient = quotient
+            self.rhs = rhs
         }
 
         mutating func inspect(_ wl: WorryLevel) -> WorryLevel {
-            let worry = operation(wl) / 3
+            var worry: WorryLevel
+            let rhs = WorryLevel(rhs) ?? wl
+
+            switch operation {
+            case "*": worry = wl * rhs
+            case "+": worry = wl + rhs
+            default: worry = wl
+            }
             inspections += 1
             return worry
         }
 
         func test(_ worry: WorryLevel) -> MonkeyIndex {
-            worry % quotient == 0 ? indexTrue : indexFalse
+            worry % WorryLevel(quotient) == 0 ? indexTrue : indexFalse
         }
     }
 
@@ -49,13 +58,23 @@ struct Day11: ParsableCommand {
     mutating func run() throws {
         let monkeys = try observeMonkeys(notes: try String(contentsOfFile: path))
         let part1 = solvePart1(monkeys: monkeys)
+        let part2 = solvePart2(monkeys: monkeys)
         print("Part 1: \(part1)")
+        print("Part 2: \(part2)")
     }
 
     func solvePart1(monkeys: [Monkey]) -> MonkeyBusiness {
         var monkeys = monkeys
         for _ in 0 ..< 20 {
-            monkeys = performRound(monkeys: monkeys)
+            monkeys = performRound(monkeys: monkeys) { $0 / 3 }
+        }
+        return calculateMonkeyBusiness(monkeys: monkeys)
+    }
+
+    func solvePart2(monkeys: [Monkey]) -> MonkeyBusiness {
+        var monkeys = monkeys
+        for _ in 0 ..< 10000 {
+            monkeys = performRound(monkeys: monkeys) { $0 }
         }
         return calculateMonkeyBusiness(monkeys: monkeys)
     }
@@ -75,12 +94,13 @@ struct Day11: ParsableCommand {
         return matches.compactMap { makeMonkey(fromResult:$0, notes: notes) }
     }
 
-    func performRound(monkeys: [Monkey]) -> [Monkey] {
+    func performRound(monkeys: [Monkey], relief: (WorryLevel) -> WorryLevel) -> [Monkey] {
         var mutableMonkeys = monkeys
 
         for m in 0 ..< mutableMonkeys.count {
             while mutableMonkeys[m].inventory.count > 0 {
-                let worry = mutableMonkeys[m].inspect(mutableMonkeys[m].inventory.removeFirst())
+                var worry = mutableMonkeys[m].inspect(mutableMonkeys[m].inventory.removeFirst())
+                worry = relief(worry)
                 mutableMonkeys[mutableMonkeys[m].test(worry)].inventory.append(worry)
             }
         }
@@ -101,17 +121,10 @@ struct Day11: ParsableCommand {
               let indexTrue = Int(notes[group5]),
               let indexFalse = Int(notes[group6])
         else { return nil }
-        let inventory = notes[group1].components(separatedBy: ", ").compactMap(Int.init)
-        let operationStr = notes[group2]
-        let operationRhsStr = notes[group3]
+        let inventory = notes[group1].components(separatedBy: ", ").compactMap(WorryLevel.init)
+        let operation = String(notes[group2])
+        let rhs = String(notes[group3])
         return Monkey(indexFalse: indexFalse, indexTrue: indexTrue, inventory: inventory,
-                      operation: { wl -> WorryLevel in
-            let rhs = WorryLevel(operationRhsStr) ?? wl
-            switch operationStr {
-            case "*": return wl * rhs
-            case "+": return wl + rhs
-            default: return wl
-            }
-        }, quotient: quotient)
+                      operation: operation, quotient: quotient, rhs: rhs)
     }
 }
