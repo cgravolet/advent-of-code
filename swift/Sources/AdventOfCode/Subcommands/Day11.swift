@@ -8,7 +8,7 @@ struct Day11: ParsableCommand {
 
     typealias MonkeyBusiness = Int
     typealias MonkeyIndex = Int
-    typealias WorryLevel = UInt64
+    typealias WorryLevel = Int
 
     struct Monkey {
         let indexFalse: MonkeyIndex
@@ -57,13 +57,13 @@ struct Day11: ParsableCommand {
 
     mutating func run() throws {
         let monkeys = try observeMonkeys(notes: try String(contentsOfFile: path))
-        let part1 = solvePart1(monkeys: monkeys)
-        let part2 = solvePart2(monkeys: monkeys)
+        let part1 = part1(monkeys: monkeys)
+        let part2 = part2(monkeys: monkeys)
         print("Part 1: \(part1)")
         print("Part 2: \(part2)")
     }
 
-    func solvePart1(monkeys: [Monkey]) -> MonkeyBusiness {
+    func part1(monkeys: [Monkey]) -> MonkeyBusiness {
         var monkeys = monkeys
         for _ in 0 ..< 20 {
             monkeys = performRound(monkeys: monkeys) { $0 / 3 }
@@ -71,10 +71,10 @@ struct Day11: ParsableCommand {
         return calculateMonkeyBusiness(monkeys: monkeys)
     }
 
-    func solvePart2(monkeys: [Monkey]) -> MonkeyBusiness {
+    func part2(monkeys: [Monkey]) -> MonkeyBusiness {
         var monkeys = monkeys
         for _ in 0 ..< 10000 {
-            monkeys = performRound(monkeys: monkeys) { $0 }
+            monkeys = performRound(monkeys: monkeys)
         }
         return calculateMonkeyBusiness(monkeys: monkeys)
     }
@@ -94,13 +94,14 @@ struct Day11: ParsableCommand {
         return matches.compactMap { makeMonkey(fromResult:$0, notes: notes) }
     }
 
-    func performRound(monkeys: [Monkey], relief: (WorryLevel) -> WorryLevel) -> [Monkey] {
+    func performRound(monkeys: [Monkey], relief: ((WorryLevel) -> WorryLevel)? = nil) -> [Monkey] {
+        let modulus = monkeys.map(\.quotient).reduce(1, *)
         var mutableMonkeys = monkeys
 
         for m in 0 ..< mutableMonkeys.count {
             while mutableMonkeys[m].inventory.count > 0 {
                 var worry = mutableMonkeys[m].inspect(mutableMonkeys[m].inventory.removeFirst())
-                worry = relief(worry)
+                worry = relief?(worry) ?? worry % modulus
                 mutableMonkeys[mutableMonkeys[m].test(worry)].inventory.append(worry)
             }
         }

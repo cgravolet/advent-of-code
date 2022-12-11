@@ -70,19 +70,19 @@ final class Day11Tests: XCTestCase {
         }
     }
 
-    func testSolvePart1() throws {
+    func testPart1() throws {
         let sut = Day11()
         let monkeys = try sut.observeMonkeys(notes: sampleInput)
         let want: Day11.MonkeyBusiness = 10605
-        let got = sut.solvePart1(monkeys: monkeys)
+        let got = sut.part1(monkeys: monkeys)
         XCTAssertEqual(got, want)
     }
 
-    func testSolvePart2() throws {
+    func testPart2() throws {
         let sut = Day11()
         let monkeys = try sut.observeMonkeys(notes: sampleInput)
         let want: Day11.MonkeyBusiness = 2713310158
-        let got = sut.solvePart2(monkeys: monkeys)
+        let got = sut.part2(monkeys: monkeys)
         XCTAssertEqual(got, want)
     }
 }
