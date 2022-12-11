@@ -151,6 +151,19 @@
             ],
             "cwd": "${workspaceFolder:swift}",
             "preLaunchTask": "swift: Build Debug AdventOfCode"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Day 11",
+            "program": "${workspaceFolder:swift}/.build/debug/AdventOfCode",
+            "args": [
+                "day11",
+                "-p",
+                "../input/day11.txt"
+            ],
+            "cwd": "${workspaceFolder:swift}",
+            "preLaunchTask": "swift: Build Debug AdventOfCode"
         }
     ]
 }
