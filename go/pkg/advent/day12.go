@@ -13,27 +13,29 @@ type heightmap map[image.Point]int
 
 func (a *AdventOfCode2022) Day12(input string) {
 	hmap, start, end := makeHeightMap(strings.NewReader(input))
-	part1 := findNearestPathInMap(hmap, start, end)
-	fmt.Printf("Part 1: %d\n", part1)
+	part1, part2, ok := findNearestPathInMap(hmap, start, end)
+
+	if ok {
+		fmt.Printf("Part 1: %d\nPart 2: %d\n", part1, part2)
+	} else {
+		fmt.Println("Path not found")
+	}
 }
 
-func findNearestPathInMap(hmap heightmap, start image.Point, end image.Point) int {
-	queue := []image.Point{start}
-	visited := map[image.Point]bool{start: true}
+func findNearestPathInMap(hmap heightmap, start image.Point, end image.Point) (int, int, bool) {
+	q := []image.Point{end}
 	path := map[image.Point]image.Point{}
+	shortest := -1
+	visited := map[image.Point]bool{end: true}
 
-	for len(queue) > 0 {
-		curpos := queue[0]
-		queue = queue[1:]
+	for len(q) > 0 {
+		curpos := q[0]
+		q = q[1:]
 
-		if curpos == end {
-			pathArr := make([]image.Point, 0)
-			prev, prevExists := path[curpos]
-			for prevExists {
-				pathArr = append(pathArr, prev)
-				prev, prevExists = path[prev]
-			}
-			return len(pathArr)
+		if curpos == start {
+			return getPathLength(path, curpos), shortest, true
+		} else if hmap[curpos] == 1 && shortest == -1 {
+			shortest = getPathLength(path, curpos)
 		}
 		neighbors := make([]image.Point, 4)
 		neighbors[0] = image.Point{curpos.X - 1, curpos.Y}
@@ -41,24 +43,35 @@ func findNearestPathInMap(hmap heightmap, start image.Point, end image.Point) in
 		neighbors[2] = image.Point{curpos.X, curpos.Y - 1}
 		neighbors[3] = image.Point{curpos.X, curpos.Y + 1}
 
-		for _, neighbor := range neighbors {
-			_, isVisited := visited[neighbor]
-			neighborHeight, isValid := hmap[neighbor]
+		for _, n := range neighbors {
+			_, isVisited := visited[n]
+			nheight, isValid := hmap[n]
 
-			if !isVisited && isValid && neighborHeight <= hmap[curpos]+1 {
-				queue = append(queue, neighbor)
-				path[neighbor] = curpos
-				visited[neighbor] = true
+			if !isVisited && isValid && nheight >= hmap[curpos]-1 {
+				q = append(q, n)
+				path[n] = curpos
+				visited[n] = true
 			}
 		}
 	}
-	return -1
+	return -1, shortest, false
+}
+
+func getPathLength(path map[image.Point]image.Point, p image.Point) int {
+	pathArr := make([]image.Point, 0)
+	prev, prevExists := path[p]
+
+	for prevExists {
+		pathArr = append(pathArr, prev)
+		prev, prevExists = path[prev]
+	}
+	return len(pathArr)
 }
 
 func makeHeightMap(r io.Reader) (heightmap, image.Point, image.Point) {
-	hmap := make(heightmap)
 	var start image.Point
 	var end image.Point
+	hmap := make(heightmap)
 	y := 0
 
 	utility.ForEachLineInReader(r, func(s string) {
@@ -67,10 +80,10 @@ func makeHeightMap(r io.Reader) (heightmap, image.Point, image.Point) {
 
 			if h == -13 {
 				start = image.Point{x, y}
-				h = 0
+				h = 1
 			} else if h == -27 {
 				end = image.Point{x, y}
-				h = 27
+				h = 26
 			}
 			hmap[image.Point{x, y}] = h
 		}

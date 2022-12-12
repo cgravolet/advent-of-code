@@ -18,9 +18,18 @@ abdefghi
 func TestDay12FindNearestPathInMap(t *testing.T) {
 	hmap, start, end := makeHeightMap(strings.NewReader(day12sample))
 	want := 31
-	got := findNearestPathInMap(hmap, start, end)
+	wantshortest := 29
+	got, gotshortest, ok := findNearestPathInMap(hmap, start, end)
+
+	if !ok {
+		t.Errorf("Path not found.")
+	}
 
 	if !reflect.DeepEqual(want, got) {
+		t.Errorf("\nexpected %d, got %d\n", want, got)
+	}
+
+	if !reflect.DeepEqual(wantshortest, gotshortest) {
 		t.Errorf("\nexpected %d, got %d\n", want, got)
 	}
 }
