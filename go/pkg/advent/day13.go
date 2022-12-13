@@ -4,16 +4,25 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"reflect"
+	"sort"
 	"strings"
+
+	"github.com/cgravolet/adventofcode2022/pkg/utility"
 )
 
 func (a *AdventOfCode2022) Day13(input string) {
-	part1, err := solveDay13Part1(input)
-
+	part1, err := day13part1(input)
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Printf("Part 1: %d\n", part1)
+
+	part2, err := day13part2(input)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("Part 2: %d\n", part2)
 }
 
 func compareGroup(l, r []any) int {
@@ -101,7 +110,7 @@ func decodePacket(packet string) ([]any, error) {
 	return result, err
 }
 
-func solveDay13Part1(input string) (int, error) {
+func day13part1(input string) (int, error) {
 	result := 0
 
 	for i, pair := range strings.Split(input, "\n\n") {
@@ -119,4 +128,40 @@ func solveDay13Part1(input string) (int, error) {
 		}
 	}
 	return result, nil
+}
+
+func day13part2(input string) (int, error) {
+	packets := make([][]any, 0)
+
+	utility.ForEachLineInReader(strings.NewReader(input), func(s string) {
+		if len(s) > 0 {
+			var packet []any
+			err := json.Unmarshal([]byte(s), &packet)
+			if err == nil {
+				packets = append(packets, packet)
+			}
+		}
+	})
+
+	dividerPacket1 := []any{[]any{2.0}}
+	dividerPacket2 := []any{[]any{6.0}}
+	packets = append(packets, dividerPacket1)
+	packets = append(packets, dividerPacket2)
+
+	sort.Slice(packets, func(l, r int) bool {
+		comparison := compareGroup(packets[l], packets[r])
+		if comparison > 0 {
+			return true
+		}
+		return false
+	})
+
+	key := 1
+
+	for i, p := range packets {
+		if reflect.DeepEqual(p, dividerPacket1) || reflect.DeepEqual(p, dividerPacket2) {
+			key *= (i + 1)
+		}
+	}
+	return key, nil
 }

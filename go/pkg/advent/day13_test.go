@@ -30,9 +30,48 @@ var day13sample = `[1,1,3,1,1]
 [1,[2,[3,[4,[5,6,0]]]],8,9]
 `
 
-func TestSolveDay13Part1(t *testing.T) {
+func TestCompareGroup(t *testing.T) {
+	type test struct {
+		lhs  []any
+		rhs  []any
+		want int
+	}
+
+	tests := []test{
+		{[]any{1.0, 1.0, 3.0, 1.0, 1.0}, []any{1.0, 1.0, 5.0, 1.0, 1.0}, 1},
+		{[]any{[]any{1.0}, []any{2.0, 3.0, 4.0}}, []any{[]any{1.0}, 4.0}, 1},
+		{[]any{9.0}, []any{[]any{8.0, 7.0, 6.0}}, -1},
+		{[]any{[]any{4.0, 4.0}, 4.0, 4.0}, []any{[]any{4.0, 4.0}, 4.0, 4.0, 4.0}, 1},
+		{[]any{7.0, 7.0, 7.0, 7.0}, []any{7.0, 7.0, 7.0}, -1},
+		{[]any{}, []any{3.0}, 1},
+		{[]any{[]any{[]any{}}}, []any{[]any{}}, -1},
+		{[]any{1.0, []any{2.0, []any{3.0, []any{4.0, []any{5.0, 6.0, 7.0}}}}, 8.0, 9.0}, []any{1.0, []any{2.0, []any{3.0, []any{4.0, []any{5.0, 6.0, 0.0}}}}, 8.0, 9.0}, -1},
+	}
+
+	for _, test := range tests {
+		got := compareGroup(test.lhs, test.rhs)
+		if !reflect.DeepEqual(got, test.want) {
+			t.Errorf("\n\tTestCompareGroup - Expected %d, got %d", test.want, got)
+		}
+	}
+}
+
+func TestDay13Part1(t *testing.T) {
 	want := 13
-	got, err := solveDay13Part1(day13sample)
+	got, err := day13part1(day13sample)
+
+	if err != nil {
+		t.Errorf("\n\tTestSolveDay13Part1 - Encountered error %v", err)
+	}
+
+	if !reflect.DeepEqual(want, got) {
+		t.Errorf("\n\tTestSolveDay13Part1 - Expected %d, got %d", want, got)
+	}
+}
+
+func TestDay13Part2(t *testing.T) {
+	want := 140
+	got, err := day13part2(day13sample)
 
 	if err != nil {
 		t.Errorf("\n\tTestSolveDay13Part1 - Encountered error %v", err)
