@@ -16,22 +16,22 @@ func (a *AdventOfCode2022) Day13(input string) {
 	fmt.Printf("Part 1: %d\n", part1)
 }
 
-func compareGroup(l, r []any) bool {
+func compareGroup(l, r []any) int {
 	fmt.Printf("\t- Compare %v vs %v\n", l, r)
 
 	if len(l) == 0 && len(r) > 0 {
 		fmt.Printf("\t- Left side ran out of items, so inputs are in the right order\n")
-		return true // Left side out of items, ordered correctly
+		return 1 // Left side out of items, ordered correctly
 	} else if len(l) > 0 && len(r) == 0 {
 		fmt.Printf("\t- Right side ran out of items, so inputs are not in the right order\n")
-		return false // Right side out of items, not ordered correctly
+		return -1 // Right side out of items, not ordered correctly
 	}
 
 	for len(l) > 0 {
 
 		if len(r) == 0 {
 			fmt.Printf("\t- Right side ran out of items, so inputs are not in the right order\n")
-			return false // Right side out of items, not ordered correctly
+			return -1 // Right side out of items, not ordered correctly
 		}
 		lhs, rhs := l[0], r[0]
 		l, r = l[1:], r[1:]
@@ -43,10 +43,10 @@ func compareGroup(l, r []any) bool {
 
 			if int(lnum) > int(rnum) {
 				fmt.Printf("\t\t\t- Right side is smaller, so inputs are not in the right order\n")
-				return false // Left side greater than right, not ordered correctly
+				return -1 // Left side greater than right, not ordered correctly
 			} else if int(lnum) < int(rnum) {
 				fmt.Printf("\t\t\t- Left side is smaller, so inputs are in the right order\n")
-				return true // Left side greater than right, not ordered correctly
+				return 1 // Left side greater than right, not ordered correctly
 			}
 		} else {
 			larr, larrok := lhs.([]any)
@@ -54,17 +54,20 @@ func compareGroup(l, r []any) bool {
 
 			if larrok && rnumok {
 				fmt.Printf("\t- Mixed types; convert right to [%f] and retry comparison\n", rnum)
-				if !compareGroup(larr, []any{rnum}) {
-					return false
+				comparison := compareGroup(larr, []any{rnum})
+				if comparison != 0 {
+					return comparison
 				}
 			} else if lnumok && rarrok {
 				fmt.Printf("\t- Mixed types; convert left to [%f] and retry comparison\n", lnum)
-				if !compareGroup([]any{lnum}, rarr) {
-					return false
+				comparison := compareGroup([]any{lnum}, rarr)
+				if comparison != 0 {
+					return comparison
 				}
 			} else if larrok && rarrok {
-				if !compareGroup(larr, rarr) {
-					return false
+				comparison := compareGroup(larr, rarr)
+				if comparison != 0 {
+					return comparison
 				}
 			} else {
 				panic(fmt.Errorf("Encountered unrecognized type %v", lhs))
@@ -74,18 +77,19 @@ func compareGroup(l, r []any) bool {
 
 	if len(r) > 0 {
 		fmt.Printf("\t- Left side ran out of items, so inputs are in the right order\n")
+		return 1
 	}
-	return true
+	return 0
 }
 
-func comparePackets(l, r string) (bool, error) {
+func comparePackets(l, r string) (int, error) {
 	lqueue, lerr := decodePacket(l)
 	rqueue, rerr := decodePacket(r)
 
 	if lerr != nil {
-		return false, lerr
+		return -1, lerr
 	} else if rerr != nil {
-		return false, rerr
+		return -1, rerr
 	}
 	fmt.Printf("Comparing %v vs %v\n", lqueue, rqueue)
 	return compareGroup(lqueue, rqueue), nil
@@ -104,12 +108,12 @@ func solveDay13Part1(input string) (int, error) {
 		packets := strings.Split(pair, "\n")
 
 		if len(packets) >= 2 {
-			isOrdered, err := comparePackets(packets[0], packets[1])
-			fmt.Printf("\tResult %v\n", isOrdered)
+			comparison, err := comparePackets(packets[0], packets[1])
+			fmt.Printf("\tResult %v\n", comparison)
 
 			if err != nil {
 				return result, err
-			} else if isOrdered {
+			} else if comparison == 1 {
 				result += i + 1
 			}
 		}
