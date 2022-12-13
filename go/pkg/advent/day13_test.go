@@ -46,6 +46,7 @@ func TestCompareGroup(t *testing.T) {
 		{[]any{}, []any{3.0}, 1},
 		{[]any{[]any{[]any{}}}, []any{[]any{}}, -1},
 		{[]any{1.0, []any{2.0, []any{3.0, []any{4.0, []any{5.0, 6.0, 7.0}}}}, 8.0, 9.0}, []any{1.0, []any{2.0, []any{3.0, []any{4.0, []any{5.0, 6.0, 0.0}}}}, 8.0, 9.0}, -1},
+		{[]any{[]any{3.0, 4.0}, []any{2.0, 4.0}}, []any{[]any{3.0, 4.0}, []any{2.0, 5.0}}, 1},
 	}
 
 	for _, test := range tests {
