@@ -14,6 +14,19 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "Advent of Code - Day 10",
+            "type": "shell",
+            "command": "lua",
+            "args": [
+                "main.lua",
+                "day10"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }

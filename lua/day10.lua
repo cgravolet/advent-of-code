@@ -1,6 +1,6 @@
 local utility = require("utility")
 
-Day10 = {
+local Day10 = {
     path = "../input/day10.txt"
 }
 
@@ -57,4 +57,4 @@ function Day10.solve(ins)
     return sum, pixels
 end
 
-Day10:run()
+return Day10

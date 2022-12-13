@@ -72,6 +72,14 @@
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
             "args": ["day12"]
+        },
+        {
+            "name": "2022 Day 13",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd/adventofcode/main.go",
+            "args": ["day13"]
         }
     ]
 }
