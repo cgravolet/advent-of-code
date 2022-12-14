@@ -2,7 +2,7 @@ import ArgumentParser
 import Foundation
 
 struct Day11: ParsableCommand {
-    static let configuration = CommandConfiguration(abstract: "Advent of Code - 2022 December 10", version: "1.0.0")
+    static let configuration = CommandConfiguration(abstract: "Advent of Code - 2022 December 11", version: "1.0.0")
 
     // MARK - Data structures
 
