@@ -1,4 +1,3 @@
-import Algorithms
 import ArgumentParser
 import Foundation
 
@@ -14,8 +13,6 @@ fileprivate extension IntPoint {
 
 struct Day14: ParsableCommand {
     static let configuration = CommandConfiguration(abstract: "Advent of Code - 2022 December 10", version: "1.0.0")
-
-    // MARK - Data structures
 
     // MARK: - Options
 
@@ -54,23 +51,18 @@ struct Day14: ParsableCommand {
     // MARK: - Internal methods
 
     func makeEnvironment(input: String) -> (Set<IntPoint>, Int) {
-        let instructions = input
-            .components(separatedBy: .newlines)
+        var (env, maxY) = (Set<IntPoint>(), Int.min)
+        input.components(separatedBy: .newlines)
             .map { $0.components(separatedBy: .whitespaces) }
-
-        var env = Set<IntPoint>()
-        var maxY: Int = .min
-
-        for instruction in instructions {
-            for (i, val) in instruction.enumerated() {
-                if val == "->", let from = IntPoint(instruction[i-1]), let to = IntPoint(instruction[i+1]) {
+            .forEach { instruction in
+                for (i, val) in instruction.enumerated() where val == "->" {
+                    guard let from = IntPoint(instruction[i-1]), let to = IntPoint(instruction[i+1]) else { continue }
                     getPointsInLine(from: from, to: to)?.forEach {
                         maxY = max(maxY, $0.y)
                         env.insert($0)
                     }
                 }
             }
-        }
         return (env, maxY)
     }
 
@@ -78,34 +70,25 @@ struct Day14: ParsableCommand {
 
     private func getPointsInLine(from: IntPoint, to: IntPoint) -> [IntPoint]? {
         var points = [IntPoint]()
-
-        // Vertical line
         if from.x == to.x {
             for y in min(from.y, to.y)...max(from.y, to.y) {
                 points.append(IntPoint(to.x, y))
             }
-
-        // Horizontal line
         } else if from.y == to.y {
             for x in min(from.x, to.x)...max(from.x, to.x) {
                 points.append(IntPoint(x, to.y))
             }
-
-        // Diagonal lines not supported
         } else {
-            return nil
+            return nil // Diagonal lines not supported
         }
         return points
     }
 
     private func positionSand(inEnvironment env: Set<IntPoint>, start: IntPoint, maxY: Int,
                               floor: Int? = nil) -> IntPoint? {
+        guard !env.contains(start) else { return nil }
         let (down, left, right) = (IntPoint(0, 1), IntPoint(-1, 1), IntPoint(1, 1))
         var point = start
-
-        if env.contains(start) {
-            return nil
-        }
 
         while true {
             if !env.contains(point + down) {
@@ -122,7 +105,7 @@ struct Day14: ParsableCommand {
                 if point.y + 1 >= floor {
                     break
                 }
-            } else if point.y > maxY {
+            } else if point.y >= maxY {
                 return nil
             }
         }
