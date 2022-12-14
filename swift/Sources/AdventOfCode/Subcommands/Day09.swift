@@ -1,6 +1,24 @@
 import ArgumentParser
 import Foundation
 
+fileprivate extension IntPoint {
+    func move(_ direction: Day09.Direction) -> IntPoint {
+        let moveCoord = direction.coord
+        return IntPoint(x + moveCoord.x, y + moveCoord.y)
+    }
+
+    func reposition(near h: IntPoint) -> IntPoint {
+        guard !isTouching(h) else { return self }
+        let (xdiff, ydiff) = (h.x - x, h.y - y)
+        let movex = abs(xdiff) > 1 || (abs(xdiff) > 0 && abs(ydiff) > 1)
+        let movey = abs(ydiff) > 1 || (abs(ydiff) > 0 && abs(xdiff) > 1)
+        return IntPoint(
+            movex ? x + (xdiff < 0 ? -1 : 1) : x,
+            movey ? y + (ydiff < 0 ? -1 : 1) : y
+        )
+    }
+}
+
 struct Day09: ParsableCommand {
     static let configuration = CommandConfiguration(abstract: "Advent of Code - 2022 December 9", version: "1.0.0")
 
@@ -37,36 +55,6 @@ struct Day09: ParsableCommand {
             case .down(let count): return count
             case .left(let count): return count
             }
-        }
-    }
-
-    struct IntPoint: Hashable {
-        let x: Int
-        let y: Int
-
-        init(_ x: Int, _ y: Int) {
-            self.x = x
-            self.y = y
-        }
-
-        func isTouching(_ point: IntPoint) -> Bool {
-            abs(x - point.x) <= 1 && abs(y - point.y) <= 1
-        }
-
-        func move(_ direction: Direction) -> IntPoint {
-            let moveCoord = direction.coord
-            return IntPoint(x + moveCoord.x, y + moveCoord.y)
-        }
-
-        func reposition(near h: IntPoint) -> IntPoint {
-            guard !isTouching(h) else { return self }
-            let (xdiff, ydiff) = (h.x - x, h.y - y)
-            let movex = abs(xdiff) > 1 || (abs(xdiff) > 0 && abs(ydiff) > 1)
-            let movey = abs(ydiff) > 1 || (abs(ydiff) > 0 && abs(xdiff) > 1)
-            return IntPoint(
-                movex ? x + (xdiff < 0 ? -1 : 1) : x,
-                movey ? y + (ydiff < 0 ? -1 : 1) : y
-            )
         }
     }
 
