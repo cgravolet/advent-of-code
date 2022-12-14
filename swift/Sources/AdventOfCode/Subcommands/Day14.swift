@@ -25,42 +25,54 @@ struct Day14: ParsableCommand {
     // MARK: - Lifecycle
 
     mutating func run() throws {
-        let part1 = part1(input: try String(contentsOfFile: path))
+        let input = try String(contentsOfFile: path)
+        let (part1, part2) = (part1(input), part2(input))
         print("Part 1: \(part1)")
+        print("Part 2: \(part2)")
     }
 
-    func part1(input: String) -> Int {
-        let instructions = input
-            .components(separatedBy: .newlines)
-            .map { $0.components(separatedBy: .whitespaces) }
-
-        var environment = Set<IntPoint>()
-        var maxX: Int = .min
-        var maxY: Int = .min
-        var minX: Int = .max
-
-        for instruction in instructions {
-            for (i, val) in instruction.enumerated() {
-                if val == "->", let from = IntPoint(instruction[i-1]), let to = IntPoint(instruction[i+1]) {
-                    getPointsInLine(from: from, to: to)?.forEach {
-                        maxX = max(maxX, $0.x)
-                        maxY = max(maxY, $0.y)
-                        minX = min(minX, $0.x)
-                        environment.insert($0)
-                    }
-                }
-            }
-        }
-
+    func part1(_ input: String) -> Int {
+        var (env, maxY) = makeEnvironment(input: input)
         var count = 0
-        while let sand = positionSand(inEnvironment: environment, start: IntPoint(500, 0), minX: minX, maxX: maxX, maxY: maxY) {
-            environment.insert(sand)
+        while let sand = positionSand(inEnvironment: env, start: IntPoint(500, 0), maxY: maxY) {
+            env.insert(sand)
+            count += 1
+        }
+        return count
+    }
+
+    func part2(_ input: String) -> Int {
+        var (env, maxY) = makeEnvironment(input: input)
+        var count = 0
+        while let sand = positionSand(inEnvironment: env, start: IntPoint(500, 0), maxY: maxY, floor: maxY + 2) {
+            env.insert(sand)
             count += 1
         }
         return count
     }
 
     // MARK: - Internal methods
+
+    func makeEnvironment(input: String) -> (Set<IntPoint>, Int) {
+        let instructions = input
+            .components(separatedBy: .newlines)
+            .map { $0.components(separatedBy: .whitespaces) }
+
+        var env = Set<IntPoint>()
+        var maxY: Int = .min
+
+        for instruction in instructions {
+            for (i, val) in instruction.enumerated() {
+                if val == "->", let from = IntPoint(instruction[i-1]), let to = IntPoint(instruction[i+1]) {
+                    getPointsInLine(from: from, to: to)?.forEach {
+                        maxY = max(maxY, $0.y)
+                        env.insert($0)
+                    }
+                }
+            }
+        }
+        return (env, maxY)
+    }
 
     // MARK: - Private methods
 
@@ -86,9 +98,14 @@ struct Day14: ParsableCommand {
         return points
     }
 
-    private func positionSand(inEnvironment env: Set<IntPoint>, start: IntPoint, minX: Int, maxX: Int, maxY: Int) -> IntPoint? {
+    private func positionSand(inEnvironment env: Set<IntPoint>, start: IntPoint, maxY: Int,
+                              floor: Int? = nil) -> IntPoint? {
         let (down, left, right) = (IntPoint(0, 1), IntPoint(-1, 1), IntPoint(1, 1))
         var point = start
+
+        if env.contains(start) {
+            return nil
+        }
 
         while true {
             if !env.contains(point + down) {
@@ -101,7 +118,11 @@ struct Day14: ParsableCommand {
                 break
             }
 
-            if !(minX...maxX ~= point.x) || point.y > maxY {
+            if let floor = floor {
+                if point.y + 1 >= floor {
+                    break
+                }
+            } else if point.y > maxY {
                 return nil
             }
         }

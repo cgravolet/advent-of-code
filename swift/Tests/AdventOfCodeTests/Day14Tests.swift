@@ -10,7 +10,14 @@ final class Day14Tests: XCTestCase {
     func testPart1() throws {
         let sut = Day14()
         let want = 24
-        let got = sut.part1(input: sampleInput)
+        let got = sut.part1(sampleInput)
+        XCTAssertEqual(got, want)
+    }
+
+    func testPart2() throws {
+        let sut = Day14()
+        let want = 93
+        let got = sut.part2(sampleInput)
         XCTAssertEqual(got, want)
     }
 }
