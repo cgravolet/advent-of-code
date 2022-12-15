@@ -33,7 +33,7 @@ final class Day09Tests: XCTestCase {
     }
 
     func testIsTouching() throws {
-        let tests: [(lhs: IntPoint, rhs: IntPoint, want: Bool)] = [
+        let tests: [(lhs: Coord, rhs: Coord, want: Bool)] = [
             (.init(100, 100), .init(100, 100), true),
             (.init(100, 100), .init(99, 100), true),
             (.init(100, 100), .init(98, 100), false),

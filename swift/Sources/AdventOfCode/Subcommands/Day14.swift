@@ -1,7 +1,7 @@
 import ArgumentParser
 import Foundation
 
-fileprivate extension IntPoint {
+fileprivate extension Coord {
     init?(_ token: String) {
         let components = token.components(separatedBy: ",").compactMap(Int.init)
         guard components.count == 2 else {
@@ -31,7 +31,7 @@ struct Day14: ParsableCommand {
     func part1(_ input: String) -> Int {
         var (env, maxY) = makeEnvironment(input: input)
         var count = 0
-        while let sand = positionSand(inEnvironment: env, start: IntPoint(500, 0), maxY: maxY) {
+        while let sand = positionSand(inEnvironment: env, start: Coord(500, 0), maxY: maxY) {
             env.insert(sand)
             count += 1
         }
@@ -41,7 +41,7 @@ struct Day14: ParsableCommand {
     func part2(_ input: String) -> Int {
         var (env, maxY) = makeEnvironment(input: input)
         var count = 0
-        while let sand = positionSand(inEnvironment: env, start: IntPoint(500, 0), maxY: maxY, floor: maxY + 2) {
+        while let sand = positionSand(inEnvironment: env, start: Coord(500, 0), maxY: maxY, floor: maxY + 2) {
             env.insert(sand)
             count += 1
         }
@@ -50,13 +50,13 @@ struct Day14: ParsableCommand {
 
     // MARK: - Internal methods
 
-    func makeEnvironment(input: String) -> (Set<IntPoint>, Int) {
-        var (env, maxY) = (Set<IntPoint>(), Int.min)
+    func makeEnvironment(input: String) -> (Set<Coord>, Int) {
+        var (env, maxY) = (Set<Coord>(), Int.min)
         input.components(separatedBy: .newlines)
             .map { $0.components(separatedBy: .whitespaces) }
             .forEach { instruction in
                 for (i, val) in instruction.enumerated() where val == "->" {
-                    guard let from = IntPoint(instruction[i-1]), let to = IntPoint(instruction[i+1]) else { continue }
+                    guard let from = Coord(instruction[i-1]), let to = Coord(instruction[i+1]) else { continue }
                     getPointsInLine(from: from, to: to)?.forEach {
                         maxY = max(maxY, $0.y)
                         env.insert($0)
@@ -68,15 +68,15 @@ struct Day14: ParsableCommand {
 
     // MARK: - Private methods
 
-    private func getPointsInLine(from: IntPoint, to: IntPoint) -> [IntPoint]? {
-        var points = [IntPoint]()
+    private func getPointsInLine(from: Coord, to: Coord) -> [Coord]? {
+        var points = [Coord]()
         if from.x == to.x {
             for y in min(from.y, to.y)...max(from.y, to.y) {
-                points.append(IntPoint(to.x, y))
+                points.append(Coord(to.x, y))
             }
         } else if from.y == to.y {
             for x in min(from.x, to.x)...max(from.x, to.x) {
-                points.append(IntPoint(x, to.y))
+                points.append(Coord(x, to.y))
             }
         } else {
             return nil // Diagonal lines not supported
@@ -84,10 +84,10 @@ struct Day14: ParsableCommand {
         return points
     }
 
-    private func positionSand(inEnvironment env: Set<IntPoint>, start: IntPoint, maxY: Int,
-                              floor: Int? = nil) -> IntPoint? {
+    private func positionSand(inEnvironment env: Set<Coord>, start: Coord, maxY: Int,
+                              floor: Int? = nil) -> Coord? {
         guard !env.contains(start) else { return nil }
-        let (down, left, right) = (IntPoint(0, 1), IntPoint(-1, 1), IntPoint(1, 1))
+        let (down, left, right) = (Coord(0, 1), Coord(-1, 1), Coord(1, 1))
         var point = start
 
         while true {

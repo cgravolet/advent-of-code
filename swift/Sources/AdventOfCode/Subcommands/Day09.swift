@@ -1,18 +1,18 @@
 import ArgumentParser
 import Foundation
 
-fileprivate extension IntPoint {
-    func move(_ direction: Day09.Direction) -> IntPoint {
+fileprivate extension Coord {
+    func move(_ direction: Day09.Direction) -> Coord {
         let moveCoord = direction.coord
-        return IntPoint(x + moveCoord.x, y + moveCoord.y)
+        return Coord(x + moveCoord.x, y + moveCoord.y)
     }
 
-    func reposition(near h: IntPoint) -> IntPoint {
+    func reposition(near h: Coord) -> Coord {
         guard !isTouching(h) else { return self }
         let (xdiff, ydiff) = (h.x - x, h.y - y)
         let movex = abs(xdiff) > 1 || (abs(xdiff) > 0 && abs(ydiff) > 1)
         let movey = abs(ydiff) > 1 || (abs(ydiff) > 0 && abs(xdiff) > 1)
-        return IntPoint(
+        return Coord(
             movex ? x + (xdiff < 0 ? -1 : 1) : x,
             movey ? y + (ydiff < 0 ? -1 : 1) : y
         )
@@ -39,12 +39,12 @@ struct Day09: ParsableCommand {
             }
         }
 
-        var coord: IntPoint {
+        var coord: Coord {
             switch self {
-            case .up: return IntPoint(0, -1)
-            case .right: return IntPoint(1, 0)
-            case .down: return IntPoint(0, 1)
-            case .left: return IntPoint(-1, 0)
+            case .up: return Coord(0, -1)
+            case .right: return Coord(1, 0)
+            case .down: return Coord(0, 1)
+            case .left: return Coord(-1, 0)
             }
         }
 
@@ -81,8 +81,8 @@ struct Day09: ParsableCommand {
 
     func solve(instructions: [Direction], ropeSize: Int) -> Int {
         guard ropeSize > 0 else { return 0 }
-        var rope = [IntPoint](repeating: IntPoint(500, 500), count: ropeSize)
-        var visited = Set<IntPoint>()
+        var rope = [Coord](repeating: Coord(500, 500), count: ropeSize)
+        var visited = Set<Coord>()
 
         for direction in instructions {
             for _ in 0 ..< direction.count {
