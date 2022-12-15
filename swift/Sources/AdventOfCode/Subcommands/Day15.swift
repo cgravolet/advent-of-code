@@ -14,12 +14,14 @@ struct Day15: ParsableCommand {
 
     mutating func run() throws {
         let input = try String(contentsOfFile: path)
-        let (part1, part2) = (try part1(input, row: 2000000), try part2(input))
+        let part1 = try part1(input, row: 2000000)
+        let part2 = try part2(input, max: 4000000)
         print("Part 1: \(part1)")
         print("Part 2: \(part2)")
     }
 
     func part1(_ input: String, row: Int) throws -> Int {
+        let start = Date()
         var (minX, maxX, minY, maxY) = (Int.max, Int.min, Int.max, Int.min)
         var env = Set<Coord>()
         let sensors = try parseInput(input).compactMap { pair -> (Coord, Int)? in
@@ -47,11 +49,59 @@ struct Day15: ParsableCommand {
                 }
             }
         }
+        print("Part 1 omplete in \(Date().timeIntervalSince(start)) seconds")
         return count
     }
 
-    func part2(_ input: String) throws -> Int {
-        return 0 // TODO
+    func part2(_ input: String, max: Int) throws -> Int {
+        let start = Date()
+        var env = Set<Coord>()
+        let sensors = try parseInput(input).compactMap { pair -> (Coord, Int)? in
+            let distance = pair.sensor.manhattanDistance(to: pair.beacon)
+            env.insert(pair.beacon)
+            env.insert(pair.sensor)
+            if (pair.sensor.x < 0 && abs(0 - pair.sensor.x) > distance) ||
+               (pair.sensor.y < 0 && abs(0 - pair.sensor.y) > distance) ||
+               (pair.sensor.x > max && abs(max - pair.sensor.x) > distance) ||
+               (pair.sensor.y > max && abs(max - pair.sensor.y) > distance) {
+                return nil
+            }
+            return (pair.sensor, distance)
+        }
+        let range = 0...max
+        var beacon: Coord?
+        let group = DispatchGroup()
+
+        Array(range).chunks(ofCount: max/4).forEach { rangey in
+            group.enter()
+            DispatchQueue.global(qos: .utility).async {
+                defer { group.leave() }
+                for y in rangey {
+                    for x in range {
+                        guard beacon == nil else { return }
+                        let coord = Coord(x, y)
+                        if env.contains(coord) { continue }
+                        var isValid = true
+
+                        for (sensor, distance) in sensors where sensor.manhattanDistance(to: coord) <= distance {
+                            isValid = false
+                            break
+                        }
+
+                        if isValid {
+                            beacon = coord
+                        }
+                    }
+                }
+            }
+        }
+        group.wait()
+        print("Part 2 omplete in \(Date().timeIntervalSince(start)) seconds")
+
+        if let beacon = beacon {
+            return beacon.x * 4000000 + beacon.y
+        }
+        return -1
     }
 
     // MARK: - Internal methods

@@ -28,8 +28,8 @@ final class Day15Tests: XCTestCase {
 
     func testPart2() throws {
         let sut = Day15()
-        let want = 0
-        let got = try sut.part2(sampleInput)
+        let want = 56000011
+        let got = try sut.part2(sampleInput, max: 20)
         XCTAssertEqual(got, want)
     }
 }
