@@ -32,4 +32,14 @@ final class Day15Tests: XCTestCase {
         let got = try sut.part2(sampleInput, max: 20)
         XCTAssertEqual(got, want)
     }
+
+    func testGetCoordsOutsideRange() throws {
+        let sut = Day15()
+        let want = Set<Coord>([
+            Coord(0, 5), Coord(1, 4), Coord(1, 6), Coord(2, 3), Coord(2, 7), Coord(3, 2), Coord(3, 8), Coord(4, 1),
+            Coord(4, 9), Coord(5, 2), Coord(5, 8), Coord(6, 3), Coord(6, 7), Coord(7, 4), Coord(7, 6), Coord(8, 5)
+        ])
+        let got = sut.getCoordsOutsideRange(of: Coord(4, 5), distance: 3, min: 0, max: 20)
+        XCTAssertEqual(got, want)
+    }
 }

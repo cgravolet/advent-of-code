@@ -14,14 +14,17 @@ struct Day15: ParsableCommand {
 
     mutating func run() throws {
         let input = try String(contentsOfFile: path)
+
         let part1 = try part1(input, row: 2000000)
-        let part2 = try part2(input, max: 4000000)
         print("Part 1: \(part1)")
+
+        let part2 = try part2(input, max: 4000000)
         print("Part 2: \(part2)")
     }
 
     func part1(_ input: String, row: Int) throws -> Int {
         let start = Date()
+        defer { print("Part 1 complete in \(Date().timeIntervalSince(start).rounded()) seconds") }
         var (minX, maxX, minY, maxY) = (Int.max, Int.min, Int.max, Int.min)
         var env = Set<Coord>()
         let sensors = try parseInput(input).compactMap { pair -> (Coord, Int)? in
@@ -49,62 +52,44 @@ struct Day15: ParsableCommand {
                 }
             }
         }
-        print("Part 1 omplete in \(Date().timeIntervalSince(start)) seconds")
         return count
     }
 
     func part2(_ input: String, max: Int) throws -> Int {
         let start = Date()
-        var env = Set<Coord>()
-        let sensors = try parseInput(input).compactMap { pair -> (Coord, Int)? in
+        defer { print("Part 2 complete in \(Date().timeIntervalSince(start).rounded()) seconds") }
+        var candidates = Set<Coord>()
+        let sensors = try parseInput(input).map { pair -> (Coord, Int) in
             let distance = pair.sensor.manhattanDistance(to: pair.beacon)
-            env.insert(pair.beacon)
-            env.insert(pair.sensor)
-            if (pair.sensor.x < 0 && abs(0 - pair.sensor.x) > distance) ||
-               (pair.sensor.y < 0 && abs(0 - pair.sensor.y) > distance) ||
-               (pair.sensor.x > max && abs(max - pair.sensor.x) > distance) ||
-               (pair.sensor.y > max && abs(max - pair.sensor.y) > distance) {
-                return nil
-            }
+            candidates.formUnion(getCoordsOutsideRange(of: pair.sensor, distance: distance, min: 0, max: max))
             return (pair.sensor, distance)
         }
-        let range = 0...max
-        var beacon: Coord?
-        let group = DispatchGroup()
-
-        Array(range).chunks(ofCount: max/4).forEach { rangey in
-            group.enter()
-            DispatchQueue.global(qos: .utility).async {
-                defer { group.leave() }
-                for y in rangey {
-                    for x in range {
-                        guard beacon == nil else { return }
-                        let coord = Coord(x, y)
-                        if env.contains(coord) { continue }
-                        var isValid = true
-
-                        for (sensor, distance) in sensors where sensor.manhattanDistance(to: coord) <= distance {
-                            isValid = false
-                            break
-                        }
-
-                        if isValid {
-                            beacon = coord
-                        }
-                    }
-                }
+        candidateLoop: for candidate in candidates {
+            for (sensor, distance) in sensors where candidate.manhattanDistance(to: sensor) <= distance {
+                continue candidateLoop
             }
-        }
-        group.wait()
-        print("Part 2 omplete in \(Date().timeIntervalSince(start)) seconds")
-
-        if let beacon = beacon {
-            return beacon.x * 4000000 + beacon.y
+            return candidate.x * 4000000 + candidate.y
         }
         return -1
     }
 
     // MARK: - Internal methods
+
+    func getCoordsOutsideRange(of coord: Coord, distance: Int, min: Int, max: Int) -> Set<Coord> {
+        var (coords, step) = (Set<Coord>(), 0)
+        for x in (coord.x - distance - 1)...(coord.x + distance + 1) {
+            guard (0...max) ~= x else { continue }
+            let (uy, dy) = (coord.y - step, coord.y + step)
+            if (0...max) ~= uy {
+                coords.insert(Coord(x, coord.y - step))
+            }
+            if (0...max) ~= dy {
+                coords.insert(Coord(x, coord.y + step))
+            }
+            step = x < coord.x ? step + 1 : step - 1
+        }
+        return coords
+    }
 
     func parseInput(_ input: String) throws -> [(sensor: Coord, beacon: Coord)] {
         let pattern = #"Sensor at x=(-?\d+), y=(-?\d+): closest beacon is at x=(-?\d+), y=(-?\d+)"#
