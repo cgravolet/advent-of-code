@@ -30,7 +30,11 @@ func TestParseInputDay16(t *testing.T) {
 		"II": {0, []string{"AA", "JJ"}},
 		"JJ": {21, []string{"II"}},
 	}
-	got := parseInputDay16(day16sample)
+	got, first := parseInputDay16(day16sample)
+
+	if first != "AA" {
+		t.Errorf("expected 'AA', got '%s'", first)
+	}
 
 	if !reflect.DeepEqual(want, got) {
 		t.Errorf("expected %v, got %v", want, got)

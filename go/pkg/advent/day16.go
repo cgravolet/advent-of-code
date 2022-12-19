@@ -15,11 +15,17 @@ type Valve struct {
 }
 
 func (a *AdventOfCode2022) Day16(input string) {
-	valveMap := parseInputDay16(input)
-	fmt.Printf("%v\n", valveMap)
+	valves, first := parseInputDay16(input)
+	choosePath(valves, first)
+	fmt.Printf("%s %v\n", first, valves)
 }
 
-func parseInputDay16(input string) map[string]Valve {
+func choosePath(valves map[string]Valve, id string) {
+
+}
+
+func parseInputDay16(input string) (map[string]Valve, string) {
+	var first string
 	valveMap := make(map[string]Valve)
 
 	utility.ForEachLineInReader(strings.NewReader(input), func(s string) {
@@ -31,7 +37,10 @@ func parseInputDay16(input string) map[string]Valve {
 		for _, c := range strings.Split(matches[3], ",") {
 			valve.Connections = append(valve.Connections, strings.TrimSpace(c))
 		}
+		if len(first) == 0 {
+			first = matches[1]
+		}
 		valveMap[matches[1]] = valve
 	})
-	return valveMap
+	return valveMap, first
 }

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"reflect"
 	"strings"
 
@@ -15,13 +16,14 @@ import (
 func main() {
 	// Check for sub-command argument (i.e. "day01, day02, etc.")
 	if len(os.Args) < 2 {
-		log.Fatal(fmt.Errorf("You must specify a subcommand (i.e. 'day01' or 'day02')"))
+		log.Fatal(fmt.Errorf("you must specify a subcommand (i.e. 'day01' or 'day02')"))
 	}
 	subcmd := os.Args[1]
 
 	// Retrieve the input path option, if available
+	defaultPath := filepath.Join("..", "..", "..", "input", fmt.Sprintf("%s.txt", subcmd))
 	flagSet := flag.NewFlagSet(subcmd, flag.ExitOnError)
-	input := flagSet.String("path", fmt.Sprintf("../../../input/%s.txt", subcmd), "Input file path")
+	input := flagSet.String("path", defaultPath, "Input file path")
 	flagSet.Parse(os.Args[2:])
 
 	// Open the input file and read it's contents
@@ -40,7 +42,7 @@ func main() {
 	cmdFunc := reflect.ValueOf(adv).MethodByName(funcName)
 
 	if !cmdFunc.IsValid() {
-		log.Fatal(fmt.Errorf("Method '%s' not found", funcName))
+		log.Fatal(fmt.Errorf("method '%s' not found", funcName))
 	}
 	params := []reflect.Value{reflect.ValueOf(contents)}
 	cmdFunc.Call(params)
