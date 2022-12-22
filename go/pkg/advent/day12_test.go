@@ -7,16 +7,15 @@ import (
 	"testing"
 )
 
-var day12sample = `Sabqponm
+var sample12 = `Sabqponm
 abcryxxl
 accszExk
 acctuvwj
 abdefghi
-
 `
 
 func TestDay12FindNearestPathInMap(t *testing.T) {
-	hmap, start, end := makeHeightMap(strings.NewReader(day12sample))
+	hmap, start, end := makeHeightMap(strings.NewReader(sample12))
 	want := 31
 	wantshortest := 29
 	got, gotshortest, ok := findNearestPathInMap(hmap, start, end)
@@ -37,7 +36,7 @@ func TestDay12FindNearestPathInMap(t *testing.T) {
 func TestDay12MakeHeightMap(t *testing.T) {
 	wantstart := image.Point{0, 0}
 	wantend := image.Point{5, 2}
-	got, gotstart, gotend := makeHeightMap(strings.NewReader(day12sample))
+	got, gotstart, gotend := makeHeightMap(strings.NewReader(sample12))
 
 	if !reflect.DeepEqual(len(got), 40) {
 		t.Errorf("\nexpected\n%d\n\ngot\n%d\n\n", 40, len(got))

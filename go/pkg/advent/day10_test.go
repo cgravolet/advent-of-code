@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-var day10sample string = `addx 15
+var sample10 string = `addx 15
 addx -11
 addx 6
 addx -3
@@ -152,11 +152,10 @@ addx -11
 noop
 noop
 noop
-
 `
 
 func TestDay10Part1(t *testing.T) {
-	input := makeClockCircuitInstructions(strings.NewReader(day10sample))
+	input := makeClockCircuitInstructions(strings.NewReader(sample10))
 	want := 13140
 	got, _ := day10part1(input)
 
@@ -166,7 +165,7 @@ func TestDay10Part1(t *testing.T) {
 }
 
 func TestDay10Part2(t *testing.T) {
-	input := makeClockCircuitInstructions(strings.NewReader(day10sample))
+	input := makeClockCircuitInstructions(strings.NewReader(sample10))
 	want := `##..##..##..##..##..##..##..##..##..##..
 ###...###...###...###...###...###...###.
 ####....####....####....####....####....

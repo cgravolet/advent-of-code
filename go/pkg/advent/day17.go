@@ -15,7 +15,7 @@ const (
 
 func (a *AdventOfCode2022) Day17(input string) {
 	instructions := parseInputDay17(input)
-	fmt.Printf("%d %q\n", instructions.Len(), instructions)
+	fmt.Printf("%d %v\n", instructions.Len(), instructions)
 }
 
 func parseInputDay17(input string) *ring.Ring {

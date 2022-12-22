@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-var day13sample = `[1,1,3,1,1]
+var sample13 = `[1,1,3,1,1]
 [1,1,5,1,1]
 
 [[1],[2,3,4]]
@@ -59,7 +59,7 @@ func TestCompareGroup(t *testing.T) {
 
 func TestDay13Part1(t *testing.T) {
 	want := 13
-	got, err := day13part1(day13sample)
+	got, err := day13part1(sample13)
 
 	if err != nil {
 		t.Errorf("\n\tTestSolveDay13Part1 - Encountered error %v", err)
@@ -72,7 +72,7 @@ func TestDay13Part1(t *testing.T) {
 
 func TestDay13Part2(t *testing.T) {
 	want := 140
-	got, err := day13part2(day13sample)
+	got, err := day13part2(sample13)
 
 	if err != nil {
 		t.Errorf("\n\tTestSolveDay13Part1 - Encountered error %v", err)
