@@ -28,12 +28,10 @@ func parseInputDay18(input string) (points []Point3D, b Boundary) {
 	b.MaxX, b.MaxY, b.MaxZ = math.MinInt, math.MinInt, math.MinInt
 	b.MinX, b.MinY, b.MinZ = math.MaxInt, math.MaxInt, math.MaxInt
 	utility.ForEachLineInReader(strings.NewReader(input), func(s string) {
-		var p Point3D
-		_, err := fmt.Sscanf(s, "%d,%d,%d", &p.X, &p.Y, &p.Z)
-		p.X++
-		p.Y++
-		p.Z++
+		var x, y, z int
+		_, err := fmt.Sscanf(s, "%d,%d,%d", &x, &y, &z)
 		if err == nil {
+			p := Point3D{x + 1, y + 1, z + 1}
 			points = append(points, p)
 			b.MaxX = int(math.Max(float64(b.MaxX), float64(p.X)))
 			b.MaxY = int(math.Max(float64(b.MaxY), float64(p.Y)))
@@ -92,7 +90,7 @@ func solveDay18Part1(input string) int {
 	points, b := parseInputDay18(input)
 	graph := makeGraph(b)
 
-	// Step 1: Build the grid
+	// Step 1: Add points to the graph
 	for _, point := range points {
 		graph[point.X][point.Y][point.Z] = 1
 	}
