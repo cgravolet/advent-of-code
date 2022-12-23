@@ -6,6 +6,13 @@ import (
 	"strconv"
 )
 
+func (a *AdventOfCode2022) Day21(input string) {
+	part1 := solveDay21Part1(input)
+	fmt.Printf("Part 1: %d\n", part1)
+}
+
+// Data structures
+
 type MonkeyEquation struct {
 	Left     string
 	Right    string
@@ -36,10 +43,7 @@ func (me *MonkeyEquation) trySolve(m map[string]int) (int, bool) {
 	return -1, false
 }
 
-func (a *AdventOfCode2022) Day21(input string) {
-	part1 := solveDay21Part1(input)
-	fmt.Printf("Part 1: %d\n", part1)
-}
+// Parse
 
 func parseInputDay21(input string) (m map[string]int, e map[string]MonkeyEquation) {
 	m = make(map[string]int)
@@ -64,6 +68,8 @@ func parseInputDay21(input string) (m map[string]int, e map[string]MonkeyEquatio
 	}
 	return
 }
+
+// Solve
 
 func solveDay21Part1(input string) int {
 	m, e := parseInputDay21(input)
