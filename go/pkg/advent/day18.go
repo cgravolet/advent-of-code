@@ -11,6 +11,7 @@ import (
 type Point3D struct {
 	X, Y, Z int
 }
+
 type Boundary struct {
 	MaxX, MaxY, MaxZ, MinX, MinY, MinZ int
 }
@@ -101,7 +102,7 @@ func solveDay18Part1(input string) int {
 	for _, p := range points {
 		for _, s := range sides {
 			x, y, z := p.X+s.X, p.Y+s.Y, p.Z+s.Z
-			if x >= 0 && y >= 0 && z >= 0 && graph[x][y][z] == 0 {
+			if graph[x][y][z] == 0 {
 				sum++
 			}
 		}
@@ -127,7 +128,7 @@ func solveDay18Part2(input string) int {
 	for _, p := range points {
 		for _, s := range sides {
 			x, y, z := p.X+s.X, p.Y+s.Y, p.Z+s.Z
-			if x >= 0 && y >= 0 && z >= 0 && graph[x][y][z] == 2 {
+			if graph[x][y][z] == 2 {
 				sum++
 			}
 		}

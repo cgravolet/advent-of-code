@@ -2,6 +2,15 @@ package utility
 
 import "fmt"
 
+func ContainsString(s []string, str string) bool {
+	for _, v := range s {
+		if v == str {
+			return true
+		}
+	}
+	return false
+}
+
 func InsertElement(s []int, e int, i int) ([]int, error) {
 	if i >= len(s) || i < 0 {
 		return s, fmt.Errorf("index %d out of range", i)
