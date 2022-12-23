@@ -30,7 +30,7 @@ func TestParseInputDay16(t *testing.T) {
 		"II": {"II", 0, []string{"AA", "JJ"}, 5},
 		"JJ": {"JJ", 21, []string{"II"}, 5},
 	}
-	got := parseInputDay16(sample16)
+	got, _ := parseInputDay16(sample16)
 
 	if !reflect.DeepEqual(want, got) {
 		t.Errorf("expected %v, got %v", want, got)

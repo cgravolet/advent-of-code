@@ -28,7 +28,7 @@ type ValveMap map[string]map[string]int
 
 // Parse
 
-func parseInputDay16(input string) map[string]Valve {
+func parseInputDay16(input string) (map[string]Valve, int) {
 	var index int
 	valveMap := make(map[string]Valve)
 
@@ -48,21 +48,27 @@ func parseInputDay16(input string) map[string]Valve {
 		}
 		valveMap[name] = valve
 	})
-	return valveMap
+	return valveMap, index
 }
 
 // Solve
 
 func solveDay16Part1(input string) int {
-	v := parseInputDay16(input)
+	v, _ := parseInputDay16(input)
 	vm := makeValveMap(v)
 	return traverse(vm, v, 30, "AA", 0)
 }
 
 func solveDay16Part2(input string) int {
-	v := parseInputDay16(input)
+	v, maplen := parseInputDay16(input)
 	vm := makeValveMap(v)
-	return traverse(vm, v, 26, "AA", 0)
+	pressure, bitmask := 0, (uint16(1)<<maplen)-1
+
+	for i := uint16(0); i < (bitmask+1)/2; i++ {
+		val := traverse(vm, v, 26, "AA", i) + traverse(vm, v, 26, "AA", bitmask^i)
+		pressure = utility.MaxInt(pressure, val)
+	}
+	return pressure
 }
 
 // Helper methods
@@ -112,7 +118,7 @@ func makeValveMap(valves map[string]Valve) ValveMap {
 }
 
 func traverse(vm ValveMap, valves map[string]Valve, time int, valve string, bitmask uint16) int {
-	var maxval int
+	var pressure int
 	for n, dist := range vm[valve] {
 		bit := uint16(1) << valves[n].Index
 		if bitmask&bit > 0 {
@@ -123,7 +129,7 @@ func traverse(vm ValveMap, valves map[string]Valve, time int, valve string, bitm
 		if rt <= 0 {
 			continue
 		}
-		maxval = utility.MaxInt(maxval, traverse(vm, valves, rt, n, bitmask|bit)+valves[n].FlowRate*rt)
+		pressure = utility.MaxInt(pressure, traverse(vm, valves, rt, n, bitmask|bit)+valves[n].FlowRate*rt)
 	}
-	return maxval
+	return pressure
 }
