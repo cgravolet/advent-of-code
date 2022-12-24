@@ -16,7 +16,7 @@ type Items []Item
 func (lhs Compartment) GetCommonItems(rhs Compartment) Items {
 	commonItems := make(Items, 0)
 	for _, el := range lhs {
-		if strings.IndexRune(string(rhs), el) > -1 && strings.IndexRune(string(commonItems), el) == -1 {
+		if strings.ContainsRune(string(rhs), el) && !strings.ContainsRune(string(commonItems), el) {
 			commonItems = append(commonItems, Item(el))
 		}
 	}
@@ -58,7 +58,7 @@ func day03part1(input io.Reader) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("Priority sum of common items (part 1): %d\n", sum)
+	fmt.Printf("Part 1: %d\n", sum)
 }
 
 func day03part2(input io.Reader) {
@@ -92,5 +92,5 @@ func day03part2(input io.Reader) {
 		}
 		sum += commonItems.Priority()
 	}
-	fmt.Printf("Priority sum of badges (part 2): %d\n", sum)
+	fmt.Printf("Part 2: %d\n", sum)
 }

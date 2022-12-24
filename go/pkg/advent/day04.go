@@ -50,6 +50,6 @@ func (a *AdventOfCode2022) Day04(input string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("Contained sections (part 1): %d\n", contained)
-	fmt.Printf("Overlapped sections (part 2): %d\n", overlapped)
+	fmt.Printf("Part 1: %d\n", contained)
+	fmt.Printf("Part 2: %d\n", overlapped)
 }

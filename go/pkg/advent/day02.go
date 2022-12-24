@@ -15,14 +15,14 @@ type Outcome int
 
 const (
 	Rock     Shape = 1
-	Paper          = 2
-	Scissors       = 3
+	Paper    Shape = 2
+	Scissors Shape = 3
 )
 
 const (
 	Win  Outcome = 6
-	Draw         = 3
-	Loss         = 0
+	Draw Outcome = 3
+	Loss Outcome = 0
 )
 
 func (lhs Shape) Play(rhs Shape) Outcome {
@@ -120,7 +120,7 @@ func day02part1(input io.Reader) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("Total score (part 1): %d\n", scoreTotal)
+	fmt.Printf("Part 1: %d\n", scoreTotal)
 }
 
 func day02part2(input io.Reader) {
@@ -138,5 +138,5 @@ func day02part2(input io.Reader) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("Total score (part 2): %d\n", scoreTotal)
+	fmt.Printf("Part 2: %d\n", scoreTotal)
 }

@@ -13,8 +13,8 @@ func (a *AdventOfCode2022) Day07(input string) {
 	dirmap := makeDirMap(strings.NewReader(input))
 	part1 := findTotalSizeOfCandidatesForDeletion(dirmap, 100000)
 	part2 := findSizeOfDirectoryForDeletion(dirmap, 70000000, 30000000)
-	fmt.Printf("Total size of candidates for deletion (part 1): %d\n", part1)
-	fmt.Printf("Size of directory for deletion (part 2): %d\n", part2)
+	fmt.Printf("Part 1: %d\n", part1)
+	fmt.Printf("Part 2: %d\n", part2)
 }
 
 func findSizeOfDirectoryForDeletion(dirmap map[string]int, total int, required int) int {

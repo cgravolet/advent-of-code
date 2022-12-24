@@ -62,11 +62,7 @@ func day13part2(input string) (int, error) {
 	packets = append(packets, dividerPacket1, dividerPacket2)
 
 	sort.Slice(packets, func(l, r int) bool {
-		comparison := compareGroup(packets[l], packets[r])
-		if comparison > 0 {
-			return true
-		}
-		return false
+		return compareGroup(packets[l], packets[r]) > 0
 	})
 
 	key := 1
@@ -123,7 +119,7 @@ func compareGroup(l, r []any) int {
 				return comparison
 			}
 		} else {
-			panic(fmt.Errorf("Encountered unrecognized type %v", lhs))
+			panic(fmt.Errorf("encountered unrecognized type %v", lhs))
 		}
 	}
 

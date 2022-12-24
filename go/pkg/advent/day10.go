@@ -19,7 +19,7 @@ func (a *AdventOfCode2022) Day10(input string) {
 	instructions := makeClockCircuitInstructions(strings.NewReader(input))
 	part1, part2 := day10part1(instructions)
 	fmt.Printf("Part 1: %d\n", part1)
-	fmt.Printf("%s\n", part2)
+	fmt.Printf("Part 2:\n%s\n", part2)
 }
 
 // Internal methods

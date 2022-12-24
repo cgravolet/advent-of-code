@@ -42,11 +42,11 @@ func (a *AdventOfCode2022) Day05(input string) {
 
 	// Part 1
 	part1 := applyInstructions(stacks, instructions)
-	fmt.Printf("Day 5, part 1 answer: %s\n", part1)
+	fmt.Printf("Part 1: %s\n", part1)
 
 	// Part 2
 	part2 := applyModifiedInstructions(stacks, instructions)
-	fmt.Printf("Day 5, part 2 answer: %s\n", part2)
+	fmt.Printf("Part 2: %s\n", part2)
 }
 
 // Private methods

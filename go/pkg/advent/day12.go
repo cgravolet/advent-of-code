@@ -16,7 +16,8 @@ func (a *AdventOfCode2022) Day12(input string) {
 	part1, part2, ok := findNearestPathInMap(hmap, start, end)
 
 	if ok {
-		fmt.Printf("Part 1: %d\nPart 2: %d\n", part1, part2)
+		fmt.Printf("Part 1: %d\n", part1)
+		fmt.Printf("Part 2: %d\n", part2)
 	} else {
 		fmt.Println("Path not found")
 	}

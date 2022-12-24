@@ -35,7 +35,7 @@ func (a *AdventOfCode2022) Day01(input string) {
 
 	// Elf with most calories
 	mostCalories := calories[0]
-	fmt.Printf("Most calories (part 1): %d\n", mostCalories)
+	fmt.Printf("Part 1: %d\n", mostCalories)
 
 	// Top three calories
 	topThree := 0
@@ -45,5 +45,5 @@ func (a *AdventOfCode2022) Day01(input string) {
 			topThree += calories[i]
 		}
 	}
-	fmt.Printf("Top three combined (part 2): %d\n", topThree)
+	fmt.Printf("Part 2: %d\n", topThree)
 }
