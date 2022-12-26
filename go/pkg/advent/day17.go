@@ -1,7 +1,6 @@
 package advent
 
 import (
-	"container/ring"
 	"fmt"
 	"image"
 	"strings"
@@ -11,21 +10,20 @@ import (
 
 func (a *AdventOfCode2022) Day17(input string) {
 	part1 := solveDay17Part1(input)
+	part2 := solveDay17Part2(input)
 	fmt.Printf("Part 1: %d\n", part1)
+	fmt.Printf("Part 2: %d\n", part2)
 }
 
 // Data structures
 
-type JetDirection string
-
-const (
-	JetLeft  JetDirection = "<"
-	JetRight JetDirection = ">"
-)
-
 type RockShape []image.Point
 
-func (rs *RockShape) move(x, y int) RockShape {
+func (rs *RockShape) Len() int {
+	return 5
+}
+
+func (rs *RockShape) Move(x, y int) RockShape {
 	var rock RockShape
 	for _, p := range *rs {
 		rock = append(rock, image.Point{p.X + x, p.Y + y})
@@ -33,9 +31,9 @@ func (rs *RockShape) move(x, y int) RockShape {
 	return rock
 }
 
-func NewRockShape(index int, y int) RockShape {
-	var shape RockShape
-	switch index % 5 {
+func NewRockShape(index int, y int) (shape RockShape, i int) {
+	i = index % shape.Len()
+	switch i {
 	case 0:
 		shape = RockShape{{2, y}, {3, y}, {4, y}, {5, y}}
 	case 1:
@@ -47,9 +45,9 @@ func NewRockShape(index int, y int) RockShape {
 	case 4:
 		shape = RockShape{{2, y + 1}, {3, y + 1}, {2, y}, {3, y}}
 	default:
-		panic(fmt.Errorf("retrieving shape for invalid range %d", index%5))
+		panic(fmt.Errorf("retrieving shape for invalid range %d", i))
 	}
-	return shape
+	return
 }
 
 type RockChamber map[image.Point]bool
@@ -96,47 +94,55 @@ func (rc *RockChamber) GetHeight() int {
 	return maxY + 1
 }
 
-// Parse
+func (rc *RockChamber) GetTopRows(count int) string {
+	row, max := "", rc.GetHeight()-1
 
-func parseInputDay17(input string) *ring.Ring {
-	input = strings.TrimSpace(input)
-	r := ring.New(len(input))
-	for _, d := range input {
-		r.Value = JetDirection(d)
-		r = r.Next()
+	for y := max; y >= max-count; y-- {
+		for x := 0; x < 7; x++ {
+			_, exists := (*rc)[image.Point{x, y}]
+			if exists {
+				row += "#"
+			} else {
+				row += "."
+			}
+		}
 	}
-	return r
+	return row
 }
 
 // Solve
 
 func solveDay17Part1(input string) int {
+	rockCount := 2022
 	chamber := make(RockChamber)
-	jets := parseInputDay17(input)
-	y := 3
+	jets := strings.TrimSpace(input)
+	j, y := 0, 3
 
-	for i := 0; i < 2022; i++ {
-		rock := NewRockShape(i, y)
+	for i := 0; i < rockCount; i++ {
+		rock, _ := NewRockShape(i, y)
 
 		for {
-			jetx := 1
-			if jets.Value == JetLeft {
-				jetx = -1
+			// Determine what direction the steam is blowing
+			var jx int
+			if jets[j%len(jets)] == '<' {
+				jx = -1
+			} else if jets[j%len(jets)] == '>' {
+				jx = 1
 			}
-			jets = jets.Next()
+			j++
 
-			// Move left or right depending on the jet of steam
-			if !chamber.Collides(rock.move(jetx, 0)) {
-				rock = rock.move(jetx, 0)
+			// Move the rock left or right depending on direction os steam
+			if !chamber.Collides(rock.Move(jx, 0)) {
+				rock = rock.Move(jx, 0)
 			}
 
 			// Move down
-			if chamber.Collides(rock.move(0, -1)) {
+			if chamber.Collides(rock.Move(0, -1)) {
 				chamber.AddRock(rock)
 				y = chamber.GetHeight() + 3
 				break
 			} else {
-				rock = rock.move(0, -1)
+				rock = rock.Move(0, -1)
 			}
 		}
 	}
@@ -144,34 +150,62 @@ func solveDay17Part1(input string) int {
 }
 
 func solveDay17Part2(input string) int {
+	rockCount := 1000000000000
 	chamber := make(RockChamber)
-	jets := parseInputDay17(input)
-	y := 3
+	jets := strings.TrimSpace(input)
+	j, y := 0, 3
 
-	for i := 0; i < 1000000000000; i++ {
-		rock := NewRockShape(i, y)
+	type cycle struct {
+		r, j int
+		t    string
+	}
+	type cycleVal struct {
+		h, i int
+	}
+	cache := make(map[cycle]cycleVal)
+	heightBeforeTotal := 0
+	totalHeightWithoutRemainder := 0
+
+	for i := 0; i < rockCount; i++ {
+		rock, r := NewRockShape(i, y)
+		c := cycle{r, j % len(jets), chamber.GetTopRows(100)}
+		height := chamber.GetHeight()
+		val, exists := cache[c]
+
+		// If a cycle is detected, the number of cycles and total height can be calculated and the majority
+		// of iterations can be skipped
+		if exists && totalHeightWithoutRemainder == 0 {
+			rocksPerCycle := i - 1 - val.i
+			heightPerCycle := height - val.h
+			numberOfCycles := (rockCount - val.i) / rocksPerCycle
+			totalHeightWithoutRemainder = val.h + (numberOfCycles * heightPerCycle)
+			heightBeforeTotal = height
+
+			// Increment i to drop remainder of rocks after cycle calculation
+			i = rockCount - (rockCount - val.i - (numberOfCycles * rocksPerCycle))
+			continue
+		}
+		cache[c] = cycleVal{height, i - 1}
 
 		for {
-			jetx := 1
-			if jets.Value == JetLeft {
-				jetx = -1
+			jx := 1
+			if jets[j%len(jets)] == '<' {
+				jx = -1
 			}
-			jets = jets.Next()
+			j++
 
-			// Move left or right depending on the jet of steam
-			if !chamber.Collides(rock.move(jetx, 0)) {
-				rock = rock.move(jetx, 0)
+			if !chamber.Collides(rock.Move(jx, 0)) {
+				rock = rock.Move(jx, 0)
 			}
 
-			// Move down
-			if chamber.Collides(rock.move(0, -1)) {
+			if chamber.Collides(rock.Move(0, -1)) {
 				chamber.AddRock(rock)
 				y = chamber.GetHeight() + 3
 				break
 			} else {
-				rock = rock.move(0, -1)
+				rock = rock.Move(0, -1)
 			}
 		}
 	}
-	return chamber.GetHeight()
+	return chamber.GetHeight() - heightBeforeTotal + totalHeightWithoutRemainder
 }
