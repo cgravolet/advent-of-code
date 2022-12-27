@@ -13,17 +13,17 @@ func TestParseInputDay19(t *testing.T) {
 	want := []Blueprint{
 		{
 			ID:          1,
-			OreBot:      BotCost{4, 0, 0},
-			ClayBot:     BotCost{2, 0, 0},
-			ObsidianBot: BotCost{3, 14, 0},
-			GeodeBot:    BotCost{2, 0, 7},
+			OreBot:      ResourceCollection{4, 0, 0, 0},
+			ClayBot:     ResourceCollection{2, 0, 0, 0},
+			ObsidianBot: ResourceCollection{3, 14, 0, 0},
+			GeodeBot:    ResourceCollection{2, 0, 7, 0},
 		},
 		{
 			ID:          2,
-			OreBot:      BotCost{2, 0, 0},
-			ClayBot:     BotCost{3, 0, 0},
-			ObsidianBot: BotCost{3, 8, 0},
-			GeodeBot:    BotCost{3, 0, 12},
+			OreBot:      ResourceCollection{2, 0, 0, 0},
+			ClayBot:     ResourceCollection{3, 0, 0, 0},
+			ObsidianBot: ResourceCollection{3, 8, 0, 0},
+			GeodeBot:    ResourceCollection{3, 0, 12, 0},
 		},
 	}
 	got := parseInputDay19(sample19)

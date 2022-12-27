@@ -17,88 +17,131 @@ func (a *AdventOfCode2022) Day19(input string) {
 
 type Blueprint struct {
 	ID          int
-	OreBot      BotCost
-	ClayBot     BotCost
-	ObsidianBot BotCost
-	GeodeBot    BotCost
+	OreBot      ResourceCollection
+	ClayBot     ResourceCollection
+	ObsidianBot ResourceCollection
+	GeodeBot    ResourceCollection
 }
 
-type BotCost struct {
+type ResourceCollection struct {
 	Ore      int
 	Clay     int
 	Obsidian int
+	Geode    int
 }
 
-func (bp Blueprint) MaxCost() BotCost {
-	return BotCost{
+func (bp Blueprint) MaxCost() ResourceCollection {
+	return ResourceCollection{
 		utility.MaxInt(bp.OreBot.Ore, bp.ClayBot.Ore, bp.ObsidianBot.Ore, bp.GeodeBot.Ore),
 		utility.MaxInt(bp.OreBot.Clay, bp.ClayBot.Clay, bp.ObsidianBot.Clay, bp.GeodeBot.Clay),
 		utility.MaxInt(bp.OreBot.Obsidian, bp.ClayBot.Obsidian, bp.ObsidianBot.Obsidian, bp.GeodeBot.Obsidian),
+		utility.MaxInt(bp.OreBot.Geode, bp.ClayBot.Geode, bp.ObsidianBot.Geode, bp.GeodeBot.Geode),
 	}
 }
 
 func (bp Blueprint) QualityLevel(time int) int {
-	resources := struct{ ore, clay, obsidian, geode int }{}
-	bots := struct{ ore, clay, obsidian, geode int }{1, 0, 0, 0}
-
-	for i := 0; i < time; i++ {
-		order := struct{ ore, clay, obsidian, geode bool }{}
-		fmt.Printf("\n== Minute %d ==\n", i+1)
-
-		// Spend ore to begin crafting a robot, if possible
-		if resources.ore >= bp.GeodeBot.Ore && resources.obsidian >= bp.GeodeBot.Obsidian {
-			resources.ore -= bp.GeodeBot.Ore
-			resources.obsidian -= bp.GeodeBot.Obsidian
-			order.geode = true
-			fmt.Printf("Spend %d ore and %d obsidian to start building a geode-cracking robot.\n", bp.GeodeBot.Ore, bp.GeodeBot.Obsidian)
-		} else if resources.ore >= bp.ObsidianBot.Ore && resources.clay >= bp.ObsidianBot.Clay {
-			resources.ore -= bp.ObsidianBot.Ore
-			resources.clay -= bp.ObsidianBot.Clay
-			order.obsidian = true
-			fmt.Printf("Spend %d ore and %d clay to start building an obsidian-collecting robot.\n", bp.ObsidianBot.Ore, bp.ObsidianBot.Clay)
-		} else if resources.ore >= bp.ClayBot.Ore {
-			resources.ore -= bp.ClayBot.Ore
-			order.clay = true
-			fmt.Printf("Spend %d ore to start building a clay-collecting robot.\n", bp.ClayBot.Ore)
-		} else if resources.ore >= bp.OreBot.Ore {
-			resources.ore -= bp.OreBot.Ore
-			order.ore = true
-			fmt.Printf("Spend %d ore to start building an ore-collecting robot.\n", bp.ClayBot.Ore)
-		}
-
-		// Mine resources
-		resources.ore += bots.ore
-		fmt.Printf("%d ore-collecting robot collects %d ore; you now have %d ore.\n", bots.ore, bots.ore, resources.ore)
-
-		if bots.clay > 0 {
-			resources.clay += bots.clay
-			fmt.Printf("%d clay-collecting robots collects %d clay; you now have %d clay.\n", bots.clay, bots.clay, resources.clay)
-		}
-		if bots.obsidian > 0 {
-			resources.obsidian += bots.obsidian
-			fmt.Printf("%d obsidian-collecting robots collects %d obsidian; you now have %d obsidian.\n", bots.obsidian, bots.obsidian, resources.obsidian)
-		}
-		if bots.geode > 0 {
-			resources.geode += bots.geode
-			fmt.Printf("%d geode-cracking robots cracks %d geode; you now have %d open geodes.\n", bots.geode, bots.geode, resources.geode)
-		}
-
-		// Complete robot construction
-		if order.geode {
-			bots.geode++
-			fmt.Printf("The new geode-cracking robot is ready; you now have %d of them.\n", bots.geode)
-		} else if order.obsidian {
-			bots.obsidian++
-			fmt.Printf("The new obsidian-collecting robot is ready; you now have %d of them.\n", bots.obsidian)
-		} else if order.clay {
-			bots.clay++
-			fmt.Printf("The new clay-collecting robot is ready; you now have %d of them.\n", bots.clay)
-		} else if order.ore {
-			bots.ore++
-			fmt.Printf("The new ore-collecting robot is ready; you now have %d of them.\n", bots.ore)
-		}
+	type state struct {
+		resources ResourceCollection
+		bots      ResourceCollection
+		time      int
 	}
-	return resources.geode * bp.ID
+
+	stateDescription := func(s state) string {
+		return fmt.Sprintf("%d%d%d%d-%d%d%d%d-%d",
+			s.resources.Ore, s.resources.Clay, s.resources.Obsidian, s.resources.Geode,
+			s.bots.Ore, s.bots.Clay, s.bots.Obsidian, s.bots.Geode,
+			s.time)
+	}
+
+	var maxGeodes int
+	queue := []state{{ResourceCollection{}, ResourceCollection{1, 0, 0, 0}, 1}}
+	cache := make(map[string]bool)
+	craft := make(map[int]bool)
+
+	for len(queue) > 0 {
+		s := queue[0]
+		queue = queue[1:]
+		d := stateDescription(s)
+
+		_, seen := cache[d]
+		if seen {
+			continue
+		}
+		cache[d] = true
+		r := s.resources
+		b := s.bots
+		t := s.time
+
+		if t > time {
+			maxGeodes = utility.MaxInt(maxGeodes, s.resources.Geode)
+			continue
+		}
+
+		if r.Ore >= bp.GeodeBot.Ore && r.Obsidian >= bp.GeodeBot.Obsidian {
+			queue = append(queue, state{
+				ResourceCollection{
+					Ore:      r.Ore - bp.GeodeBot.Ore + b.Ore,
+					Clay:     r.Clay + b.Clay,
+					Obsidian: r.Obsidian - bp.GeodeBot.Obsidian + b.Obsidian,
+					Geode:    r.Geode + b.Geode,
+				},
+				ResourceCollection{b.Ore, b.Clay, b.Obsidian, b.Geode + 1},
+				t + 1,
+			})
+			craft[t] = true
+			continue
+		} else if r.Ore >= bp.ObsidianBot.Ore && r.Clay >= bp.ObsidianBot.Clay {
+			queue = append(queue, state{
+				ResourceCollection{
+					Ore:      r.Ore - bp.ObsidianBot.Ore + b.Ore,
+					Clay:     r.Clay - bp.ObsidianBot.Clay + b.Clay,
+					Obsidian: r.Obsidian + b.Obsidian,
+					Geode:    r.Geode + b.Geode,
+				},
+				ResourceCollection{b.Ore, b.Clay, b.Obsidian + 1, b.Geode},
+				t + 1,
+			})
+			continue
+		}
+
+		if r.Ore >= bp.ClayBot.Ore {
+			queue = append(queue, state{
+				ResourceCollection{
+					Ore:      r.Ore - bp.ClayBot.Ore + b.Ore,
+					Clay:     r.Clay + b.Clay,
+					Obsidian: r.Obsidian + b.Obsidian,
+					Geode:    r.Geode + b.Geode,
+				},
+				ResourceCollection{b.Ore, b.Clay + 1, b.Obsidian, b.Geode},
+				t + 1,
+			})
+		}
+
+		if r.Ore >= bp.OreBot.Ore {
+			queue = append(queue, state{
+				ResourceCollection{
+					Ore:      r.Ore - bp.OreBot.Ore + b.Ore,
+					Clay:     r.Clay + b.Clay,
+					Obsidian: r.Obsidian + b.Obsidian,
+					Geode:    r.Geode + b.Geode,
+				},
+				ResourceCollection{b.Ore + 1, b.Clay, b.Obsidian, b.Geode},
+				t + 1,
+			})
+		}
+
+		queue = append(queue, state{
+			ResourceCollection{
+				Ore:      r.Ore + b.Ore,
+				Clay:     r.Clay + b.Clay,
+				Obsidian: r.Obsidian + b.Obsidian,
+				Geode:    r.Geode + b.Geode,
+			},
+			ResourceCollection{b.Ore, b.Clay, b.Obsidian, b.Geode},
+			t + 1,
+		})
+	}
+	return maxGeodes * bp.ID
 }
 
 // Parse
@@ -120,10 +163,10 @@ func parseInputDay19(input string) []Blueprint {
 		g7, _ := strconv.Atoi(match[7])
 		bp := Blueprint{
 			ID:          g1,
-			OreBot:      BotCost{g2, 0, 0},
-			ClayBot:     BotCost{g3, 0, 0},
-			ObsidianBot: BotCost{g4, g5, 0},
-			GeodeBot:    BotCost{g6, 0, g7},
+			OreBot:      ResourceCollection{g2, 0, 0, 0},
+			ClayBot:     ResourceCollection{g3, 0, 0, 0},
+			ObsidianBot: ResourceCollection{g4, g5, 0, 0},
+			GeodeBot:    ResourceCollection{g6, 0, g7, 0},
 		}
 		blueprints = append(blueprints, bp)
 	}
