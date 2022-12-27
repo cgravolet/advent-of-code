@@ -46,15 +46,15 @@ func TestDay12MakeHeightMap(t *testing.T) {
 		t.Errorf("\nexpected\n%d\n\ngot\n%d\n\n", wantstart, gotstart)
 	}
 
-	if !reflect.DeepEqual(got[wantstart], 0) {
-		t.Errorf("\nexpected\n%d\n\ngot\n%d\n\n", 0, got[wantstart])
+	if !reflect.DeepEqual(got[wantstart], 1) {
+		t.Errorf("\nexpected\n%d\n\ngot\n%d\n\n", 1, got[wantstart])
 	}
 
 	if !reflect.DeepEqual(wantend, gotend) {
 		t.Errorf("\nexpected\n%d\n\ngot\n%d\n\n", wantend, gotend)
 	}
 
-	if !reflect.DeepEqual(got[wantend], 27) {
-		t.Errorf("\nexpected\n%d\n\ngot\n%d\n\n", 0, got[wantend])
+	if !reflect.DeepEqual(got[wantend], 26) {
+		t.Errorf("\nexpected\n%d\n\ngot\n%d\n\n", 26, got[wantend])
 	}
 }

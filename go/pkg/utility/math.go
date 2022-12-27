@@ -1,15 +1,23 @@
 package utility
 
-func MaxInt(l, r int) int {
-	if l > r {
-		return l
+import "math"
+
+func MaxInt(nums ...int) int {
+	maxNum := math.MinInt
+	for _, num := range nums {
+		if num > maxNum {
+			maxNum = num
+		}
 	}
-	return r
+	return maxNum
 }
 
-func MinInt(l, r int) int {
-	if l < r {
-		return l
+func MinInt(nums ...int) int {
+	minNum := math.MaxInt
+	for _, num := range nums {
+		if num < minNum {
+			minNum = num
+		}
 	}
-	return r
+	return minNum
 }
