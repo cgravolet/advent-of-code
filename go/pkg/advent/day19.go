@@ -10,7 +10,9 @@ import (
 
 func (a *AdventOfCode2022) Day19(input string) {
 	part1 := solveDay19Part1(input)
+	part2 := solveDay19Part2(input)
 	fmt.Printf("Part 1: %d\n", part1)
+	fmt.Printf("Part 2: %d\n", part2)
 }
 
 // Data structures
@@ -39,7 +41,7 @@ func (bp Blueprint) MaxCost() ResourceCollection {
 	}
 }
 
-func (bp Blueprint) QualityLevel(time int) int {
+func (bp Blueprint) MaxGeodes(time int) int {
 	type state struct {
 		resources ResourceCollection
 		bots      ResourceCollection
@@ -56,7 +58,7 @@ func (bp Blueprint) QualityLevel(time int) int {
 	var maxGeodes int
 	queue := []state{{ResourceCollection{}, ResourceCollection{1, 0, 0, 0}, 1}}
 	cache := make(map[string]bool)
-	craft := make(map[int]bool)
+	craft := make(map[int]int)
 
 	for len(queue) > 0 {
 		s := queue[0]
@@ -88,7 +90,7 @@ func (bp Blueprint) QualityLevel(time int) int {
 				ResourceCollection{b.Ore, b.Clay, b.Obsidian, b.Geode + 1},
 				t + 1,
 			})
-			craft[t] = true
+			craft[t] = b.Geode
 			continue
 		} else if r.Ore >= bp.ObsidianBot.Ore && r.Clay >= bp.ObsidianBot.Clay {
 			queue = append(queue, state{
@@ -101,6 +103,11 @@ func (bp Blueprint) QualityLevel(time int) int {
 				ResourceCollection{b.Ore, b.Clay, b.Obsidian + 1, b.Geode},
 				t + 1,
 			})
+			continue
+		}
+
+		geodeBots, crafted := craft[t]
+		if crafted && geodeBots == b.Geode {
 			continue
 		}
 
@@ -141,7 +148,11 @@ func (bp Blueprint) QualityLevel(time int) int {
 			t + 1,
 		})
 	}
-	return maxGeodes * bp.ID
+	return maxGeodes
+}
+
+func (bp Blueprint) QualityLevel(time int) int {
+	return bp.MaxGeodes(time) * bp.ID
 }
 
 // Parse
@@ -179,6 +190,17 @@ func solveDay19Part1(input string) int {
 	var sum int
 	for _, bp := range parseInputDay19(input) {
 		sum += bp.QualityLevel(24)
+	}
+	return sum
+}
+
+func solveDay19Part2(input string) int {
+	sum := 1
+	for i, bp := range parseInputDay19(input) {
+		if i >= 3 {
+			continue
+		}
+		sum *= bp.MaxGeodes(32)
 	}
 	return sum
 }
