@@ -198,7 +198,7 @@ func solveDay19Part2(input string) int {
 	sum := 1
 	for i, bp := range parseInputDay19(input) {
 		if i >= 3 {
-			continue
+			break
 		}
 		sum *= bp.MaxGeodes(32)
 	}
