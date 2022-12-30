@@ -1,77 +1,74 @@
 package advent
 
 import (
+	"container/ring"
 	"fmt"
+	"image"
 	"strconv"
 	"strings"
-
-	"github.com/cgravolet/adventofcode2022/pkg/utility"
 )
 
 func (a *AdventOfCode2022) Day20(input string) {
-	seq := parseInputDay20(input)
-	part1 := solveDay20Part1(seq)
+	part1 := solveDay20Part1(input)
 	fmt.Printf("Part 1: %d\n", part1)
 }
 
-func parseInputDay20(input string) []int {
-	sequence := make([]int, 0)
-	utility.ForEachLineInReader(strings.NewReader(input), func(s string) {
-		num, err := strconv.Atoi(s)
-		if err == nil {
-			sequence = append(sequence, num)
-		}
-	})
-	return sequence
-}
-
-/*
-[1, 2, -3, 4, 0, 3, -2]
-
-len = 7
-item 10 is at index 3
-item -3 is at index 2 and wants to move to index 6
-
-i is 3, move forward 4 to end at index 1
-
-4 is at index 5
-len is 7
-4 wants to move to index 3
-*/
-func solveDay20Part1(seq []int) int {
-	result := make([]int, len(seq))
-	copy(result, seq)
-
-	var cur int
-
-	for _, val := range result {
-		val = result[cur]
-
-		if val == 0 {
-			cur++
+func parseInputDay20(input string) (nums []int) {
+	for _, line := range strings.Split(strings.TrimSpace(input), "\n") {
+		num, err := strconv.Atoi(line)
+		if err != nil {
 			continue
 		}
-		to := (cur + val) % len(seq)
+		nums = append(nums, num)
+	}
+	return
+}
 
-		if cur+val > len(seq) {
-			to++
-		}
-		result, _ = utility.MoveElement(result, cur, to)
+func solveDay20Part1(input string) int {
+	var sum int
+	nums := parseInputDay20(input)
+	r := mixNumbers(nums)
 
-		if to > cur {
-			// no-op
-		} else if to <= cur {
-			cur++
-		}
+	for r.Value != 0 {
+		r = r.Next()
 	}
 
-	// Solve
-	zi := utility.SliceIndex(len(result), func(i int) bool {
-		return result[i] == 0
-	})
-	var sum int
-	for _, num := range []int{zi + 1000, zi + 2000, zi + 3000} {
-		sum += result[num%len(result)]
+	for i := 1000; i <= 3000; i += 1000 {
+		r = r.Move(1000)
+		sum += r.Value.(int)
 	}
 	return sum
+}
+
+// Helpers
+
+func mixNumbers(nums []int) *ring.Ring {
+	positions := make(map[image.Point]*ring.Ring, len(nums))
+	r := ring.New(len(nums))
+
+	for i, num := range nums {
+		positions[image.Point{i, num}] = r
+		r.Value = num
+		r = r.Next()
+	}
+
+	l := len(nums) - 1
+	hl := l >> 1
+
+	for i, num := range nums {
+		r = positions[image.Point{i, num}].Prev()
+		removed := r.Unlink(1)
+		if num > hl || num < -hl {
+			num %= l
+			switch {
+			case num > hl:
+				num -= l
+			case num < -hl:
+				num += l
+			}
+		}
+		r.Move(num).Link(removed)
+	}
+
+	return r
 }

@@ -25,7 +25,7 @@ func TestParseInputDay20(t *testing.T) {
 
 func TestSolveDay20Part1(t *testing.T) {
 	want := 3
-	got := solveDay20Part1(parseInputDay20(sample20))
+	got := solveDay20Part1(sample20)
 
 	if !reflect.DeepEqual(want, got) {
 		t.Errorf("expected %v, got %v", want, got)

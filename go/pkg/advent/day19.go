@@ -32,15 +32,6 @@ type ResourceCollection struct {
 	Geode    int
 }
 
-func (bp Blueprint) MaxCost() ResourceCollection {
-	return ResourceCollection{
-		utility.MaxInt(bp.OreBot.Ore, bp.ClayBot.Ore, bp.ObsidianBot.Ore, bp.GeodeBot.Ore),
-		utility.MaxInt(bp.OreBot.Clay, bp.ClayBot.Clay, bp.ObsidianBot.Clay, bp.GeodeBot.Clay),
-		utility.MaxInt(bp.OreBot.Obsidian, bp.ClayBot.Obsidian, bp.ObsidianBot.Obsidian, bp.GeodeBot.Obsidian),
-		utility.MaxInt(bp.OreBot.Geode, bp.ClayBot.Geode, bp.ObsidianBot.Geode, bp.GeodeBot.Geode),
-	}
-}
-
 func (bp Blueprint) MaxGeodes(time int) int {
 	type state struct {
 		resources ResourceCollection
