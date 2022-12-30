@@ -8,7 +8,9 @@ import (
 
 func (a *AdventOfCode2022) Day21(input string) {
 	part1 := solveDay21Part1(input)
+	part2 := solveDay21Part2(input)
 	fmt.Printf("Part 1: %d\n", part1)
+	fmt.Printf("Part 2: %d\n", part2)
 }
 
 // Data structures
