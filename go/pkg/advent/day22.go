@@ -116,7 +116,7 @@ func (p PathDirection) turn(d string) PathDirection {
 		case PathRight:
 			return PathDown
 		case PathDown:
-			return PathRight
+			return PathLeft
 		case PathLeft:
 			return PathUp
 		case PathUp:
