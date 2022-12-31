@@ -2,6 +2,7 @@ package advent
 
 import (
 	"fmt"
+	"image"
 	"regexp"
 	"strconv"
 	"strings"
@@ -17,6 +18,87 @@ func (a *AdventOfCode2022) Day22(input string) {
 }
 
 // Data structures
+
+type BoardMap [][]int
+
+func (m BoardMap) Move(p image.Point, d PathDirection) (image.Point, error) {
+	var pos image.Point
+	err := fmt.Errorf("direction not implemented: %d", d)
+
+	switch d {
+	case PathUp:
+		pos, err = m.moveVertical(-1, p)
+	case PathDown:
+		pos, err = m.moveVertical(1, p)
+	case PathLeft:
+		pos, err = m.moveHorizontal(-1, p)
+	case PathRight:
+		pos, err = m.moveHorizontal(1, p)
+	}
+	return pos, err
+}
+
+func (m BoardMap) moveVertical(d int, p image.Point) (image.Point, error) {
+	pos := p.Add(image.Point{0, d})
+
+	if d > 0 && (pos.Y >= len(m) || m[pos.Y][pos.X] == 0) {
+		// Move up until 0 is found
+		for {
+			cur := pos.Add(image.Point{0, -1})
+			if cur.Y < 0 || m[cur.Y][cur.X] == 0 {
+				break
+			} else {
+				pos = cur
+			}
+		}
+	} else if d < 0 && (pos.Y < 0 || m[pos.Y][pos.X] == 0) {
+		// Move down until 0 is found
+		for {
+			cur := pos.Add(image.Point{0, 1})
+			if cur.Y >= len(m) || m[cur.Y][cur.X] == 0 {
+				break
+			} else {
+				pos = cur
+			}
+		}
+	}
+
+	if m[pos.Y][pos.X] == 2 {
+		return p, fmt.Errorf("wall detected")
+	}
+	return pos, nil
+}
+
+func (m BoardMap) moveHorizontal(d int, p image.Point) (image.Point, error) {
+	pos := p.Add(image.Point{d, 0})
+
+	if d > 0 && (pos.X >= len(m[pos.Y]) || m[pos.Y][pos.X] == 0) {
+		// Move left until 0 is found
+		for {
+			cur := pos.Add(image.Point{-1, 0})
+			if cur.X < 0 || m[cur.Y][cur.X] == 0 {
+				break
+			} else {
+				pos = cur
+			}
+		}
+	} else if d < 0 && (pos.X < 0 || m[pos.Y][pos.X] == 0) {
+		// Move right until 0 is found
+		for {
+			cur := pos.Add(image.Point{1, 0})
+			if cur.X >= len(m[cur.Y]) || m[cur.Y][cur.X] == 0 {
+				break
+			} else {
+				pos = cur
+			}
+		}
+	}
+
+	if m[pos.Y][pos.X] == 2 {
+		return p, fmt.Errorf("wall detected")
+	}
+	return pos, nil
+}
 
 type PathDirection int
 
@@ -62,39 +144,43 @@ type PathInstruction struct {
 
 // Parse
 
-func parseInputDay22(input string) (nums [][]int, instructions []PathInstruction) {
+func parseInputDay22(input string) (board BoardMap, start image.Point, instructions []PathInstruction) {
 	s := strings.Split(input, "\n\n")
 	if len(s) == 2 {
-		nums = parse2DMapDay22(s[0])
+		board, start = parseBoardMap22(s[0])
 		instructions = parseInstructionsDay22(s[1])
 	}
 	return
 }
 
-func parse2DMapDay22(input string) [][]int {
-	var map2D [][]int
-	s := strings.Split(input, "\n")
+func parseBoardMap22(input string) (BoardMap, image.Point) {
+	var board BoardMap
 	var maxWidth int
-	for _, l := range s {
+	var start *image.Point
+	lines := strings.Split(input, "\n")
+	for _, l := range lines {
 		maxWidth = utility.MaxInt(maxWidth, len(l))
 	}
-	for y, l := range s {
-		map2D = append(map2D, make([]int, maxWidth))
+	for y, l := range lines {
+		board = append(board, make([]int, maxWidth))
 		for x := 0; x < maxWidth; x++ {
-			map2D[y][x] = 0
+			board[y][x] = 0
 			if len(l) > x {
 				switch l[x] {
 				case ' ':
-					map2D[y][x] = 0
+					board[y][x] = 0
 				case '.':
-					map2D[y][x] = 1
+					if start == nil {
+						start = &image.Point{x, y}
+					}
+					board[y][x] = 1
 				case '#':
-					map2D[y][x] = 2
+					board[y][x] = 2
 				}
 			}
 		}
 	}
-	return map2D
+	return board, *start
 }
 
 func parseInstructionsDay22(input string) []PathInstruction {
@@ -120,7 +206,21 @@ func parseInstructionsDay22(input string) []PathInstruction {
 // Solve
 
 func solveDay22Part1(input string) int {
-	return -1 // TODO
+	board, pos, instructions := parseInputDay22(input)
+	dir := PathUp
+
+	for _, instruction := range instructions {
+		dir = instruction.Direction
+
+		for i := 0; i < instruction.Count; i++ {
+			p, err := board.Move(pos, instruction.Direction)
+			if err != nil {
+				break
+			}
+			pos = p
+		}
+	}
+	return calculatePassword(pos, dir)
 }
 
 func solveDay22Part2(input string) int {
@@ -128,3 +228,7 @@ func solveDay22Part2(input string) int {
 }
 
 // Helpers
+
+func calculatePassword(pos image.Point, dir PathDirection) int {
+	return 1000*(pos.Y+1) + 4*(pos.X+1) + int(dir)
+}

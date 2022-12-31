@@ -1,6 +1,7 @@
 package advent
 
 import (
+	"image"
 	"reflect"
 	"testing"
 )
@@ -21,7 +22,7 @@ var sample22 = `        ...#
 10R5L5R10L4R5L5`
 
 func TestParseInputDay22(t *testing.T) {
-	wantmap := [][]int{
+	wantmap := BoardMap{
 		{0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 1, 1, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 1, 0, 0, 0, 0},
@@ -44,10 +45,15 @@ func TestParseInputDay22(t *testing.T) {
 		{PathDown, 5},
 		{PathRight, 5},
 	}
-	gotmap, gotinstructions := parseInputDay22(sample22)
+	wantstart := image.Point{8, 0}
+	gotmap, gotstart, gotinstructions := parseInputDay22(sample22)
 
 	if !reflect.DeepEqual(wantmap, gotmap) {
 		t.Errorf("expected %v, got %v", wantmap, gotmap)
+	}
+
+	if !reflect.DeepEqual(wantstart, gotstart) {
+		t.Errorf("expected %v, got %v", wantstart, gotstart)
 	}
 
 	if !reflect.DeepEqual(wantinstructions, gotinstructions) {
