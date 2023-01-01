@@ -71,7 +71,7 @@ func TestSolveDay22Part1(t *testing.T) {
 }
 
 func TestSolveDay22Part2(t *testing.T) {
-	want := -1
+	want := 5031
 	got := solveDay22Part2(sample22)
 
 	if !reflect.DeepEqual(want, got) {
