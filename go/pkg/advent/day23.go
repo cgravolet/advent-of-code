@@ -11,10 +11,21 @@ import (
 
 func (a *AdventOfCode2022) Day23(input string) {
 	part1 := solveDay23Part1(input)
+	part2 := solveDay23Part2(input)
 	fmt.Printf("Part 1: %d\n", part1)
+	fmt.Printf("Part 2: %d\n", part2)
 }
 
 // Data structures
+
+type CompassDirection int
+
+const (
+	North CompassDirection = iota
+	South
+	West
+	East
+)
 
 type ElfMap struct {
 	grid map[image.Point]bool
@@ -81,7 +92,7 @@ func (em ElfMap) GetEmptySpaceCount() int {
 	return sum
 }
 
-func (em ElfMap) GetProposedPosition(x, y int) (image.Point, error) {
+func (em ElfMap) GetProposedPosition(index, x, y int) (image.Point, error) {
 	p := image.Point{x, y}
 	n := em.GetElf(x, y-1)
 	s := em.GetElf(x, y+1)
@@ -94,24 +105,39 @@ func (em ElfMap) GetProposedPosition(x, y int) (image.Point, error) {
 
 	if !(n || nw || ne || s || sw || se || w || e) {
 		return p, fmt.Errorf("staying put")
-	} else if !(n || nw || ne) {
-		return p.Add(image.Point{0, -1}), nil
-	} else if !(s || sw || se) {
-		return p.Add(image.Point{0, 1}), nil
-	} else if !(w || nw || sw) {
-		return p.Add(image.Point{-1, 0}), nil
-	} else if !(e || ne || se) {
-		return p.Add(image.Point{1, 0}), nil
+	}
+
+	for i := index; i < index+4; i++ {
+		direction := CompassDirection(i % 4)
+
+		switch direction {
+		case North:
+			if !(n || nw || ne) {
+				return p.Add(image.Point{0, -1}), nil
+			}
+		case South:
+			if !(s || sw || se) {
+				return p.Add(image.Point{0, 1}), nil
+			}
+		case West:
+			if !(w || nw || sw) {
+				return p.Add(image.Point{-1, 0}), nil
+			}
+		case East:
+			if !(e || ne || se) {
+				return p.Add(image.Point{1, 0}), nil
+			}
+		}
 	}
 	return p, fmt.Errorf("cannot move")
 }
 
-func (em *ElfMap) PerformCycle() {
+func (em *ElfMap) PerformCycle(i int) int {
 	proposals := make(map[image.Point]image.Point)
 	conflicts := make(map[image.Point]int)
 
 	for elf := range (*em).grid {
-		p, err := (*em).GetProposedPosition(elf.X, elf.Y)
+		p, err := (*em).GetProposedPosition(i, elf.X, elf.Y)
 		if err != nil {
 			continue
 		}
@@ -121,6 +147,7 @@ func (em *ElfMap) PerformCycle() {
 		}
 		proposals[p] = elf
 	}
+	var moves int
 
 	for to, from := range proposals {
 		_, conflict := conflicts[to]
@@ -129,7 +156,9 @@ func (em *ElfMap) PerformCycle() {
 		}
 		(*em).RemoveElf(from.X, from.Y)
 		(*em).AddElf(to.X, to.Y)
+		moves++
 	}
+	return moves
 }
 
 func (em *ElfMap) RemoveElf(x, y int) {
@@ -160,13 +189,20 @@ func parseInputDay23(input string) ElfMap {
 
 func solveDay23Part1(input string) int {
 	em := parseInputDay23(input)
-	fmt.Printf("== Initial State ==\n")
-	em.Print()
-
 	for i := 0; i < 10; i++ {
-		em.PerformCycle()
-		fmt.Printf("\n== End of Round %d ==\n", i+1)
-		em.Print()
+		em.PerformCycle(i)
 	}
 	return em.GetEmptySpaceCount()
+}
+
+func solveDay23Part2(input string) int {
+	em := parseInputDay23(input)
+	i := 0
+	for {
+		if em.PerformCycle(i) == 0 {
+			break
+		}
+		i++
+	}
+	return i + 1
 }

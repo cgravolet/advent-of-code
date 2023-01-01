@@ -57,3 +57,12 @@ func TestSolveDay23Part1(t *testing.T) {
 		t.Errorf("expected: %v, got: %v", want, got)
 	}
 }
+
+func TestSolveDay23Part2(t *testing.T) {
+	got := solveDay23Part2(sample23)
+	want := 20
+
+	if !reflect.DeepEqual(want, got) {
+		t.Errorf("expected: %v, got: %v", want, got)
+	}
+}
