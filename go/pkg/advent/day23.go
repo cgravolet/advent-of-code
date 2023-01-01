@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"image"
 	"math"
+	"regexp"
 	"strings"
 
 	"github.com/cgravolet/adventofcode2022/pkg/utility"
@@ -61,35 +62,9 @@ func (em ElfMap) Print() {
 	fmt.Println(em.Description())
 }
 
-func (em *ElfMap) GetElf(x, y int) bool {
-	val, ok := (*em).grid[image.Point{x, y}]
+func (em ElfMap) GetElf(x, y int) bool {
+	val, ok := em.grid[image.Point{x, y}]
 	return ok && val
-}
-
-func (em ElfMap) GetElves() (e []image.Point) {
-	for key := range em.grid {
-		e = append(e, key)
-	}
-	return
-}
-
-func (em ElfMap) GetEmptySpaceCount() int {
-	minX, maxX, minY, maxY := math.MaxInt, math.MinInt, math.MaxInt, math.MinInt
-	for pos := range em.grid {
-		minX = utility.MinInt(minX, pos.X)
-		maxX = utility.MaxInt(maxX, pos.X)
-		minY = utility.MinInt(minY, pos.Y)
-		maxY = utility.MaxInt(maxY, pos.Y)
-	}
-	var sum int
-	for x := minX; x <= maxX; x++ {
-		for y := minY; y <= maxY; y++ {
-			if !em.GetElf(x, y) {
-				sum++
-			}
-		}
-	}
-	return sum
 }
 
 func (em ElfMap) GetProposedPosition(index, x, y int) (image.Point, error) {
@@ -192,16 +167,14 @@ func solveDay23Part1(input string) int {
 	for i := 0; i < 10; i++ {
 		em.PerformCycle(i)
 	}
-	return em.GetEmptySpaceCount()
+	re := regexp.MustCompile(`[^.]+`)
+	return len(re.ReplaceAllString(em.Description(), ""))
 }
 
 func solveDay23Part2(input string) int {
 	em := parseInputDay23(input)
 	i := 0
-	for {
-		if em.PerformCycle(i) == 0 {
-			break
-		}
+	for em.PerformCycle(i) != 0 {
 		i++
 	}
 	return i + 1
