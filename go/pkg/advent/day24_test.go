@@ -14,10 +14,6 @@ var sample24 = `#.######
 ######.#
 `
 
-/*
- * 128 64 32 16 8  4 2 1
- *  w  bw bs be bn p e s
- */
 func TestParseInputDay24(t *testing.T) {
 	want := Mountain{
 		start: image.Point{1, 0},
