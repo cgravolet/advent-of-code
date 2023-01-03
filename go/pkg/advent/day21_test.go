@@ -23,33 +23,27 @@ hmdt: 32
 `
 
 func TestParseInputDay21(t *testing.T) {
-	gotm, gote := parseInputDay21(sample21)
-	wantm := map[string]int{
-		"dbpl": 5,
-		"zczc": 2,
-		"dvpt": 3,
-		"lfqf": 4,
-		"humn": 5,
-		"ljgn": 2,
-		"sllz": 4,
-		"hmdt": 32,
-	}
-	wante := map[string]MonkeyEquation{
-		"root": {"pppw", "sjmn", "+"},
-		"cczh": {"sllz", "lgvd", "+"},
-		"ptdq": {"humn", "dvpt", "-"},
-		"sjmn": {"drzm", "dbpl", "*"},
-		"pppw": {"cczh", "lfqf", "/"},
-		"lgvd": {"ljgn", "ptdq", "*"},
-		"drzm": {"hmdt", "zczc", "-"},
+	got := parseInputDay21(sample21)
+	want := YellerMonkeyGroup{
+		"dbpl": {value: 5, didYell: true},
+		"zczc": {value: 2, didYell: true},
+		"dvpt": {value: 3, didYell: true},
+		"lfqf": {value: 4, didYell: true},
+		"humn": {value: 5, didYell: true},
+		"ljgn": {value: 2, didYell: true},
+		"sllz": {value: 4, didYell: true},
+		"hmdt": {value: 32, didYell: true},
+		"root": {left: "pppw", right: "sjmn", operator: "+"},
+		"cczh": {left: "sllz", right: "lgvd", operator: "+"},
+		"ptdq": {left: "humn", right: "dvpt", operator: "-"},
+		"sjmn": {left: "drzm", right: "dbpl", operator: "*"},
+		"pppw": {left: "cczh", right: "lfqf", operator: "/"},
+		"lgvd": {left: "ljgn", right: "ptdq", operator: "*"},
+		"drzm": {left: "hmdt", right: "zczc", operator: "-"},
 	}
 
-	if !reflect.DeepEqual(wantm, gotm) {
-		t.Errorf("expected %v, got %v", wantm, gotm)
-	}
-
-	if !reflect.DeepEqual(wante, gote) {
-		t.Errorf("expected %v, got %v", wante, gote)
+	if !reflect.DeepEqual(want, got) {
+		t.Errorf("expected %v, got %v", want, got)
 	}
 }
 
