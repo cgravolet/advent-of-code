@@ -79,9 +79,6 @@ func (m Mountain) IncrementTime() Mountain {
 
 	for y, row := range m.valley {
 		mountain.valley[y] = make([]valleyEntity, len(row))
-	}
-
-	for y, row := range m.valley {
 		for x, entity := range row {
 			if entity&wall > 0 {
 				mountain.valley[y][x] = entity
@@ -165,12 +162,35 @@ func parseInputDay24(input string) Mountain {
 // Solve
 
 func solveDay24Part1(input string) int {
+	m := parseInputDay24(input)
+	_, time := findPath(m)
+	return time
+}
+
+func solveDay24Part2(input string) int {
+	var sum int
+	m := parseInputDay24(input)
+	nm, time := findPath(m)
+	sum += time
+	nm.start = m.end
+	nm.end = m.start
+	nm, time = findPath(nm)
+	sum += time
+	nm.start = m.start
+	nm.end = m.end
+	nm, time = findPath(nm)
+	sum += time
+	return sum
+}
+
+// Helpers
+
+func findPath(m Mountain) (Mountain, int) {
 	type snapshot struct {
 		position image.Point
 		mountain Mountain
 		time     int
 	}
-	m := parseInputDay24(input)
 	q := []snapshot{{m.start, m, 0}}
 	cache := make(map[string]bool)
 
@@ -179,7 +199,7 @@ func solveDay24Part1(input string) int {
 		q = q[1:]
 
 		if s.position == m.end {
-			return s.time
+			return s.mountain, s.time
 		}
 		_, exists := cache[fmt.Sprintf("%v-%d", s.position, s.time)]
 
@@ -214,9 +234,5 @@ func solveDay24Part1(input string) int {
 			q = append(q, snapshot{s.position, nm, s.time + 1})
 		}
 	}
-	return -1
-}
-
-func solveDay24Part2(input string) int {
-	return -1 // TODO
+	return m, -1
 }

@@ -45,7 +45,7 @@ func TestSolveDay24Part1(t *testing.T) {
 }
 
 func TestSolveDay24Part2(t *testing.T) {
-	want := -1
+	want := 54
 	got := solveDay24Part2(sample24)
 
 	if !reflect.DeepEqual(want, got) {
