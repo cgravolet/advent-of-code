@@ -84,9 +84,8 @@ func solveDay21Part2(input string) int {
 	root := m["root"]
 	root.operator = "-"
 	m["root"] = root
-	dir := m.GetValueFromMonkey(root.left) - m.GetValueFromMonkey(root.right)
-	low, high := 0, math.MaxInt
-	diff := m.GetValueFromMonkey("root")
+	dir := m.GetValueFromMonkey("root")
+	low, high, diff := 0, math.MaxInt, dir
 
 	for math.Abs(diff) > 0.1 {
 		val := (high-low)/2 + low
