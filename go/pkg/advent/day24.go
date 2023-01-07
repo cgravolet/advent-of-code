@@ -33,6 +33,97 @@ type Mountain struct {
 	valley [][]valleyEntity
 }
 
+func (m Mountain) Description() string {
+	var desc string
+	for _, row := range m.valley {
+		for _, e := range row {
+			if e&wall > 0 {
+				desc += "#"
+			} else if e == 0 {
+				desc += "."
+			} else {
+				count := 0
+				blizz := ""
+
+				if e&blizzNorth > 0 {
+					blizz = "^"
+					count++
+				}
+				if e&blizzSouth > 0 {
+					blizz = "v"
+					count++
+				}
+				if e&blizzWest > 0 {
+					blizz = "<"
+					count++
+				}
+				if e&blizzEast > 0 {
+					blizz = ">"
+					count++
+				}
+				if count > 1 {
+					desc += fmt.Sprintf("%d", count)
+				} else {
+					desc += blizz
+				}
+			}
+		}
+		desc += "\n"
+	}
+	return strings.TrimSpace(desc)
+}
+
+func (m Mountain) IncrementTime() Mountain {
+	mountain := Mountain{start: m.start, end: m.end, valley: make([][]valleyEntity, len(m.valley))}
+	blizzards := make(map[image.Point]valleyEntity)
+
+	for y, row := range m.valley {
+		mountain.valley[y] = make([]valleyEntity, len(row))
+	}
+
+	for y, row := range m.valley {
+		for x, entity := range row {
+			if entity&wall > 0 {
+				mountain.valley[y][x] = entity
+				continue
+			}
+			if entity&blizzNorth > 0 {
+				pos := image.Point{x, y - 1}
+				if m.valley[pos.Y][pos.X]&wall > 0 {
+					pos = image.Point{x, len(m.valley) - 2}
+				}
+				blizzards[pos] |= blizzNorth
+			}
+			if entity&blizzSouth > 0 {
+				pos := image.Point{x, y + 1}
+				if m.valley[pos.Y][pos.X]&wall > 0 {
+					pos = image.Point{x, 1}
+				}
+				blizzards[pos] |= blizzSouth
+			}
+			if entity&blizzWest > 0 {
+				pos := image.Point{x - 1, y}
+				if m.valley[pos.Y][pos.X]&wall > 0 {
+					pos = image.Point{len(row) - 2, y}
+				}
+				blizzards[pos] |= blizzWest
+			}
+			if entity&blizzEast > 0 {
+				pos := image.Point{x + 1, y}
+				if m.valley[pos.Y][pos.X]&wall > 0 {
+					pos = image.Point{1, y}
+				}
+				blizzards[pos] |= blizzEast
+			}
+		}
+	}
+
+	for point, blizz := range blizzards {
+		mountain.valley[point.Y][point.X] |= blizz
+	}
+	return mountain
+}
+
 // Parse
 
 func parseInputDay24(input string) Mountain {
@@ -74,7 +165,56 @@ func parseInputDay24(input string) Mountain {
 // Solve
 
 func solveDay24Part1(input string) int {
-	return -1 // TODO
+	type snapshot struct {
+		position image.Point
+		mountain Mountain
+		time     int
+	}
+	m := parseInputDay24(input)
+	q := []snapshot{{m.start, m, 0}}
+	cache := make(map[string]bool)
+
+	for len(q) > 0 {
+		s := q[0]
+		q = q[1:]
+
+		if s.position == m.end {
+			return s.time
+		}
+		_, exists := cache[fmt.Sprintf("%v-%d", s.position, s.time)]
+
+		if exists {
+			continue
+		} else {
+			cache[fmt.Sprintf("%v-%d", s.position, s.time)] = true
+		}
+		nm := s.mountain.IncrementTime()
+		north := s.position.Add(image.Point{0, -1})
+		south := s.position.Add(image.Point{0, 1})
+		east := s.position.Add(image.Point{1, 0})
+		west := s.position.Add(image.Point{-1, 0})
+
+		if north.Y >= 0 && nm.valley[north.Y][north.X] == 0 {
+			q = append(q, snapshot{north, nm, s.time + 1})
+		}
+
+		if south.Y < len(nm.valley) && nm.valley[south.Y][south.X] == 0 {
+			q = append(q, snapshot{south, nm, s.time + 1})
+		}
+
+		if nm.valley[east.Y][east.X] == 0 {
+			q = append(q, snapshot{east, nm, s.time + 1})
+		}
+
+		if nm.valley[west.Y][west.X] == 0 {
+			q = append(q, snapshot{west, nm, s.time + 1})
+		}
+
+		if nm.valley[s.position.Y][s.position.X] == 0 {
+			q = append(q, snapshot{s.position, nm, s.time + 1})
+		}
+	}
+	return -1
 }
 
 func solveDay24Part2(input string) int {
