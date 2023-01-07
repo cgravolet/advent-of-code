@@ -2,6 +2,7 @@ package advent
 
 import (
 	"fmt"
+	"math"
 	"regexp"
 	"strconv"
 )
@@ -25,18 +26,14 @@ type YellerMonkey struct {
 
 type YellerMonkeyGroup map[string]YellerMonkey
 
-func (g *YellerMonkeyGroup) GetValueFromMonkey(n string) int {
-	m := (*g)[n]
+func (g YellerMonkeyGroup) GetValueFromMonkey(n string) float64 {
+	m := g[n]
 
 	if m.didYell {
-		return m.value
+		return float64(m.value)
 	}
-	left, lhs := (*g)[m.left], g.GetValueFromMonkey(m.left)
-	right, rhs := (*g)[m.right], g.GetValueFromMonkey(m.right)
-	left.value, left.didYell = lhs, true
-	right.value, right.didYell = lhs, true
-	(*g)[m.left] = left
-	(*g)[m.right] = right
+	lhs := g.GetValueFromMonkey(m.left)
+	rhs := g.GetValueFromMonkey(m.right)
 
 	switch m.operator {
 	case "+":
@@ -79,9 +76,36 @@ func parseInputDay21(input string) YellerMonkeyGroup {
 
 func solveDay21Part1(input string) int {
 	m := parseInputDay21(input)
-	return m.GetValueFromMonkey("root")
+	return int(m.GetValueFromMonkey("root"))
 }
 
 func solveDay21Part2(input string) int {
-	return -1
+	m := parseInputDay21(input)
+	root := m["root"]
+	root.operator = "-"
+	m["root"] = root
+	dir := m.GetValueFromMonkey(root.left) - m.GetValueFromMonkey(root.right)
+	low, high := 0, math.MaxInt
+	diff := m.GetValueFromMonkey("root")
+
+	for math.Abs(diff) > 0.1 {
+		val := (high-low)/2 + low
+		m["humn"] = YellerMonkey{value: val, didYell: true}
+		diff = m.GetValueFromMonkey("root")
+
+		if dir < 0 {
+			if diff < 0 {
+				low = val
+			} else {
+				high = val
+			}
+		} else {
+			if diff > 0 {
+				low = val
+			} else {
+				high = val
+			}
+		}
+	}
+	return m["humn"].value
 }
