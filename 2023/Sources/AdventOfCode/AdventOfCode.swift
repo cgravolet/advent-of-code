@@ -15,7 +15,7 @@ struct AdventOfCode: ParsableCommand {
         let output: String
 
         switch (year, day) {
-        case (2023, 1): output = try Self.AOC202301(input)
+        case (2023, 1): output = try Self.AOC202301_part2(input)
         default: throw AdventOfCodeError.notSupported
         }
         print("Advent of Code \(year), Day \(day): \(output)")
