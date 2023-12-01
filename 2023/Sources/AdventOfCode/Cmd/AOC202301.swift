@@ -33,7 +33,7 @@ extension AdventOfCode {
         let output = input
             .replacingOccurrences(of: "one", with: "one1one", options: .regularExpression)
             .replacingOccurrences(of: "two", with: "two2two", options: .regularExpression)
-            .replacingOccurrences(of: "three", with: "three3threee", options: .regularExpression)
+            .replacingOccurrences(of: "three", with: "three3three", options: .regularExpression)
             .replacingOccurrences(of: "four", with: "four4four", options: .regularExpression)
             .replacingOccurrences(of: "five", with: "five5five", options: .regularExpression)
             .replacingOccurrences(of: "six", with: "six6six", options: .regularExpression)
