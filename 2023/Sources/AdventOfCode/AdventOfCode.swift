@@ -12,10 +12,11 @@ struct AdventOfCode: ParsableCommand {
 
     func run() throws {
         let input = try getInputFile()
-        let output: String
+        let output: (String, String)
 
         switch (year, day) {
-        case (2023, 1): output = try Self.AOC202301_part2(input)
+        case (2023, 1): output = try Self.AOC202301(input)
+        case (2023, 2): output = try Self.AOC202302(input)
         default: throw AdventOfCodeError.notSupported
         }
         print("Advent of Code \(year), Day \(day): \(output)")

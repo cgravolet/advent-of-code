@@ -2,7 +2,13 @@ import Algorithms
 import Foundation
 
 extension AdventOfCode {
-    static func AOC202301(_ input: String) throws -> String {
+    static func AOC202301(_ input: String) throws -> (String, String) {
+        (try solvePart1(input), try solvePart2(input))
+    }
+
+    // MARK: - Private methods
+
+    private static func solvePart1(_ input: String) throws -> String {
         input
             .components(separatedBy: .newlines)
             .map(calibrateInput)
@@ -10,7 +16,7 @@ extension AdventOfCode {
             .toString()
     }
 
-    static func AOC202301_part2(_ input: String) throws -> String {
+    private static func solvePart2(_ input: String) throws -> String {
         input
             .components(separatedBy: .newlines)
             .map(calibrateInput_part2)
@@ -18,7 +24,7 @@ extension AdventOfCode {
             .toString()
     }
 
-    // MARK: - Private methods
+    // MARK: - Helper methods
 
     private static func calibrateInput(_ input: String) -> Int {
         let output = input.replacingOccurrences(of: "[^0-9]+", with: "", options: .regularExpression)

@@ -3,21 +3,27 @@
         {
             "type": "lldb",
             "request": "launch",
-            "sourceLanguages": [
-                "swift"
-            ],
+            "sourceLanguages": ["swift"],
             "args": ["2023", "1"],
             "cwd": "${workspaceFolder:2023}",
-            "name": "Debug AdventOfCode",
+            "name": "Day 1",
             "program": "${workspaceFolder:2023}/.build/debug/AdventOfCode",
             "preLaunchTask": "swift: Build Debug AdventOfCode"
         },
         {
             "type": "lldb",
             "request": "launch",
-            "sourceLanguages": [
-                "swift"
-            ],
+            "sourceLanguages": ["swift"],
+            "args": ["2023", "2"],
+            "cwd": "${workspaceFolder:2023}",
+            "name": "Day 2",
+            "program": "${workspaceFolder:2023}/.build/debug/AdventOfCode",
+            "preLaunchTask": "swift: Build Debug AdventOfCode"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "sourceLanguages": ["swift"],
             "args": [],
             "cwd": "${workspaceFolder:2023}",
             "name": "Release AdventOfCode",
