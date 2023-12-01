@@ -3,30 +3,22 @@ import Foundation
 
 extension AdventOfCode {
     static func AOC202301(_ input: String) throws -> (String, String) {
-        (try solvePart1(input), try solvePart2(input))
+        (solve(input, calibrateInput1), solve(input, calibrateInput2))
     }
 
     // MARK: - Private methods
 
-    private static func solvePart1(_ input: String) throws -> String {
+    private static func solve(_ input: String, _ calibrate: (String) -> Int) -> String {
         input
             .components(separatedBy: .newlines)
-            .map(calibrateInput)
-            .reduce(0, +)
-            .toString()
-    }
-
-    private static func solvePart2(_ input: String) throws -> String {
-        input
-            .components(separatedBy: .newlines)
-            .map(calibrateInput_part2)
+            .map(calibrate)
             .reduce(0, +)
             .toString()
     }
 
     // MARK: - Helper methods
 
-    private static func calibrateInput(_ input: String) -> Int {
+    private static func calibrateInput1(_ input: String) -> Int {
         let output = input.replacingOccurrences(of: "[^0-9]+", with: "", options: .regularExpression)
         if let firstChar = output.first, let lastChar = output.last {
             return Int(String(firstChar) + String(lastChar)) ?? 0
@@ -34,18 +26,18 @@ extension AdventOfCode {
         return 0
     }
 
-    private static func calibrateInput_part2(_ input: String) -> Int {
+    private static func calibrateInput2(_ input: String) -> Int {
         // TODO: This is messy! (but it works...)
         let output = input
-            .replacingOccurrences(of: "one", with: "one1one", options: .regularExpression)
-            .replacingOccurrences(of: "two", with: "two2two", options: .regularExpression)
-            .replacingOccurrences(of: "three", with: "three3three", options: .regularExpression)
-            .replacingOccurrences(of: "four", with: "four4four", options: .regularExpression)
-            .replacingOccurrences(of: "five", with: "five5five", options: .regularExpression)
-            .replacingOccurrences(of: "six", with: "six6six", options: .regularExpression)
-            .replacingOccurrences(of: "seven", with: "seven7seven", options: .regularExpression)
-            .replacingOccurrences(of: "eight", with: "eight8eight", options: .regularExpression)
-            .replacingOccurrences(of: "nine", with: "nine9nine", options: .regularExpression)
+            .replacingOccurrences(of: "one", with: "o1e", options: .regularExpression)
+            .replacingOccurrences(of: "two", with: "t2o", options: .regularExpression)
+            .replacingOccurrences(of: "three", with: "t3e", options: .regularExpression)
+            .replacingOccurrences(of: "four", with: "f4r", options: .regularExpression)
+            .replacingOccurrences(of: "five", with: "f5e", options: .regularExpression)
+            .replacingOccurrences(of: "six", with: "s6x", options: .regularExpression)
+            .replacingOccurrences(of: "seven", with: "s7n", options: .regularExpression)
+            .replacingOccurrences(of: "eight", with: "e8t", options: .regularExpression)
+            .replacingOccurrences(of: "nine", with: "n9e", options: .regularExpression)
             .replacingOccurrences(of: "[^0-9]+", with: "", options: .regularExpression)
         if let firstChar = output.first, let lastChar = output.last {
             return Int(String(firstChar) + String(lastChar)) ?? 0
