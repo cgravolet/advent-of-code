@@ -26,10 +26,22 @@ extension AdventOfCode {
     }
 
     private static func solvePart2(_ input: String) throws -> String {
-        "TODO"
+        input
+            .components(separatedBy: .newlines)
+            .compactMap(parseGameSets)
+            .map(getMinimumSetPower)
+            .reduce(0, +)
+            .toString()
     }
 
     // MARK: - Helper methods
+
+    private static func getMinimumSetPower(from gameSets: [GameSet]) -> Int {
+        let blue = gameSets.map(\.blue).max() ?? 0
+        let green = gameSets.map(\.green).max() ?? 0
+        let red = gameSets.map(\.red).max() ?? 0
+        return blue * green * red
+    }
 
     private static func isPossible(_ gameSets: [GameSet], blue: Int, green: Int, red: Int) -> Bool {
         let invalidSets = gameSets.filter {
