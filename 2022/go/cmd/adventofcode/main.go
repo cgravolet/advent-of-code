@@ -8,23 +8,24 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
-	"strings"
 
 	"github.com/cgravolet/adventofcode2022/pkg/advent"
 )
 
 func main() {
-	// Check for sub-command argument (i.e. "day01, day02, etc.")
-	if len(os.Args) < 2 {
-		log.Fatal(fmt.Errorf("you must specify a subcommand (i.e. 'day01' or 'day02')"))
+	// Check for sub-command argument (i.e. "2022 01, 2022 02, etc.")
+	if len(os.Args) < 3 {
+		log.Fatal(fmt.Errorf("you must specify a subcommand (i.e. '2022 01' or '2022 02')"))
 	}
-	subcmd := os.Args[1]
+	year := os.Args[1]
+	day := os.Args[2]
+	subcmd := fmt.Sprintf("puzzle%s%s", year, day)
 
 	// Retrieve the input path option, if available
-	defaultPath := filepath.Join("..", "..", "..", "input", fmt.Sprintf("%s.txt", subcmd))
+	defaultPath := filepath.Join("..", "..", "..", "..", "input", fmt.Sprintf("%s-%s.txt", year, day))
 	flagSet := flag.NewFlagSet(subcmd, flag.ExitOnError)
 	input := flagSet.String("path", defaultPath, "Input file path")
-	flagSet.Parse(os.Args[2:])
+	flagSet.Parse(os.Args[3:])
 
 	// Open the input file and read it's contents
 	file, err := os.Open(*input)
@@ -38,7 +39,7 @@ func main() {
 
 	// Use reflection to find the function related to the given sub-command, and pass it the contents of the input file
 	adv := &advent.AdventOfCode2022{}
-	funcName := strings.ToUpper(subcmd[:1]) + strings.ToLower(subcmd[1:])
+	funcName := fmt.Sprintf("Puzzle%s%s", year, day)
 	cmdFunc := reflect.ValueOf(adv).MethodByName(funcName)
 
 	if !cmdFunc.IsValid() {

@@ -27,7 +27,7 @@
             "request": "launch",
             "name": "Day 01",
             "program": "${workspaceFolder:swift}/.build/debug/AdventOfCode",
-            "args": ["day01", "-p", "../input/day01.txt"],
+            "args": ["day01", "-p", "../../input/2022-01.txt"],
             "cwd": "${workspaceFolder:swift}",
             "preLaunchTask": "swift: Build Debug AdventOfCode"
         },
@@ -36,7 +36,7 @@
             "request": "launch",
             "name": "Day 02",
             "program": "${workspaceFolder:swift}/.build/debug/AdventOfCode",
-            "args": ["day02", "-p", "../input/day02.txt"],
+            "args": ["day02", "-p", "../../input/2022-02.txt"],
             "cwd": "${workspaceFolder:swift}",
             "preLaunchTask": "swift: Build Debug AdventOfCode"
         },
@@ -45,7 +45,7 @@
             "request": "launch",
             "name": "Day 03",
             "program": "${workspaceFolder:swift}/.build/debug/AdventOfCode",
-            "args": ["day03", "-p", "../input/day03.txt"],
+            "args": ["day03", "-p", "../../input/2022-03.txt"],
             "cwd": "${workspaceFolder:swift}",
             "preLaunchTask": "swift: Build Debug AdventOfCode"
         },
@@ -54,7 +54,7 @@
             "request": "launch",
             "name": "Day 04",
             "program": "${workspaceFolder:swift}/.build/debug/AdventOfCode",
-            "args": ["day04", "-p", "../input/day04.txt"],
+            "args": ["day04", "-p", "../../input/2022-04.txt"],
             "cwd": "${workspaceFolder:swift}",
             "preLaunchTask": "swift: Build Debug AdventOfCode"
         },
@@ -63,7 +63,7 @@
             "request": "launch",
             "name": "Day 05",
             "program": "${workspaceFolder:swift}/.build/debug/AdventOfCode",
-            "args": ["day05", "-p", "../input/day05.txt"],
+            "args": ["day05", "-p", "../../input/2022-05.txt"],
             "cwd": "${workspaceFolder:swift}",
             "preLaunchTask": "swift: Build Debug AdventOfCode"
         },
@@ -72,7 +72,7 @@
             "request": "launch",
             "name": "Day 06",
             "program": "${workspaceFolder:swift}/.build/debug/AdventOfCode",
-            "args": ["day06", "-p", "../input/day06.txt"],
+            "args": ["day06", "-p", "../../input/2022-06.txt"],
             "cwd": "${workspaceFolder:swift}",
             "preLaunchTask": "swift: Build Debug AdventOfCode"
         },
@@ -81,7 +81,7 @@
             "request": "launch",
             "name": "Day 07",
             "program": "${workspaceFolder:swift}/.build/debug/AdventOfCode",
-            "args": ["day07", "-p", "../input/day07.txt"],
+            "args": ["day07", "-p", "../../input/2022-07.txt"],
             "cwd": "${workspaceFolder:swift}",
             "preLaunchTask": "swift: Build Debug AdventOfCode"
         },
@@ -90,7 +90,7 @@
             "request": "launch",
             "name": "Day 08",
             "program": "${workspaceFolder:swift}/.build/debug/AdventOfCode",
-            "args": ["day08", "-p", "../input/day08.txt"],
+            "args": ["day08", "-p", "../../input/2022-08.txt"],
             "cwd": "${workspaceFolder:swift}",
             "preLaunchTask": "swift: Build Debug AdventOfCode"
         },
@@ -99,7 +99,7 @@
             "request": "launch",
             "name": "Day 09",
             "program": "${workspaceFolder:swift}/.build/debug/AdventOfCode",
-            "args": ["day09", "-p", "../input/day09.txt"],
+            "args": ["day09", "-p", "../../input/2022-09.txt"],
             "cwd": "${workspaceFolder:swift}",
             "preLaunchTask": "swift: Build Debug AdventOfCode"
         },
@@ -108,7 +108,7 @@
             "request": "launch",
             "name": "Day 10",
             "program": "${workspaceFolder:swift}/.build/debug/AdventOfCode",
-            "args": ["day10", "-p", "../input/day10.txt"],
+            "args": ["day10", "-p", "../../input/2022-10.txt"],
             "cwd": "${workspaceFolder:swift}",
             "preLaunchTask": "swift: Build Debug AdventOfCode"
         },
@@ -117,7 +117,7 @@
             "request": "launch",
             "name": "Day 11",
             "program": "${workspaceFolder:swift}/.build/debug/AdventOfCode",
-            "args": ["day11", "-p", "../input/day11.txt"],
+            "args": ["day11", "-p", "../../input/2022-11.txt"],
             "cwd": "${workspaceFolder:swift}",
             "preLaunchTask": "swift: Build Debug AdventOfCode"
         },
@@ -126,7 +126,7 @@
             "request": "launch",
             "name": "Day 14",
             "program": "${workspaceFolder:swift}/.build/debug/AdventOfCode",
-            "args": ["day14", "-p", "../input/day14.txt"],
+            "args": ["day14", "-p", "../../input/2022-14.txt"],
             "cwd": "${workspaceFolder:swift}",
             "preLaunchTask": "swift: Build Debug AdventOfCode"
         },
@@ -135,7 +135,7 @@
             "request": "launch",
             "name": "Day 15",
             "program": "${workspaceFolder:swift}/.build/debug/AdventOfCode",
-            "args": ["day15", "-p", "../input/day15.txt"],
+            "args": ["day15", "-p", "../../input/2022-15.txt"],
             "cwd": "${workspaceFolder:swift}",
             "preLaunchTask": "swift: Build Debug AdventOfCode"
         }

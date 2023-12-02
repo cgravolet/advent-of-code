@@ -51,7 +51,7 @@ struct Day11: ParsableCommand {
     // MARK: - Options
 
     @Option(name: .shortAndLong, help: "Input file path")
-    var path: String = "../input/day11.txt"
+    var path: String = "../../input/2022-11.txt"
 
     // MARK: - Lifecycle
 

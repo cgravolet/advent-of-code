@@ -7,7 +7,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
-            "args": ["day01"]
+            "args": ["2022", "01"]
         },
         {
             "name": "2022 Day 02",
@@ -15,7 +15,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
-            "args": ["day02"]
+            "args": ["2022", "02"]
         },
         {
             "name": "2022 Day 03",
@@ -23,7 +23,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
-            "args": ["day03"]
+            "args": ["2022", "03"]
         },
         {
             "name": "2022 Day 04",
@@ -31,7 +31,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
-            "args": ["day04"]
+            "args": ["2022", "04"]
         },
         {
             "name": "2022 Day 05",
@@ -39,7 +39,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
-            "args": ["day05"]
+            "args": ["2022", "05"]
         },
         {
             "name": "2022 Day 06",
@@ -47,7 +47,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
-            "args": ["day06"]
+            "args": ["2022", "06"]
         },
         {
             "name": "2022 Day 07",
@@ -55,7 +55,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
-            "args": ["day07"]
+            "args": ["2022", "07"]
         },
         {
             "name": "2022 Day 10",
@@ -63,7 +63,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
-            "args": ["day10"]
+            "args": ["2022", "10"]
         },
         {
             "name": "2022 Day 12",
@@ -71,7 +71,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
-            "args": ["day12"]
+            "args": ["2022", "12"]
         },
         {
             "name": "2022 Day 13",
@@ -79,7 +79,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
-            "args": ["day13"]
+            "args": ["2022", "13"]
         },
         {
             "name": "2022 Day 16",
@@ -87,7 +87,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
-            "args": ["day16"]
+            "args": ["2022", "16"]
         },
         {
             "name": "2022 Day 17",
@@ -95,7 +95,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
-            "args": ["day17"]
+            "args": ["2022", "17"]
         },
         {
             "name": "2022 Day 18",
@@ -103,7 +103,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
-            "args": ["day18"]
+            "args": ["2022", "18"]
         },
         {
             "name": "2022 Day 19",
@@ -111,7 +111,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
-            "args": ["day19"]
+            "args": ["2022", "19"]
         },
         {
             "name": "2022 Day 20",
@@ -119,7 +119,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
-            "args": ["day20"]
+            "args": ["2022", "20"]
         },
         {
             "name": "2022 Day 21",
@@ -127,7 +127,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
-            "args": ["day21"]
+            "args": ["2022", "21"]
         },
         {
             "name": "2022 Day 22",
@@ -135,7 +135,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
-            "args": ["day22"]
+            "args": ["2022", "22"]
         },
         {
             "name": "2022 Day 23",
@@ -143,7 +143,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
-            "args": ["day23"]
+            "args": ["2022", "23"]
         },
         {
             "name": "2022 Day 24",
@@ -151,7 +151,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
-            "args": ["day24"]
+            "args": ["2022", "24"]
         },
         {
             "name": "2022 Day 25",
@@ -159,7 +159,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/adventofcode/main.go",
-            "args": ["day25"]
+            "args": ["2022", "25"]
         }
     ]
 }

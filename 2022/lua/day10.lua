@@ -1,7 +1,7 @@
 local utility = require("utility")
 
 local Day10 = {
-    path = "../input/day10.txt"
+    path = "../input/2022-10.txt"
 }
 
 function Day10:run()
