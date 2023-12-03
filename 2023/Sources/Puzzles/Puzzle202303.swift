@@ -10,9 +10,37 @@ struct Puzzle202303: Puzzle {
 
   func solve1() throws -> Any {
     let map = Map2D(input)
-    let candidates = getCoordsForSymbols(in: map).flatMap { getPartNumberCandidates(for: $0, in: map) }
-    return Set(candidates)
-      .map { getPartNumber(at: $0, in: map) }
+    let regex = Regex {
+      OneOrMore(.digit)
+    }
+    var partNumbers = [PartNumber]()
+
+    // Get a list of all partnumbers
+    for y in 0...map.maxY {
+      var partNum = PartNumber(y: y)
+
+      for x in 0...map.maxX {
+        if let value = map.getValue(at: Coord2D(x: x, y: y))?.firstMatch(of: regex)?.0 {
+          if partNum.rawValue.isEmpty {
+            partNum.x1 = x
+          }
+          partNum.rawValue += value
+          partNum.x2 = x
+        } else if !partNum.rawValue.isEmpty {
+          partNumbers.append(partNum)
+          partNum = PartNumber(y: y)
+        }
+      }
+
+      if !partNum.rawValue.isEmpty {
+        partNumbers.append(partNum)
+      }
+    }
+
+    return
+      partNumbers
+      .filter { isPartNumber($0, in: map) }
+      .map(\.value)
       .reduce(0, +)
   }
 
@@ -22,43 +50,18 @@ struct Puzzle202303: Puzzle {
 
   // MARK: - Private methods
 
-  private func getCoordsForSymbols(in map: Map2D) -> Set<Coord2D> {
+  private func isPartNumber(_ partNumber: PartNumber, in map: Map2D) -> Bool {
     let regex = Regex {
-      OneOrMore(("0"..."9").inverted)
+      OneOrMore(.digit.inverted)
     }
-    return Set(map.getCoords(matching: regex))
-  }
-
-  private func getPartNumber(at coord: Coord2D, in map: Map2D) -> Int {
-    var firstCoord = coord
-    while map.getValue(at: Coord2D(x: firstCoord.x - 1, y: firstCoord.y)) != nil {
-      firstCoord = Coord2D(x: firstCoord.x - 1, y: firstCoord.y)
-    }
-    var partNumStr = map.getValue(at: firstCoord)!
-    while map.getValue(at: Coord2D(x: firstCoord.x + 1, y: firstCoord.y)) != nil {
-      firstCoord = Coord2D(x: firstCoord.x + 1, y: firstCoord.y)
-      partNumStr += map.getValue(at: firstCoord)!
-    }
-    return partNumStr.toInt()
-  }
-
-  private func getPartNumberCandidates(for coord: Coord2D, in map: Map2D) -> Set<Coord2D> {
-    let regex = Regex {
-      OneOrMore(.digit)
-    }
-    let candidates = map
-      .getAdjacentCoords(to: coord)
-      .filter { map.getValue(at: $0)?.firstMatch(of: regex) != nil }
-      .reduce([Coord2D](), { result, coord in
-        if result.contains(Coord2D(x: coord.x - 1, y: coord.y)) {
-          return result
-        } else if result.contains(Coord2D(x: coord.x + 1, y: coord.y)) {
-          return result
+    let candidates = Set(partNumber.coords.flatMap { map.getAdjacentCoords(to: $0) })
+      .subtracting(partNumber.coords)
+      .filter {
+        if map.getValue(at: $0)?.firstMatch(of: regex) != nil {
+          return true
         }
-        var mutableResult = result
-        mutableResult.append(coord)
-        return mutableResult
-      })
-      return Set(candidates)
+        return false
+      }
+    return !candidates.isEmpty
   }
 }
