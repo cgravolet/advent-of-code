@@ -9,13 +9,43 @@ struct Puzzle202303: Puzzle {
   // MARK: - Public methods
 
   func solve1() throws -> Any {
+    getPartNumbers(in: Map2D(input))
+      .map(\.value)
+      .reduce(0, +)
+  }
+
+  func solve2() throws -> Any {
     let map = Map2D(input)
+    let regex = Regex {
+      One("*")
+    }
+    let partNumbers = getPartNumbers(in: map)
+
+    return map.getCoords(matching: regex)
+      .compactMap { getGearRatio(for: $0, partNumbers: partNumbers, in: map) }
+      .reduce(0, +)
+  }
+
+  // MARK: - Private methods
+
+  private func getGearRatio(for gear: Coord2D, partNumbers: [PartNumber], in map: Map2D) -> Int? {
+    let adjacentCoords = map.getAdjacentCoords(to: gear)
+    let adjacentPartNumbers = partNumbers.filter { partNum in
+      adjacentCoords.first(where: { partNum.contains($0) }) != nil
+    }
+    if adjacentPartNumbers.count == 2 {
+      return adjacentPartNumbers[0].value * adjacentPartNumbers[1].value
+    }
+    return nil
+  }
+
+  private func getPartNumbers(in map: Map2D) -> [PartNumber] {
+    var partNumbers = [PartNumber]()
+
     let regex = Regex {
       OneOrMore(.digit)
     }
-    var partNumbers = [PartNumber]()
 
-    // Get a list of all partnumbers
     for y in 0...map.maxY {
       var partNum = PartNumber(y: y)
 
@@ -36,32 +66,21 @@ struct Puzzle202303: Puzzle {
         partNumbers.append(partNum)
       }
     }
-
-    return
-      partNumbers
-      .filter { isPartNumber($0, in: map) }
-      .map(\.value)
-      .reduce(0, +)
+    return partNumbers.filter { isPartNumber($0, in: map) }
   }
-
-  func solve2() throws -> Any {
-    -1
-  }
-
-  // MARK: - Private methods
 
   private func isPartNumber(_ partNumber: PartNumber, in map: Map2D) -> Bool {
     let regex = Regex {
       OneOrMore(.digit.inverted)
     }
-    let candidates = Set(partNumber.coords.flatMap { map.getAdjacentCoords(to: $0) })
+    let firstAdjacentSymbol = Set(partNumber.coords.flatMap { map.getAdjacentCoords(to: $0) })
       .subtracting(partNumber.coords)
-      .filter {
+      .first(where: {
         if map.getValue(at: $0)?.firstMatch(of: regex) != nil {
           return true
         }
         return false
-      }
-    return !candidates.isEmpty
+      })
+    return firstAdjacentSymbol != nil
   }
 }

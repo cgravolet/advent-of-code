@@ -8,7 +8,7 @@ final class Puzzle202303Tests: XCTestCase {
       467..114..
       ...*......
       ..35..633.
-      .......#..
+      ......#...
       617*......
       .....+.58.
       ..592.....
@@ -21,9 +21,19 @@ final class Puzzle202303Tests: XCTestCase {
   }
 
   func testSolve2() throws {
-    let input: String = """
+    let input = """
+      467..114..
+      ...*......
+      ..35..633.
+      ......#...
+      617*......
+      .....+.58.
+      ..592.....
+      ......755.
+      ...$.*....
+      .664.598..
       """
     let sut = Puzzle202303(input: input)
-    XCTAssertEqual(try sut.solve2() as? Int, -1)
+    XCTAssertEqual(try sut.solve2() as? Int, 467835)
   }
 }

@@ -23,4 +23,8 @@ struct PartNumber: Hashable, CustomStringConvertible {
     self.x2 = 0
     self.y = y
   }
+
+  func contains(_ coord: Coord2D) -> Bool {
+    y == coord.y && x1...x2 ~= coord.x
+  }
 }
