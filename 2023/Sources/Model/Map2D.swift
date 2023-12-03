@@ -17,8 +17,7 @@ struct Map2D {
 
     for y in 0..<maxY {
       for x in 0..<maxX {
-        let value = lines[y].split(separator: "")[x]
-
+        let value = lines[y][x]
         if value != "." {
           mutableData[Coord2D(x: x, y: y)] = String(value)
         }
@@ -29,26 +28,15 @@ struct Map2D {
     self.maxY = maxY - 1
   }
 
-  func getAdjacentCoords(to coord: Coord2D) -> [Coord2D] {
-    [
-      Coord2D(x: coord.x, y: coord.y - 1),
-      Coord2D(x: coord.x, y: coord.y + 1),
-      Coord2D(x: coord.x - 1, y: coord.y - 1),
-      Coord2D(x: coord.x + 1, y: coord.y - 1),
-      Coord2D(x: coord.x - 1, y: coord.y),
-      Coord2D(x: coord.x + 1, y: coord.y),
-      Coord2D(x: coord.x - 1, y: coord.y + 1),
-      Coord2D(x: coord.x + 1, y: coord.y + 1),
-    ].filter { 0...maxX ~= $0.x && 0...maxY ~= $0.y }
+  func adjacentCoords(to coord: Coord2D) -> [Coord2D] {
+    coord.adjacent.filter { 0...maxX ~= $0.x && 0...maxY ~= $0.y }
   }
 
-  func getCoords(matching regex: some RegexComponent) -> [Coord2D] {
-    data
-      .filter { $0.value.firstMatch(of: regex) != nil }
-      .map(\.key)
+  func coords(matching regex: some RegexComponent) -> [Coord2D] {
+    data.filter({ $0.value.firstMatch(of: regex) != nil }).map(\.key)
   }
 
-  func getValue(at coord: Coord2D) -> String? {
+  func value(at coord: Coord2D) -> String? {
     data[coord]
   }
 }
@@ -59,7 +47,7 @@ extension Map2D: CustomStringConvertible {
 
     for y in 0...maxY {
       for x in 0...maxX {
-        output += getValue(at: .init(x: x, y: y)) ?? "."
+        output += value(at: .init(x: x, y: y)) ?? "."
       }
       if y < maxY {
         output += "\n"

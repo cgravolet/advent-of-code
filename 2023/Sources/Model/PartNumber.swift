@@ -14,7 +14,7 @@ struct PartNumber: Hashable, CustomStringConvertible {
     return mutableCoords
   }
 
-  var description: String { "(\(x1)-\(x2),\(y)) \(value)" }
+  var description: String { "(\(x1)-\(x2),\(y)) \(rawValue)" }
   var value: Int { rawValue.toInt() }
 
   init(y: Int) {

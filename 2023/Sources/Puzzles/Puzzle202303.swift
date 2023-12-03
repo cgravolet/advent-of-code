@@ -4,53 +4,52 @@ import Foundation
 import RegexBuilder
 
 struct Puzzle202303: Puzzle {
-  let input: String
+  let map: Map2D
+
+  init(input: String) {
+    self.map = Map2D(input)
+  }
 
   // MARK: - Public methods
 
   func solve1() throws -> Any {
-    getPartNumbers(in: Map2D(input))
-      .map(\.value)
-      .reduce(0, +)
+    partNumbers(in: map).map(\.value).reduce(0, +)
   }
 
   func solve2() throws -> Any {
-    let map = Map2D(input)
-    let regex = Regex {
-      One("*")
-    }
-    let partNumbers = getPartNumbers(in: map)
-
-    return map.getCoords(matching: regex)
-      .compactMap { getGearRatio(for: $0, partNumbers: partNumbers, in: map) }
-      .reduce(0, +)
+    gearRatios(in: map).reduce(0, +)
   }
 
   // MARK: - Private methods
 
-  private func getGearRatio(for gear: Coord2D, partNumbers: [PartNumber], in map: Map2D) -> Int? {
-    let adjacentCoords = map.getAdjacentCoords(to: gear)
+  private func gearRatios(in map: Map2D) -> [Int] {
+    let partNumbers = partNumbers(in: map)
+    return map
+      .coords(matching: Regex { One("*") })
+      .compactMap { gearRatio(for: $0, partNumbers: partNumbers, in: map) }
+  }
+
+  private func gearRatio(for gear: Coord2D, partNumbers: [PartNumber], in map: Map2D) -> Int? {
+    let coords = map.adjacentCoords(to: gear)
     let adjacentPartNumbers = partNumbers.filter { partNum in
-      adjacentCoords.first(where: { partNum.contains($0) }) != nil
+      coords.first(where: { partNum.contains($0) }) != nil
     }
+
     if adjacentPartNumbers.count == 2 {
-      return adjacentPartNumbers[0].value * adjacentPartNumbers[1].value
+      return adjacentPartNumbers.map(\.value).reduce(1, *)
     }
     return nil
   }
 
-  private func getPartNumbers(in map: Map2D) -> [PartNumber] {
+  private func partNumbers(in map: Map2D) -> [PartNumber] {
+    let regex = Regex { OneOrMore(.digit) }
     var partNumbers = [PartNumber]()
-
-    let regex = Regex {
-      OneOrMore(.digit)
-    }
 
     for y in 0...map.maxY {
       var partNum = PartNumber(y: y)
 
       for x in 0...map.maxX {
-        if let value = map.getValue(at: Coord2D(x: x, y: y))?.firstMatch(of: regex)?.0 {
+        if let value = map.value(at: Coord2D(x: x, y: y))?.firstMatch(of: regex)?.0 {
           if partNum.rawValue.isEmpty {
             partNum.x1 = x
           }
@@ -70,16 +69,11 @@ struct Puzzle202303: Puzzle {
   }
 
   private func isPartNumber(_ partNumber: PartNumber, in map: Map2D) -> Bool {
-    let regex = Regex {
-      OneOrMore(.digit.inverted)
-    }
-    let firstAdjacentSymbol = Set(partNumber.coords.flatMap { map.getAdjacentCoords(to: $0) })
+    let regex = Regex { OneOrMore(.digit.inverted) }
+    let firstAdjacentSymbol = Set(partNumber.coords.flatMap { map.adjacentCoords(to: $0) })
       .subtracting(partNumber.coords)
       .first(where: {
-        if map.getValue(at: $0)?.firstMatch(of: regex) != nil {
-          return true
-        }
-        return false
+        map.value(at: $0)?.firstMatch(of: regex) != nil
       })
     return firstAdjacentSymbol != nil
   }
