@@ -13,14 +13,15 @@ protocol Puzzle {
 extension Puzzle {
   static var day: Int {
     let typeName = String(reflecting: Self.self)
-    guard let i = typeName.lastIndex(where: { !$0.isNumber })  ,
+    guard let i = typeName.lastIndex(where: { !$0.isNumber }),
       let day = Int(typeName[i...].dropFirst())
     else {
-      fatalError("""
-      Day number not found in type name: \
-      implement the static `day` property \
-      or use the day number as your type's suffix (like `202303`).")
-      """)
+      fatalError(
+        """
+        Day number not found in type name: \
+        implement the static `day` property \
+        or use the day number as your type's suffix (like `202303`).")
+        """)
     }
     return day
   }

@@ -3,13 +3,6 @@ import Collections
 import Foundation
 
 struct Puzzle202302: Puzzle {
-  private struct GameSet {
-    let id: Int
-    let blue: Int
-    let green: Int
-    let red: Int
-  }
-
   let input: String
 
   // MARK: - Public methods

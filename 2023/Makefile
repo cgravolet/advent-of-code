@@ -1,5 +1,8 @@
 default: test
 
+benchmark:
+	swift run -c release AdventOfCode --benchmark
+
 build:
 	swift build
 

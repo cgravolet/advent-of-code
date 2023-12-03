@@ -1,7 +1,7 @@
 import ArgumentParser
 
 let allPuzzles: [any Puzzle] = [
-  Puzzle202301(), Puzzle202302()
+  Puzzle202301(), Puzzle202302(), Puzzle202303(),
 ]
 
 @main
