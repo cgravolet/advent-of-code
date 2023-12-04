@@ -27,3 +27,13 @@ let package = Package(
         ),
     ]
 )
+
+// Enable Regex literal syntax
+for target in package.targets {
+    target.swiftSettings = target.swiftSettings ?? []
+    target.swiftSettings?.append(contentsOf: [
+        .enableUpcomingFeature("BareSlashRegexLiterals"),
+        .enableUpcomingFeature("StrictConcurrency"),
+        .unsafeFlags(["-enable-actor-data-race-checks"], .when(configuration: .debug)),
+    ])
+}
