@@ -21,32 +21,35 @@ struct Puzzle202304: Puzzle {
 
   // MARK: - Private methods
 
+  /// Counts the total number of cards after considering all the duplicate cards won
   func cardCount(from cards: [Int]) -> Int {
-    var scratchcards = cards.map { (score: $0, count: 1) }
+    var scratchcards = cards.map { (winCount: $0, cardCount: 1) }
 
     for i in 0..<scratchcards.count {
-      guard scratchcards[i].score > 0 else { continue }
-      for _ in 0..<scratchcards[i].count {
-        for j in (i+1)..<(i+1+scratchcards[i].score) {
-          guard scratchcards.count > j else { continue }
-          scratchcards[j] = (scratchcards[j].score, scratchcards[j].count + 1)
+      guard scratchcards[i].winCount > 0 else { continue }
+
+      for _ in 0..<scratchcards[i].cardCount {
+
+        for j in (i + 1)..<(i + 1 + scratchcards[i].winCount) {
+          guard scratchcards.count > j else { break }
+          scratchcards[j] = (scratchcards[j].winCount, scratchcards[j].cardCount + 1)
         }
       }
     }
-    return scratchcards.map(\.count).reduce(0, +)
+    return scratchcards.map(\.cardCount).reduce(0, +)
   }
 
   /// Returns a scratchcard score and win count from the given
   /// String (i.e. "Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53")
   func scratchCards(from input: String) -> (count: Int, score: Int)? {
-    let components = input.split(separator: ": ")
-
-    guard let numSets = components.last?.split(separator: " | ").map(String.init).map(setInt),
+    guard
+      let numSets = input.split(separator: ": ").last?.split(separator: " | ").map(String.init).map(
+        setInt),
       numSets.count == 2
     else { return nil }
 
     let winCount = numSets[0].intersection(numSets[1]).count
-    let score = winCount > 0 ? Int(UInt(1 << (winCount - 1))) : 0
+    let score = winCount > 0 ? pow(2, winCount - 1).intValue : 0
 
     return (winCount, score)
   }

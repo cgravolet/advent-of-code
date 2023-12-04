@@ -3,16 +3,20 @@ import Collections
 import Foundation
 
 struct Puzzle202301: Puzzle {
-  let input: String
+  let input: [String]
+
+  init(input: String) {
+    self.input = input.components(separatedBy: .newlines)
+  }
 
   // MARK: - Public methods
 
   func solve1() throws -> Any {
-    solve(input, calibrateInput1)
+    input.map(calibrateInput1).reduce(0, +)
   }
 
   func solve2() throws -> Any {
-    solve(input, calibrateInput2)
+    input.map(calibrateInput2).reduce(0, +)
   }
 
   // MARK: - Private methods
@@ -43,12 +47,5 @@ struct Puzzle202301: Puzzle {
       return Int(String(firstChar) + String(lastChar)) ?? 0
     }
     return 0
-  }
-
-  private func solve(_ input: String, _ calibrate: (String) -> Int) -> Int {
-    input
-      .components(separatedBy: .newlines)
-      .map(calibrate)
-      .reduce(0, +)
   }
 }

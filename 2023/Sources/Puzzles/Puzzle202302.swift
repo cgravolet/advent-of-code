@@ -3,13 +3,16 @@ import Collections
 import Foundation
 
 struct Puzzle202302: Puzzle {
-  let input: String
+  let input: [String]
+
+  init(input: String) {
+    self.input = input.components(separatedBy: .newlines)
+  }
 
   // MARK: - Public methods
 
   func solve1() throws -> Any {
     input
-      .components(separatedBy: .newlines)
       .compactMap(parseGameSets)
       .filter { isPossible($0, blue: 14, green: 13, red: 12) }
       .compactMap(\.first?.id)
@@ -18,7 +21,6 @@ struct Puzzle202302: Puzzle {
 
   func solve2() throws -> Any {
     input
-      .components(separatedBy: .newlines)
       .compactMap(parseGameSets)
       .map(getMinimumSetPower)
       .reduce(0, +)
