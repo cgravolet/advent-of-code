@@ -24,7 +24,8 @@ struct Puzzle202303: Puzzle {
 
   private func gearRatios(in map: Map2D) -> [Int] {
     let partNumbers = partNumbers(in: map)
-    return map
+    return
+      map
       .coords(matching: Regex { One("*") })
       .compactMap { gearRatio(for: $0, partNumbers: partNumbers, in: map) }
   }
