@@ -20,19 +20,24 @@ struct GardenMap: CustomStringConvertible {
 }
 
 struct Puzzle202305: Puzzle {
-  let input: String
+  let input: [String]
+
+  init(input: String) {
+    self.input = input.split(separator: "\n\n").map { String($0) }
+  }
 
   // MARK: - Public methods
 
   func solve1() throws -> Any {
-    let sections = input.split(separator: "\n\n")
-    let almanac = sections[1..<sections.count].compactMap(parseMap)
-    let seeds = sections.first?.integerValues ?? []
-    return try seeds.map({ try getLocation(of: $0, category: .seed, in: almanac) }).min() ?? -1
+    let almanac = input[1..<input.count].compactMap(parseMap)
+    let seeds = input.first?.integerValues
+    return try seeds?.map({ try getLocation(of: $0, category: .seed, in: almanac) }).min() ?? -1
   }
 
   func solve2() throws -> Any {
-    -1
+    let almanac = input[1..<input.count].compactMap(parseMap)
+    let seeds = parseSeeds(from: input.first ?? "")
+    return try seeds.map({ try getLocation(of: $0, category: .seed, in: almanac) }).min() ?? -1
   }
 
   // MARK: - Private methods
@@ -54,7 +59,7 @@ struct Puzzle202305: Puzzle {
     return try getLocation(of: location, category: map.category.destination, in: almanac)
   }
 
-  func parseMap(from input: Substring) -> GardenMap? {
+  func parseMap(from input: String) -> GardenMap? {
     let components = input.split(separator: ":")
     guard let catMatch = components.first?.firstMatch(of: /([A-Za-z]+)\-to\-([A-Za-z]+)/),
       let src = GardenMap.Category(rawValue: String(catMatch.output.1)),
@@ -74,5 +79,11 @@ struct Puzzle202305: Puzzle {
     let srcStart = String(match.output.2).integerValue
     let length = String(match.output.3).integerValue
     return (srcStart..<srcStart + length, destStart..<destStart + length)
+  }
+
+  func parseSeeds(from input: String) -> [Int] {
+    return input.integerValues.chunks(ofCount: 2)
+      .map { $0.first!..<$0.first!+$0.last! }
+      .flatMap { [Int]($0) }
   }
 }
