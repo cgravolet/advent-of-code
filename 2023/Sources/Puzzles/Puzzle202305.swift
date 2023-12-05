@@ -2,23 +2,6 @@ import Algorithms
 import Collections
 import Foundation
 
-struct GardenMap: CustomStringConvertible {
-  enum Category: String {
-    case seed, soil, fertilizer, water, light, temperature, humidity, location
-  }
-  let category: (source: Category, destination: Category)
-  let ranges: [(source: Range<Int>, destination: Range<Int>)]
-
-  init(source: Category, destination: Category, ranges: [(Range<Int>, Range<Int>)]) {
-    self.category = (source: source, destination: destination)
-    self.ranges = ranges
-  }
-
-  var description: String {
-    "GardenMap(\(category.source.rawValue)-to-\(category.destination.rawValue),\(ranges))"
-  }
-}
-
 struct Puzzle202305: Puzzle {
   let input: [String]
 
@@ -29,24 +12,22 @@ struct Puzzle202305: Puzzle {
   // MARK: - Public methods
 
   func solve1() throws -> Any {
-    let almanac = input[1..<input.count].compactMap(parseMap)
-    let seeds = input.first?.integerValues
-    return try seeds?.map({ try getLocation(of: $0, category: .seed, in: almanac) }).min() ?? -1
+    let (seeds, almanac) = parseAlmanac(from: input, parseSeeds1)
+    return try seeds.map({ try getLocation(of: $0, category: .seed, in: almanac) }).min() ?? -1
   }
 
   func solve2() throws -> Any {
-    let almanac = input[1..<input.count].compactMap(parseMap)
-    let seeds = parseSeeds(from: input.first ?? "")
+    let (seeds, almanac) = parseAlmanac(from: input, parseSeeds2)
     return try seeds.map({ try getLocation(of: $0, category: .seed, in: almanac) }).min() ?? -1
   }
 
   // MARK: - Private methods
 
-  func getLocation(of value: Int, category: GardenMap.Category, in almanac: [GardenMap]) throws -> Int {
+  private func getLocation(of value: Int, category: GardenMap.Category, in almanac: [GardenMap]) throws -> Int {
     guard category != .location else { return value }
 
     guard let map = almanac.first(where: { $0.category.source == category }) else {
-      throw AOCError.custom("Could not find map for source \(category)")
+      throw AOCError("Could not find map for source: \(category)")
     }
     let location: Int
 
@@ -59,7 +40,12 @@ struct Puzzle202305: Puzzle {
     return try getLocation(of: location, category: map.category.destination, in: almanac)
   }
 
-  func parseMap(from input: String) -> GardenMap? {
+  private func parseAlmanac(from input: [String], _ parseSeeds: (String) -> [Int]) -> ([Int], [GardenMap]) {
+    (parseSeeds(input.first ?? ""), input[1..<input.count].compactMap(parseMap))
+  }
+
+  /// Parses a garden map from the given input (i.e. "seed-to-soil map:\n50 98 2\n52 50 48")
+  private func parseMap(from input: String) -> GardenMap? {
     let components = input.split(separator: ":")
     guard let catMatch = components.first?.firstMatch(of: /([A-Za-z]+)\-to\-([A-Za-z]+)/),
       let src = GardenMap.Category(rawValue: String(catMatch.output.1)),
@@ -73,16 +59,20 @@ struct Puzzle202305: Puzzle {
   }
 
   /// Parses a range from the given input (i.e. "50 98 2")
-  func parseRange(from input: Substring) -> (Range<Int>, Range<Int>)? {
-    guard let match = input.firstMatch(of: /(\d+)\s+(\d+)\s+(\d+)/) else { return nil }
-    let destStart = String(match.output.1).integerValue
-    let srcStart = String(match.output.2).integerValue
-    let length = String(match.output.3).integerValue
-    return (srcStart..<srcStart + length, destStart..<destStart + length)
+  private func parseRange(from input: Substring) -> (Range<Int>, Range<Int>)? {
+    input.firstMatch(of: /(\d+)\s+(\d+)\s+(\d+)/)
+      .map { (dest: $0.output.1.integerValue, src: $0.output.2.integerValue, len: $0.output.3.integerValue) }
+      .map { ($0.src..<$0.src + $0.len, $0.dest..<$0.dest + $0.len) }
   }
 
-  func parseSeeds(from input: String) -> [Int] {
-    return input.integerValues.chunks(ofCount: 2)
+  /// Parses an array of seed values from the given input (i.e. "79 14 55 13")
+  private func parseSeeds1(from input: String) -> [Int] {
+    input.integerValues
+  }
+
+  /// Parses an array of seed values from the given input (i.e. "79 14 55 13")
+  private func parseSeeds2(from input: String) -> [Int] {
+    input.integerValues.chunks(ofCount: 2)
       .map { $0.first!..<$0.first!+$0.last! }
       .flatMap { [Int]($0) }
   }

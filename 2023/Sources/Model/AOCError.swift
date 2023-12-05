@@ -1,11 +1,9 @@
 import Foundation
 
-enum AOCError: LocalizedError {
-  case custom(String)
+struct AOCError: LocalizedError {
+  let errorDescription: String?
 
-  var errorDescription: String? {
-    switch self {
-    case .custom(let msg): return msg
-    }
+  init(_ message: String) {
+    self.errorDescription = message
   }
 }
