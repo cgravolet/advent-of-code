@@ -52,7 +52,7 @@ struct Puzzle202302: Puzzle {
     var red = 0
 
     for str in input.split(separator: ",") {
-      let num = String(str).toInt()
+      let num = String(str).integerValue
 
       if str.contains("blue") {
         blue = num
@@ -70,7 +70,7 @@ struct Puzzle202302: Puzzle {
   private func parseGameSets(_ input: String) -> [GameSet]? {
     let components = input.split(separator: ":")
     guard components.count == 2 else { return nil }
-    let gameId = String(components[0]).toInt()
+    let gameId = String(components[0]).integerValue
     return components[1].split(separator: ";").map { parseGameSet(String($0), id: gameId) }
   }
 }

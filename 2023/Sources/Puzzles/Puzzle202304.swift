@@ -56,6 +56,6 @@ struct Puzzle202304: Puzzle {
 
   /// Returns a Set of integers from a String (i.e. "41 48 83 86 17")
   func setInt(from input: String) -> Set<Int> {
-    Set(input.matches(of: /(\d+)/).compactMap { Int($0.output.1) })
+    Set(input.integerValues)
   }
 }

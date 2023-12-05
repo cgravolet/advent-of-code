@@ -15,7 +15,7 @@ struct PartNumber: Hashable, CustomStringConvertible {
   }
 
   var description: String { "(\(x1)-\(x2),\(y)) \(rawValue)" }
-  var value: Int { rawValue.toInt() }
+  var value: Int { rawValue.integerValue }
 
   init(y: Int) {
     self.rawValue = ""
