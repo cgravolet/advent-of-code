@@ -10,6 +10,10 @@ extension String {
     matches(of: /(\d+)/).compactMap { Int($0.output.1) }
   }
 
+  var lines: [String] {
+    trimmingCharacters(in: .whitespacesAndNewlines).components(separatedBy: .newlines)
+  }
+
   subscript(i: Int) -> Character {
     self[index(startIndex, offsetBy: i)]
   }
