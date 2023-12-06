@@ -18,6 +18,6 @@ final class Puzzle202306Tests: XCTestCase {
       Distance:  9  40  200
       """
     let sut = Puzzle202306(input: input)
-    XCTAssertEqual(try sut.solve2() as? Int, -1)
+    XCTAssertEqual(try sut.solve2() as? Int, 71503)
   }
 }
