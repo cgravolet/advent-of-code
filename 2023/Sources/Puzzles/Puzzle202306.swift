@@ -8,41 +8,35 @@ struct Puzzle202306: Puzzle {
   // MARK: - Public methods
 
   func solve1() throws -> Any {
-    let data = parseData1(from: input)
-    var margins = [Int]()
-
-    for race in data {
-      var start = 0
-      for t in 1..<race.time where (race.time - t) * t > race.distance {
-        start = t
-        break
-      }
-      var end = 0
-      for t in (1..<race.time).reversed() where (race.time - t) * t > race.distance {
-        end = t
-        break
-      }
-      margins.append(end - start + 1)
-    }
-    return margins.reduce(1, *)
+    parseData1(from: input).map(marginOfError).reduce(1, *)
   }
 
   func solve2() throws -> Any {
     let (time, dist) = parseData2(from: input)
+    return marginOfError(for: time, distance: dist)
+  }
+
+  // MARK: - Private methods
+
+  func isWinnable(for t: Int, time: Int, distance: Int) -> Bool {
+    (time - t) * t > distance
+  }
+
+  func marginOfError(for time: Int, distance: Int) -> Int {
     var start = 0
-    for t in 1..<time where (time - t) * t > dist {
+    var end = 0
+
+    for t in 1..<time where isWinnable(for: t, time: time, distance: distance) {
       start = t
       break
     }
-    var end = 0
-    for t in (1..<time).reversed() where (time - t) * t > dist {
+
+    for t in (1..<time).reversed() where isWinnable(for: t, time: time, distance: distance) {
       end = t
       break
     }
     return end - start + 1
   }
-
-  // MARK: - Private methods
 
   /// Parses the race data from the given string (i.e. "Time: 7 15 30\nDistance: 9 40 200")
   func parseData1(from input: String) -> [(time: Int, distance: Int)] {
