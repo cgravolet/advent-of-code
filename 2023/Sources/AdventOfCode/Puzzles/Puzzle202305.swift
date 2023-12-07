@@ -23,7 +23,9 @@ struct Puzzle202305: Puzzle {
 
   // MARK: - Private methods
 
-  private func getLocation(of value: Int, category: GardenMap.Category, in almanac: [GardenMap]) throws -> Int {
+  private func getLocation(of value: Int, category: GardenMap.Category, in almanac: [GardenMap])
+    throws -> Int
+  {
     guard category != .location else { return value }
 
     guard let map = almanac.first(where: { $0.category.source == category }) else {
@@ -40,7 +42,9 @@ struct Puzzle202305: Puzzle {
     return try getLocation(of: location, category: map.category.destination, in: almanac)
   }
 
-  private func parseAlmanac(from input: [String], _ parseSeeds: (String) -> [Int]) -> ([Int], [GardenMap]) {
+  private func parseAlmanac(from input: [String], _ parseSeeds: (String) -> [Int]) -> (
+    [Int], [GardenMap]
+  ) {
     (parseSeeds(input.first ?? ""), input[1..<input.count].compactMap(parseMap))
   }
 
@@ -61,7 +65,12 @@ struct Puzzle202305: Puzzle {
   /// Parses a range from the given input (i.e. "50 98 2")
   private func parseRange(from input: Substring) -> (Range<Int>, Range<Int>)? {
     input.firstMatch(of: /(\d+)\s+(\d+)\s+(\d+)/)
-      .map { (dest: $0.output.1.integerValue, src: $0.output.2.integerValue, len: $0.output.3.integerValue) }
+      .map {
+        (
+          dest: $0.output.1.integerValue, src: $0.output.2.integerValue,
+          len: $0.output.3.integerValue
+        )
+      }
       .map { ($0.src..<$0.src + $0.len, $0.dest..<$0.dest + $0.len) }
   }
 
@@ -73,7 +82,7 @@ struct Puzzle202305: Puzzle {
   /// Parses an array of seed values from the given input (i.e. "79 14 55 13")
   private func parseSeeds2(from input: String) -> [Int] {
     input.integerValues.chunks(ofCount: 2)
-      .map { $0.first!..<$0.first!+$0.last! }
+      .map { $0.first!..<$0.first! + $0.last! }
       .flatMap { [Int]($0) }
   }
 }

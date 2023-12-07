@@ -3,7 +3,7 @@ import RegexBuilder
 
 extension String {
   var integerValue: Int {
-    Int(self.replacingOccurrences(of: "[^0-9]+", with: "", options: .regularExpression)) ?? 0
+    Int(filter(\.isNumber)) ?? 0
   }
 
   var integerValues: [Int] {

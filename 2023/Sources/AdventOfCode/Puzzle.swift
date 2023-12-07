@@ -4,18 +4,13 @@ import Foundation
 
 protocol Puzzle {
   init(input: String)
-
   func solve1() throws -> Any
-
   func solve2() throws -> Any
 }
 
 extension Puzzle {
   static var day: Int {
-    let typeName = String(reflecting: Self.self)
-    guard let i = typeName.lastIndex(where: { !$0.isNumber }),
-      let day = Int(typeName[i...].dropFirst())
-    else {
+    guard let value = Int(String(reflecting: Self.self).filter(\.isNumber)) else {
       fatalError(
         """
         Day number not found in type name: \
@@ -23,7 +18,7 @@ extension Puzzle {
         or use the day number as your type's suffix (like `202303`).")
         """)
     }
-    return day
+    return value
   }
 
   var day: Int { Self.day }

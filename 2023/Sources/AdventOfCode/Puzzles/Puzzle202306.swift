@@ -12,8 +12,7 @@ struct Puzzle202306: Puzzle {
   }
 
   func solve2() throws -> Any {
-    let (time, dist) = parseData2(from: input)
-    return marginOfError(for: time, distance: dist)
+    parseData2(from: input).map(marginOfError).first ?? -1
   }
 
   // MARK: - Private methods
@@ -51,10 +50,9 @@ struct Puzzle202306: Puzzle {
   }
 
   /// Parses the race data from the given string (i.e. "Time: 7 15 30\nDistance: 9 40 200")
-  func parseData2(from input: String) -> (time: Int, distance: Int) {
-    let data = input.lines
-    let time = Int(data[0].replacingOccurrences(of: "[^0-9]+", with: "", options: .regularExpression))
-    let dist = Int(data[1].replacingOccurrences(of: "[^0-9]+", with: "", options: .regularExpression))
-    return (time ?? 0, dist ?? 0)
+  func parseData2(from input: String) -> [(time: Int, distance: Int)] {
+    let data = input.lines.map(\.integerValue)
+    guard data.count >= 2 else { return [] }
+    return [(data[0], data[1])]
   }
 }

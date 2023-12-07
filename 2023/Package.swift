@@ -31,6 +31,15 @@ let package = Package(
 // Enable Regex literal syntax
 for target in package.targets {
     target.swiftSettings = target.swiftSettings ?? []
+
+    // Swift 5.7
+    // target.swiftSettings?.append(.unsafeFlags([
+    //     "-Xfrontend", "-warn-concurrency",
+    //     "-Xfrontend", "-enable-actor-data-race-checks",
+    //     "-enable-bare-slash-regex",
+    // ]))
+
+    // Swift 5.8+
     target.swiftSettings?.append(contentsOf: [
         .enableUpcomingFeature("BareSlashRegexLiterals"),
         .enableUpcomingFeature("StrictConcurrency"),
