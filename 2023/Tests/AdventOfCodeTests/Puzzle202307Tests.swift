@@ -22,7 +22,7 @@ final class Puzzle202307Tests: XCTestCase {
   }
 
   func testCamelCards() throws {
-    let tests: [(given: String, expected: CamelCardHand.Category)] = [
+    let tests: [(given: String, expected: CamelCardHandStrength)] = [
       ("2345A 1", .highCard),
       ("Q2KJJ 13", .onePair),
       ("Q2Q2Q 19", .fullHouse),
@@ -50,12 +50,12 @@ final class Puzzle202307Tests: XCTestCase {
         XCTFail("Could not parse hand from input \(test.given)")
         continue
       }
-      XCTAssertEqual(hand.category, test.expected, "Given: \"\(test.given)\"")
+      XCTAssertEqual(hand.strength, test.expected, "Given: \"\(test.given)\"")
     }
   }
 
   func testCamelCardsWithJokers() throws {
-    let tests: [(given: String, expected: CamelCardHand.Category)] = [
+    let tests: [(given: String, expected: CamelCardHandStrength)] = [
       ("2345A 1", .highCard),
       ("Q2KJJ 13", .threeOfAKind),
       ("Q2Q2Q 19", .fullHouse),
@@ -83,7 +83,7 @@ final class Puzzle202307Tests: XCTestCase {
         XCTFail("Could not parse hand from input \(test.given)")
         continue
       }
-      XCTAssertEqual(hand.category, test.expected, "Given: \"\(test.given)\"")
+      XCTAssertEqual(hand.strength, test.expected, "Given: \"\(test.given)\"")
     }
   }
 }
