@@ -44,7 +44,9 @@ struct Puzzle202308: Puzzle {
 
   private func desertMap(from input: [String]) -> [String: [String]] {
     input.reduce(into: [String: [String]]()) {
-      guard let match = $1.firstMatch(of: /([A-Z0-9]+) = \(([A-Z0-9]+), ([A-Z0-9]+)\)/) else { return }
+      guard let match = $1.firstMatch(of: /([A-Z0-9]+) = \(([A-Z0-9]+), ([A-Z0-9]+)\)/) else {
+        return
+      }
       $0[String(match.1)] = [String(match.2), String(match.3)]
     }
   }
