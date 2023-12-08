@@ -3,34 +3,60 @@ import Collections
 import Foundation
 
 struct Puzzle202308: Puzzle {
-  let input: String
+  let input: [String]
+
+  init(input: String) {
+    self.input = input.lines
+  }
 
   // MARK: - Public methods
 
   func solve1() throws -> Any {
-    // Parse the input
-    let lines = input.lines
-    let directions = lines[0].map { $0 == "R" ? 1 : 0 }
-    let map = lines.reduce(into: [String: [String]]()) {
-      guard let match = $1.firstMatch(of: /([A-Z]+) = \(([A-Z]+), ([A-Z]+)\)/) else { return }
-      $0[String(match.1)] = [String(match.2), String(match.3)]
-    }
+    let (directions, map) = parseInput(input)
 
-    // Count the steps
-    var steps = 0
     var current = "AAA"
+    var steps = 0
 
     while current != "ZZZ" {
-      let direction = directions[steps % directions.count]
-      current = map[current]![direction]
+      current = map[current]![directions[steps % directions.count]]
       steps += 1
     }
     return steps
   }
 
   func solve2() throws -> Any {
-    return -1
+    let (directions, map) = parseInput(input)
+
+    let steps = map.keys.filter({ $0[2] == "A" }).map { current in
+      var cur = String(current)
+      var steps = 0
+
+      while cur[2] != "Z" {
+        cur = map[cur]![directions[steps % directions.count]]
+        steps += 1
+      }
+      return steps
+    }
+    return steps.reduce(1, lcm)
   }
 
   // MARK: - Private methods
+
+  private func desertMap(from input: [String]) -> [String: [String]] {
+    input.reduce(into: [String: [String]]()) {
+      guard let match = $1.firstMatch(of: /([A-Z0-9]+) = \(([A-Z0-9]+), ([A-Z0-9]+)\)/) else { return }
+      $0[String(match.1)] = [String(match.2), String(match.3)]
+    }
+  }
+
+  private func directions(from input: [String]) -> [Int] {
+    input[0].map { $0 == "R" ? 1 : 0 }
+  }
+
+  private func parseInput(_ input: [String]) -> ([Int], [String: [String]]) {
+    (
+      directions(from: input),
+      desertMap(from: input)
+    )
+  }
 }
