@@ -8,31 +8,32 @@ struct Puzzle202309: Puzzle {
   // MARK: - Public methods
 
   func solve1() throws -> Any {
-    input.lines.map(\.integerValues).map(predictValue).map(\.1).reduce(0, +)
+    try input.lines.map(\.integerValues).map(predictValue).map(\.next).reduce(0, +)
   }
 
   func solve2() throws -> Any {
-    input.lines.map(\.integerValues).map(predictValue).map(\.0).reduce(0, +)
+    try input.lines.map(\.integerValues).map(predictValue).map(\.prev).reduce(0, +)
   }
 
   // MARK: - Private methods
 
-  private func predictValue(of input: [Int]) -> (Int, Int) {
+  private func predictValue(of input: [Int]) throws -> (prev: Int, next: Int) {
+    guard !input.isEmpty else { throw AOCError("Failed predicting value of empty array") }
     var sequences = [input]
 
-    while sequences[sequences.count - 1].first(where: { $0 != 0 }) != nil {
+    while sequences.first!.first(where: { $0 != 0 }) != nil {
       var nextSequence = [Int]()
       var prev: Int?
 
-      for value in sequences.last! {
+      for value in sequences.first! {
         if let prev { nextSequence.append(value - prev) }
         prev = value
       }
-      sequences.append(nextSequence)
+      sequences.insert(nextSequence, at: 0)
     }
     return (
-      sequences.reversed().reduce(0, { $1.first! - $0 }),
-      sequences.reversed().reduce(0, { $0 + $1.last! })
+      sequences.reduce(0, { $1.first! - $0 }),
+      sequences.reduce(0, { $0 + $1.last! })
     )
   }
 }
