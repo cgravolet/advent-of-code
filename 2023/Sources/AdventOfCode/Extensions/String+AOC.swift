@@ -7,7 +7,7 @@ extension String {
   }
 
   var integerValues: [Int] {
-    matches(of: /(\d+)/).compactMap { Int($0.output.1) }
+    matches(of: /(-?\d+)/).compactMap { Int($0.output.1) }
   }
 
   var lines: [String] {
