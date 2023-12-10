@@ -5,7 +5,7 @@ struct Map2D {
   let maxX: Int
   let maxY: Int
 
-  private let data: [Coord2D: String]
+  private var data: [Coord2D: String]
 
   init(_ input: String) {
     let lines = input.trimmingCharacters(in: .whitespacesAndNewlines).components(
@@ -34,6 +34,10 @@ struct Map2D {
 
   func coords(matching regex: some RegexComponent) -> [Coord2D] {
     data.filter({ $0.value.firstMatch(of: regex) != nil }).map(\.key)
+  }
+
+  mutating func set(value: String, at coord: Coord2D) {
+    data[coord] = value
   }
 
   func value(at coord: Coord2D) -> String? {
