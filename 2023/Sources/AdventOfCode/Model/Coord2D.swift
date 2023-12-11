@@ -33,23 +33,23 @@ extension Coord2D: CustomStringConvertible {
 }
 
 extension Coord2D: AdditiveArithmetic {
-    static var zero: Coord2D { Coord2D(.zero, .zero) }
+  static var zero: Coord2D { Coord2D(.zero, .zero) }
 
-    static func + (lhs: Coord2D, rhs: Coord2D) -> Coord2D {
-        Coord2D(lhs.x + rhs.x, lhs.y + rhs.y)
-    }
+  static func + (lhs: Coord2D, rhs: Coord2D) -> Coord2D {
+    Coord2D(lhs.x + rhs.x, lhs.y + rhs.y)
+  }
 
-    static func - (lhs: Coord2D, rhs: Coord2D) -> Coord2D {
-        Coord2D(lhs.x - rhs.x, lhs.y - rhs.y)
-    }
+  static func - (lhs: Coord2D, rhs: Coord2D) -> Coord2D {
+    Coord2D(lhs.x - rhs.x, lhs.y - rhs.y)
+  }
 
-    static func += (lhs: inout Coord2D, rhs: Coord2D) {
-        lhs.x += rhs.x
-        lhs.y += rhs.y
-    }
+  static func += (lhs: inout Coord2D, rhs: Coord2D) {
+    lhs.x += rhs.x
+    lhs.y += rhs.y
+  }
 
-    static func -= (lhs: inout Coord2D, rhs: Coord2D) {
-        lhs.x -= rhs.x
-        lhs.y -= rhs.y
-    }
+  static func -= (lhs: inout Coord2D, rhs: Coord2D) {
+    lhs.x -= rhs.x
+    lhs.y -= rhs.y
+  }
 }

@@ -59,37 +59,37 @@ struct Puzzle202310: Puzzle {
         (coord + Coord2D(0, -1), "|7F"),
         (coord + Coord2D(-1, 0), "-LF"),
         (coord + Coord2D(1, 0), "-7J"),
-        (coord + Coord2D(0, 1), "|LJ")
+        (coord + Coord2D(0, 1), "|LJ"),
       ]
     case "-":
       candidates = [
         (coord + Coord2D(-1, 0), "-LF"),
-        (coord + Coord2D(1, 0), "-7J")
+        (coord + Coord2D(1, 0), "-7J"),
       ]
     case "|":
       candidates = [
         (coord + Coord2D(0, -1), "|7F"),
-        (coord + Coord2D(0, 1), "|LJ")
+        (coord + Coord2D(0, 1), "|LJ"),
       ]
     case "7":
       candidates = [
         (coord + Coord2D(-1, 0), "-LF"),
-        (coord + Coord2D(0, 1), "|LJ")
+        (coord + Coord2D(0, 1), "|LJ"),
       ]
     case "F":
       candidates = [
         (coord + Coord2D(0, 1), "|LJ"),
-        (coord + Coord2D(1, 0), "-7J")
+        (coord + Coord2D(1, 0), "-7J"),
       ]
     case "J":
       candidates = [
         (coord + Coord2D(0, -1), "|7F"),
-        (coord + Coord2D(-1, 0), "-LF")
+        (coord + Coord2D(-1, 0), "-LF"),
       ]
     case "L":
       candidates = [
         (coord + Coord2D(0, -1), "|7F"),
-        (coord + Coord2D(1, 0), "-7J")
+        (coord + Coord2D(1, 0), "-7J"),
       ]
     default:
       candidates = []
