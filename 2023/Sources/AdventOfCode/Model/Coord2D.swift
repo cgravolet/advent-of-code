@@ -26,6 +26,10 @@ struct Coord2D: Hashable {
     self.x = x
     self.y = y
   }
+
+  func manhattanDistance(to: Coord2D) -> Int {
+    abs(x - to.x) + abs(y - to.y)
+  }
 }
 
 extension Coord2D: CustomStringConvertible {
