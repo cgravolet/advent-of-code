@@ -9,8 +9,7 @@ struct Map2D {
   private(set) var minY: Int
 
   init(_ input: String) {
-    let lines = input.trimmingCharacters(in: .whitespacesAndNewlines).components(
-      separatedBy: .newlines)
+    let lines = input.lines
     let maxX = lines.first?.count ?? 0
     let maxY = lines.count
 
