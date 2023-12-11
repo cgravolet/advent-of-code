@@ -23,6 +23,6 @@ final class Puzzle202311Tests: XCTestCase {
 
   func testSolve2() throws {
     let sut = Puzzle202311(input: input)
-    XCTAssertEqual(try sut.solve2() as? Int, 82000210)
+    XCTAssertEqual(try sut.solve2() as? Int, 82_000_210)
   }
 }
