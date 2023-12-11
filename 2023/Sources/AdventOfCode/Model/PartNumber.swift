@@ -9,7 +9,7 @@ struct PartNumber: Hashable, CustomStringConvertible {
   var coords: Set<Coord2D> {
     var mutableCoords = Set<Coord2D>()
     for x in x1...x2 {
-      mutableCoords.insert(Coord2D(x: x, y: y))
+      mutableCoords.insert(Coord2D(x, y))
     }
     return mutableCoords
   }

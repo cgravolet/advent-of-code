@@ -50,7 +50,7 @@ struct Puzzle202303: Puzzle {
       var partNum = PartNumber(y: y)
 
       for x in 0...map.maxX {
-        if let value = map.value(at: Coord2D(x: x, y: y))?.firstMatch(of: regex)?.0 {
+        if let value = map.value(at: Coord2D(x, y))?.firstMatch(of: regex)?.0 {
           if partNum.rawValue.isEmpty {
             partNum.x1 = x
           }
