@@ -2,7 +2,7 @@ import Algorithms
 import Collections
 import Foundation
 
-struct SpringCondition: Hashable {
+private struct SpringCondition: Hashable {
   let record: String
   let sizes: [Int]
 }
@@ -18,16 +18,12 @@ struct Puzzle202312: Puzzle {
 
   func solve1() throws -> Any {
     var cache = [SpringCondition: Int]()
-    return input.reduce(0, { initial, input in
-      initial + arrangementCount(for: input, cache: &cache)
-    })
+    return input.reduce(0, { $0 + arrangementCount(for: $1, cache: &cache) })
   }
 
   func solve2() throws -> Any {
     var cache = [SpringCondition: Int]()
-    return input.reduce(0, { initial, input in
-      initial + arrangementCount(for: unfold(input), cache: &cache)
-    })
+    return input.reduce(0, { $0 + arrangementCount(for: unfold($1), cache: &cache) })
   }
 
   // MARK: - Private methods
@@ -35,10 +31,13 @@ struct Puzzle202312: Puzzle {
   private func arrangementCount(for input: String, cache: inout [SpringCondition: Int]) -> Int {
     let components = input.split(separator: " ")
     guard components.count == 2 else { return 0 }
-    return arrangementCount(for: String(components[0]), sizes: components[1].integerValues, cache: &cache)
+    return arrangementCount(
+      for: String(components[0]), sizes: components[1].integerValues, cache: &cache)
   }
 
-  private func arrangementCount(for record: String, sizes: [Int], cache: inout [SpringCondition: Int]) -> Int {
+  private func arrangementCount(
+    for record: String, sizes: [Int], cache: inout [SpringCondition: Int]
+  ) -> Int {
     guard !record.isEmpty else { return sizes.isEmpty ? 1 : 0 }
     guard !sizes.isEmpty else { return record.contains("#") ? 0 : 1 }
     let key = SpringCondition(record: record, sizes: sizes)
