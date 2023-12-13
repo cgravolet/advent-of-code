@@ -2,6 +2,11 @@ import Algorithms
 import Collections
 import Foundation
 
+struct SpringCondition: Hashable {
+  let record: String
+  let sizes: [Int]
+}
+
 struct Puzzle202312: Puzzle {
   let input: [String]
 
@@ -12,28 +17,39 @@ struct Puzzle202312: Puzzle {
   // MARK: - Public methods
 
   func solve1() throws -> Any {
-    input.compactMap(arrangementCount).reduce(0, +)
+    var cache = [SpringCondition: Int]()
+    return input.reduce(0, { initial, input in
+      initial + arrangementCount(for: input, cache: &cache)
+    })
   }
 
   func solve2() throws -> Any {
-    return -1
+    var cache = [SpringCondition: Int]()
+    return input.reduce(0, { initial, input in
+      initial + arrangementCount(for: unfold(input), cache: &cache)
+    })
   }
 
   // MARK: - Private methods
 
-  private func arrangementCount(for input: String) -> Int? {
+  private func arrangementCount(for input: String, cache: inout [SpringCondition: Int]) -> Int {
     let components = input.split(separator: " ")
-    guard components.count == 2 else { return nil }
-    return arrangementCount(for: String(components[0]), sizes: components[1].integerValues)
+    guard components.count == 2 else { return 0 }
+    return arrangementCount(for: String(components[0]), sizes: components[1].integerValues, cache: &cache)
   }
 
-  private func arrangementCount(for record: String, sizes: [Int]) -> Int {
+  private func arrangementCount(for record: String, sizes: [Int], cache: inout [SpringCondition: Int]) -> Int {
     guard !record.isEmpty else { return sizes.isEmpty ? 1 : 0 }
     guard !sizes.isEmpty else { return record.contains("#") ? 0 : 1 }
+    let key = SpringCondition(record: record, sizes: sizes)
+
+    if let count = cache[key] {
+      return count
+    }
     var count = 0
 
     if ".?".contains(record[0]) {
-      count += arrangementCount(for: String(record.dropFirst()), sizes: sizes)
+      count += arrangementCount(for: String(record.dropFirst()), sizes: sizes, cache: &cache)
     }
     let size = sizes[0]
 
@@ -42,8 +58,19 @@ struct Puzzle202312: Puzzle {
       && (size == record.count || record[size] != "#")
     {
       count += arrangementCount(
-        for: String(record.dropFirst(sizes[0] + 1)), sizes: Array(sizes.dropFirst()))
+        for: String(record.dropFirst(sizes[0] + 1)), sizes: Array(sizes.dropFirst()), cache: &cache)
     }
+    cache[key] = count
     return count
+  }
+
+  private func unfold(_ input: String) -> String {
+    input
+      .split(separator: " ")
+      .enumerated()
+      .map {
+        Array(repeating: $0.element, count: 5).joined(separator: $0.offset == 0 ? "?" : ",")
+      }
+      .joined(separator: " ")
   }
 }
