@@ -4,6 +4,15 @@ import Foundation
 
 private enum TiltDirection: CaseIterable {
   case north, west, south, east
+
+  var coord: Coord2D {
+    switch self {
+    case .north: return Coord2D(0, -1)
+    case .west: return Coord2D(-1, 0)
+    case .south: return Coord2D(0, 1)
+    case .east: return Coord2D(1, 0)
+    }
+  }
 }
 
 struct Puzzle202314: Puzzle {
@@ -65,21 +74,14 @@ struct Puzzle202314: Puzzle {
       }
     })
     var mutableMap = map
-
-    let move: Coord2D
-    switch direction {
-    case .north: move = Coord2D(0, -1)
-    case .west: move = Coord2D(-1, 0)
-    case .south: move = Coord2D(0, 1)
-    case .east: move = Coord2D(1, 0)
-    }
+    let move = direction.coord
 
     for rock in roundRocks {
       var curPos = rock
       var nextPos = curPos + move
 
-      while mutableMap.value(at: nextPos) == nil && nextPos.x >= map.minX && nextPos.x <= map.maxX
-        && nextPos.y >= map.minY && nextPos.y <= map.maxY
+      while mutableMap.value(at: nextPos) == nil && (map.minX...map.maxX) ~= nextPos.x
+        && (map.minY...map.maxY) ~= nextPos.y
       {
         curPos = nextPos
         nextPos = curPos + move
