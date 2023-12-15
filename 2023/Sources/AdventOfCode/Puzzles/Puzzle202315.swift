@@ -22,14 +22,13 @@ struct Puzzle202315: Puzzle {
   }
 
   func solve2() throws -> Any {
-    var boxes = [OrderedDictionary<String, Int>](repeating: OrderedDictionary<String, Int>(), count: 256)
-
+    var boxes = [OrderedDictionary<String, Int>](
+      repeating: OrderedDictionary<String, Int>(), count: 256)
     input
       .trimmingCharacters(in: .whitespacesAndNewlines)
       .split(separator: ",")
       .compactMap(parseStep)
       .forEach { performStep($0, boxes: &boxes) }
-
     return focusPower(of: boxes)
   }
 
@@ -37,7 +36,6 @@ struct Puzzle202315: Puzzle {
 
   private func focusPower(of boxes: [OrderedDictionary<String, Int>]) -> Int {
     var power = 0
-
     for (index, box) in boxes.enumerated() where !box.isEmpty {
       for (slot, lens) in box.elements.enumerated() {
         let lensPower = (index + 1) * (slot + 1) * lens.value
