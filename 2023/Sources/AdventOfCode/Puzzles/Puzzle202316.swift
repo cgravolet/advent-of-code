@@ -3,15 +3,42 @@ import Collections
 import Foundation
 
 struct Puzzle202316: Puzzle {
-  let input: String
+  let map: Map2D
+
+  init(input: String) {
+    self.map = Map2D(input)
+  }
 
   // MARK: - Public methods
 
   func solve1() throws -> Any {
-    let map = Map2D(input)
-    var beams: [(pos: Coord2D, dir: CardinalDirection)?] = [
-      (Coord2D(-1, 0), CardinalDirection.east)
-    ]
+    energizeMap(map, start: Coord2D(-1, 0), direction: .east)
+  }
+
+  func solve2() throws -> Any {
+    var startTiles = [Coord2D: CardinalDirection]()
+
+    for x in map.minX...map.maxX {
+      startTiles[Coord2D(x, map.minY - 1)] = .south
+      startTiles[Coord2D(x, map.maxY + 1)] = .north
+    }
+
+    for y in map.minY...map.maxY {
+      startTiles[Coord2D(map.minX - 1, y)] = .east
+      startTiles[Coord2D(map.maxX + 1, y)] = .west
+    }
+    var maxEnergized = 0
+
+    for (coord, direction) in startTiles {
+      maxEnergized = max(maxEnergized, energizeMap(map, start: coord, direction: direction))
+    }
+    return maxEnergized
+  }
+
+  // MARK: - Private methods
+
+  private func energizeMap(_ map: Map2D, start: Coord2D, direction: CardinalDirection) -> Int {
+    var beams: [(pos: Coord2D, dir: CardinalDirection)?] = [(start, direction)]
     var energized = [Coord2D: Int]()
     var seen = Set<String>()
 
@@ -61,10 +88,4 @@ struct Puzzle202316: Puzzle {
     }
     return energized.count
   }
-
-  func solve2() throws -> Any {
-    return -1
-  }
-
-  // MARK: - Private methods
 }
