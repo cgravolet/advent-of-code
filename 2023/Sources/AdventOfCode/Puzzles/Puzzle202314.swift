@@ -2,19 +2,6 @@ import Algorithms
 import Collections
 import Foundation
 
-private enum TiltDirection: CaseIterable {
-  case north, west, south, east
-
-  var coord: Coord2D {
-    switch self {
-    case .north: return Coord2D(0, -1)
-    case .west: return Coord2D(-1, 0)
-    case .south: return Coord2D(0, 1)
-    case .east: return Coord2D(1, 0)
-    }
-  }
-}
-
 struct Puzzle202314: Puzzle {
   let input: String
 
@@ -58,13 +45,13 @@ struct Puzzle202314: Puzzle {
 
   private func spinCycle(map: Map2D) -> Map2D {
     var mutableMap = map
-    for direction in TiltDirection.allCases {
+    for direction in CardinalDirection.allCases {
       mutableMap = tiltMap(mutableMap, direction: direction)
     }
     return mutableMap
   }
 
-  private func tiltMap(_ map: Map2D, direction: TiltDirection) -> Map2D {
+  private func tiltMap(_ map: Map2D, direction: CardinalDirection) -> Map2D {
     let roundRocks = map.coords(matching: /O/).sorted(by: {
       switch direction {
       case .north: $0.y < $1.y

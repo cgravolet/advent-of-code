@@ -42,6 +42,10 @@ struct Map2D {
     data.removeAll()
   }
 
+  func contains(_ coord: Coord2D) -> Bool {
+    (minX...maxX) ~= coord.x && (minY...maxY) ~= coord.y
+  }
+
   func coords(matching regex: some RegexComponent) -> [Coord2D] {
     data.filter({ $0.value.firstMatch(of: regex) != nil }).map(\.key)
   }
