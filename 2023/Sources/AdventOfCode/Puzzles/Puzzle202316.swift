@@ -42,7 +42,7 @@ struct Puzzle202316: Puzzle {
     var energized = [Coord2D: Int]()
     var seen = Set<String>()
 
-    while !beams.compactMap({ $0 }).isEmpty {
+    while !beams.filter({ $0 != nil }).isEmpty {
 
       for i in 0..<beams.count {
         guard let beam = beams[i] else { continue }
@@ -59,16 +59,10 @@ struct Puzzle202316: Puzzle {
           case ("\\", .west): nextDir = .north
           case ("\\", .north): nextDir = .west
           case ("\\", .south): nextDir = .east
-          case ("-", .north):
+          case ("-", .north), ("-", .south):
             nextDir = .east
             beams.append((nextPos, .west))
-          case ("-", .south):
-            nextDir = .east
-            beams.append((nextPos, .west))
-          case ("|", .east):
-            nextDir = .north
-            beams.append((nextPos, .south))
-          case ("|", .west):
+          case ("|", .east), ("|", .west):
             nextDir = .north
             beams.append((nextPos, .south))
           default: break
