@@ -9,7 +9,7 @@ private struct PathNode: Hashable {
 }
 
 struct Puzzle202317: Puzzle {
-  fileprivate typealias Path = [PathNode: Int]
+  fileprivate typealias Path = [PathNode: [Coord2D]]
 
   let map: Map2D
 
@@ -26,7 +26,9 @@ struct Puzzle202317: Puzzle {
   }
 
   func solve2() throws -> Any {
-    return -1
+    let start = Coord2D(map.minX, map.minY)
+    let end = Coord2D(map.maxX, map.maxY)
+    return findShortestDistanceUltra(from: start, to: end, in: map) ?? -1
   }
 
   // MARK: - Private methods
@@ -48,42 +50,65 @@ struct Puzzle202317: Puzzle {
     guard let startValue = map.value(at: start), let startDistance = Int(startValue) else { return -1 }
     var path = Path()
     var queue = PriorityQueue()
-    queue.enqueue((start, 0, startDistance, nil, 0))
+    queue.enqueue((start, 0, startDistance, nil, 0, [start]))
 
     while !queue.isEmpty {
       guard let node = queue.dequeue() else { continue }
+      guard node.coord != end else { return node.distance }
 
       for coord in getAdjacentCoords(to: node.coord, direction: node.direction) {
         guard let distValue = map.value(at: coord), let distance = Int(distValue) else { continue }
-        guard coord != end else { return distance + node.distance }
         let direction = CardinalDirection.allCases.first(where: { node.coord + $0.coord == coord })
         let count = direction == node.direction ? node.count + 1 : 1
         let pathNode = PathNode(coord: coord, direction: direction, count: count)
 
         guard path[pathNode] == nil, count <= 3 else { continue }
-        queue.enqueue((coord, node.distance + distance, distance, direction, count))
-        path[pathNode] = node.distance + distance
+        queue.enqueue((coord, node.distance + distance, distance, direction, count, node.path + [coord]))
+        path[pathNode] = node.path + [coord]
       }
     }
     return nil
   }
 
-  private func printPath(to end: Coord2D, in map: Map2D, path: Path) {
-    // guard var position = path.first(where: { $0.key.coord == end })?.key else { return }
-    // var mutableMap = map
-    // mutableMap.set(value: "#", at: end)
+  private func findShortestDistanceUltra(from start: Coord2D, to end: Coord2D, in map: Map2D) -> Int? {
+    guard let startValue = map.value(at: start), let startDistance = Int(startValue) else { return -1 }
+    var path = Path()
+    var queue = PriorityQueue()
+    queue.enqueue((start, 0, startDistance, nil, 0, [start]))
 
-    // while position.coord != .zero {
-    //   guard let node = path[position] else { return }
-    //   mutableMap.set(value: "#", at: node.0)
-    //   position = PathNode(coord: node.0, direction: node.2)
-    // }
-    // print(mutableMap)
+    while !queue.isEmpty {
+      guard let node = queue.dequeue() else { continue }
+      guard node.coord != end else {
+        if node.count < 4 {
+          continue
+        }
+        return node.distance
+      }
+      let adjacent: [Coord2D]
+
+      if let direction = node.direction, node.count < 4 {
+        adjacent = [node.coord + direction.coord]
+      } else {
+        adjacent = getAdjacentCoords(to: node.coord, direction: node.direction)
+      }
+
+      for coord in adjacent {
+        guard let distValue = map.value(at: coord), let distance = Int(distValue) else { continue }
+        let direction = CardinalDirection.allCases.first(where: { node.coord + $0.coord == coord })
+        let count = direction == node.direction ? node.count + 1 : 1
+        let pathNode = PathNode(coord: coord, direction: direction, count: count)
+
+        guard path[pathNode] == nil, count <= 10 else { continue }
+        queue.enqueue((coord, node.distance + distance, distance, direction, count, node.path + [coord]))
+        path[pathNode] = node.path + [coord]
+      }
+    }
+    return nil
   }
 }
 
 private struct PriorityQueue {
-  typealias Element = (coord: Coord2D, distance: Int, weight: Int, direction: CardinalDirection?, count: Int)
+  typealias Element = (coord: Coord2D, distance: Int, weight: Int, direction: CardinalDirection?, count: Int, path: [Coord2D])
 
   private var data = [Element]()
 
