@@ -47,7 +47,9 @@ struct Puzzle202317: Puzzle {
   }
 
   private func findShortestDistance(from start: Coord2D, to end: Coord2D, in map: Map2D) -> Int? {
-    guard let startValue = map.value(at: start), let startDistance = Int(startValue) else { return -1 }
+    guard let startValue = map.value(at: start), let startDistance = Int(startValue) else {
+      return -1
+    }
     var path = Path()
     var queue = PriorityQueue()
     queue.enqueue((start, 0, startDistance, nil, 0, [start]))
@@ -63,15 +65,20 @@ struct Puzzle202317: Puzzle {
         let pathNode = PathNode(coord: coord, direction: direction, count: count)
 
         guard path[pathNode] == nil, count <= 3 else { continue }
-        queue.enqueue((coord, node.distance + distance, distance, direction, count, node.path + [coord]))
+        queue.enqueue(
+          (coord, node.distance + distance, distance, direction, count, node.path + [coord]))
         path[pathNode] = node.path + [coord]
       }
     }
     return nil
   }
 
-  private func findShortestDistanceUltra(from start: Coord2D, to end: Coord2D, in map: Map2D) -> Int? {
-    guard let startValue = map.value(at: start), let startDistance = Int(startValue) else { return -1 }
+  private func findShortestDistanceUltra(from start: Coord2D, to end: Coord2D, in map: Map2D)
+    -> Int?
+  {
+    guard let startValue = map.value(at: start), let startDistance = Int(startValue) else {
+      return -1
+    }
     var path = Path()
     var queue = PriorityQueue()
     queue.enqueue((start, 0, startDistance, nil, 0, [start]))
@@ -99,7 +106,8 @@ struct Puzzle202317: Puzzle {
         let pathNode = PathNode(coord: coord, direction: direction, count: count)
 
         guard path[pathNode] == nil, count <= 10 else { continue }
-        queue.enqueue((coord, node.distance + distance, distance, direction, count, node.path + [coord]))
+        queue.enqueue(
+          (coord, node.distance + distance, distance, direction, count, node.path + [coord]))
         path[pathNode] = node.path + [coord]
       }
     }
@@ -108,15 +116,14 @@ struct Puzzle202317: Puzzle {
 }
 
 private struct PriorityQueue {
-  typealias Element = (coord: Coord2D, distance: Int, weight: Int, direction: CardinalDirection?, count: Int, path: [Coord2D])
+  typealias Element = (
+    coord: Coord2D, distance: Int, weight: Int, direction: CardinalDirection?, count: Int,
+    path: [Coord2D]
+  )
 
   private var data = [Element]()
 
   var isEmpty: Bool { data.isEmpty }
-
-  mutating func enqueue(_ value: Element) {
-    data.append(value)
-  }
 
   mutating func dequeue() -> Element? {
     guard !data.isEmpty else { return nil }
@@ -129,5 +136,9 @@ private struct PriorityQueue {
     let first = sorted.remove(at: 0)
     data = sorted
     return first
+  }
+
+  mutating func enqueue(_ value: Element) {
+    data.append(value)
   }
 }
