@@ -12,34 +12,34 @@ struct Puzzle202318: Puzzle {
   // MARK: - Public methods
 
   func solve1() throws -> Any {
+    cubicMeters(of: input.compactMap(parseLine1))
+  }
+
+  func solve2() throws -> Any {
+    cubicMeters(of: input.compactMap(parseLine2))
+  }
+
+  // MARK: - Private methods
+
+  /// Uses shoelace formula and Pick's theorem to calculate area and interior of polygon using the given dig plan
+  /// See: https://www.youtube.com/watch?v=FSWPX0XB7a0 was very helpful in explaining shoelace formula
+  /// See: https://en.wikipedia.org/wiki/Pick's_theorem
+  private func cubicMeters(of plan: [(CardinalDirection, Int)]) -> Int {
     var boundary = 0
-    let points =
-      input
-      .compactMap(parseLine)
-      .reduce(
-        into: [Coord2D.zero],
-        { points, input in
-          guard let direction = direction(for: input.0) else { return }
-          boundary += input.1
-          points.append(
-            points.last!
-              + (0..<input.1).reduce(into: Coord2D.zero, { val, _ in val += direction.coord }))
-        })
+    let points = plan.reduce(
+      into: [Coord2D.zero],
+      { points, step in
+        boundary += step.1
+        points.append(
+          points.last! + (0..<step.1).reduce(into: Coord2D.zero, { val, _ in val += step.0.coord }))
+      })
     let area =
       abs(
         (0..<points.count - 2).reduce(0, { points[$1].x * points[$1 + 1].y + $0 })
           - (0..<points.count - 2).reduce(0, { points[$1].y * points[$1 + 1].x + $0 })
       ) / 2
-    let interior = area - (boundary / 2) + 1
-
-    return boundary + interior
+    return boundary + area - (boundary / 2) + 1
   }
-
-  func solve2() throws -> Any {
-    return -1
-  }
-
-  // MARK: - Private methods
 
   private func direction(for char: Character) -> CardinalDirection? {
     switch char {
@@ -52,12 +52,23 @@ struct Puzzle202318: Puzzle {
   }
 
   /// Parses a line from the given input (i.e. "R 6 (#70c710)")
-  private func parseLine(_ input: String) -> (Character, Int, String)? {
+  private func parseLine1(_ input: String) -> (CardinalDirection, Int)? {
     guard let match = input.firstMatch(of: /([UDLR])\s([0-9]+)\s\(#([A-Za-z0-9]{6})\)/),
-      let count = Int(match.output.2)
+      let count = Int(match.output.2),
+      let direction = direction(for: String(match.output.1)[0])
     else { return nil }
-    let char = String(match.output.1)[0]
+    return (direction, count)
+  }
+
+  /// Parses a line from the given input (i.e. "R 6 (#70c710)")
+  private func parseLine2(_ input: String) -> (CardinalDirection, Int)? {
+    guard let match = input.firstMatch(of: /([UDLR])\s([0-9]+)\s\(#([A-Za-z0-9]{6})\)/) else {
+      return nil
+    }
     let hex = String(match.output.3)
-    return (char, count, hex)
+    guard let direction = direction(for: "RDLU"[Int(String(hex[5])) ?? 0]),
+      let count = Int(String(hex.prefix(5)), radix: 16)
+    else { return nil }
+    return (direction, count)
   }
 }
